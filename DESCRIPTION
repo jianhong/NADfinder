@@ -1,0 +1,23 @@
+Package: NADfinder
+Type: Package
+Title: Call wide peaks for sequencing data
+Version: 0.99.3
+Date: 2017-03-24
+Author: Jianhong Ou, Jun Yu, Paul Kaufman, Lihua Julie Zhu
+Maintainer: Jianhong Ou <jianhong.ou@umassmed.edu>
+Description: Call peaks for two samples: target and control. It will
+        count the reads for tiles of the genome and then convert it to
+        ratios. The ratios will be corrected and smoothed. The z-scores
+        is calculated for each counting windows over the background.
+        The peaks will be detected based on z-scores.
+License: GPL (>= 2)
+Depends: R (>= 3.4), BiocGenerics, IRanges, GenomicRanges, S4Vectors
+Imports: graphics, methods, baseline, signal, GenomicAlignments,
+        GenomeInfoDb, rtracklayer, SummarizedExperiment, limma,
+        trackViewer, stats, utils
+Suggests: RUnit, BiocStyle, knitr, BSgenome.Mmusculus.UCSC.mm10,
+        testthat
+biocViews: Sequencing, DNASeq, GeneRegulation, PeakDetection
+LazyData: TRUE
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1

@@ -1,0 +1,263 @@
+---
+title: "NADfinder Guide"
+author: "Jianhong Ou, Jun Yu, Paul Kaufman and Lihua Julie Zhu"
+date: "`r doc_date()`"
+package: "`r pkg_ver('NADfinder')`"
+bibliography: bibliography.bib
+csl: nature.csl
+abstract: >
+  Call peaks for two purified nucleoli samples: target and control.
+  It will count the reads for tiles of the genome and NADs,
+  and then convert it to ratios.
+  The ratios will be corrected and smoothed. The z-scores is calculated for
+  each counting windows over the background. The peaks will be detected based
+  on z-scores.
+vignette: >
+  %\VignetteIndexEntry{NADfinder Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document
+---
+
+```{r, echo=FALSE, results="hide", warning=FALSE}
+suppressPackageStartupMessages({
+  library(NADfinder)
+  library(BSgenome.Mmusculus.UCSC.mm10)
+  library(rtracklayer)
+})
+knitr::opts_chunk$set(warning=FALSE, message=FALSE, eval=TRUE)
+```
+
+# Introduction
+Nucleoli serve as major organizing hubs for the three-dimensional structure 
+of mammalian heterochromatin[@politz2016redundancy]. Specific loci, termed
+nucleolar-associated domains (NADs), form frequent three-dimensional 
+associations with nucleoli [@nemeth2010initial, @van2010high]. Early mammalian 
+development is a critical period to study NAD biological function, because 
+interactions between pericentromeric chromatin and perinucleolar regions are 
+particularly dynamic during embryonic development 
+[@aguirre20123d, @popken2014reprogramming]. 
+We therefore propose for the first time to map the 
+NADs in the mouse genome, determine how these associations are altered during 
+embryonic stem cell (ESC) differentiation, and develop tools for study of 
+these higher-order chromosome interactions in fixed and live single cells 
+(Fig. 1). 
+
+![Fig. 1 Workflow for NAD peak identification. Read counts are summarized for 
+each 50kb moving window with step size of 1kb for nucleolar and genomic 
+samples. Log2 ratio between nucleolar and genomic samples was computed for 
+each window, followed by local background correction, smoothing, peak calling, 
+filtering and annotation.
+](Picture1.png)
+
+## Steps of NADfinder
+
+1. Reads count: We move the window (w) along the genome with step (s) and count
+the reads in each window. This step can smooth the coverage, 
+which is a good for wide peaks.
+
+2. Ratio calculation: ratio = log2(nucleosome counts / genome counts), 
+pseudocount will be used to avoid x/0 by x/pseudocount.
+
+3. Background correction: Because the ratios are higher in 5’end than 
+3’ end, we applied modified polynomial fitting to remove the background. 
+With this step, the baseline of the ratios will keep at 0 along each 
+chromosome. More details could refer: CHAD A. LIEBER and ANITA 
+MAHADEVAN-JANSEN: Automated Method for Subtraction of 
+Fluorescence from Biological Raman Spectra 
+(http://journals.sagepub.com/doi/pdf/10.1366/000370203322554518).
+
+4. Curve smooth: smoothed curve will be used for peak range detection. 
+We applied butterworth filter to smooth the ratio curve. 
+The idea is that with this filter, the high frequency noise will be removed.
+
+5. Visualization of the background correction and signal processing filter
+to double check the process is reasonable.
+
+6. Calculate z-score for each chromosome by smoothed ratios and call peaks. 
+Because the peaks are start from previous valley to next valley, peaks will be 
+trimmed by background corrected signals from both shoulder of the curve to 
+make sure the peak region does not include the parts of valley.
+
+7. Export the peaks into bigwig files for visualization.
+
+# Single sample
+Here is an example to use NADfinder to do peak calling.
+
+## Reads count
+
+For single sample, we should have sequence data for whole genome as background 
+and purified nucleoli as target signal. The first step is counting the reads
+for the paired samples along the genome with sliding windows in a given step.
+
+```{r quickStart, fig.width=6, fig.height=4}
+## load the library
+library(NADfinder)
+library(SummarizedExperiment)
+## bam file path
+path <- "path/to/your/bam/files"
+f <- c(genome="genome.bam", nucleosome="nucleosome.bam")
+## window size for tile of genome. Here we set big window size because that
+## 1. peaks of NADs are wide;
+## 2. data could be smoothed well.
+ws <- 50000
+## step for tile of genome
+step <- 1000
+## Set the background. 
+## 0.25 means 25% of the lower ratios will be used for background training.
+backgroundPercentage <- 0.25
+## Count the reads for each window with a given step in the genome.
+## The output will be a GRanges object.
+library(BSgenome.Mmusculus.UCSC.mm10)
+```
+```{r eval=FALSE}
+se <- tileCount(reads=file.path(path, f), 
+                genome=Mmusculus, 
+                windowSize=ws, 
+                step=step)
+```
+
+Here we load the counts from saved data to save build time.
+
+```{r}
+data(single.count)
+se <- single.count
+```
+
+## Call peaks
+
+Once we have the counts, we calculate the ratios for nucleosome signals vs.
+genome. Then the ratios will be corrected and smoothed for each chromosome 
+before we call peaks by the function `smoothRatiosByChromosome`.
+
+We could use `cumulativePercentage` function for quality control which shows
+the difference from nucleosome to genome. `cumulativePercentage` 
+will plot the cumulative sums of sorted read counts for nucleosome and genome.
+We should expect almost a straight line for genome cumulative sums because 
+the coverage for genome should be uniform distributed. 
+Different from ChIP-seq data, the cumulative percentage tag allocation in 
+nucleosome sample will not have sharp changes because we know that most of
+NADs are broad regions (even more than 100 Kbps). However, we should observe 
+the difference from the curve of nucleosome to that of genome.
+
+```{r}
+## Calculate ratios for peak calling. We use nucleosome vs genome.
+dat <- log2se(se, nucleosomeCols = "nucleosome.bam", genomeCols="genome.bam")
+## Smooth the ratios for each chromosome.
+## We found that for each chromosome, the ratios are higher in 5'end than 3'end.
+datList <- smoothRatiosByChromosome(dat, N=100)
+## check the difference between the cumulative percentage tag allocation 
+## in genome and nucleosome samples.
+cumulativePercentage(datList[["chr18"]])
+```
+
+The peaks will be called if the ratios are significant above background by 
+`trimPeaks` for each chromosome.
+The following figure shows the peaks (black rectangles) called by 
+corrected (green curve) and smoothed (red curve) ratios.
+
+```{r}
+## check the results of smooth function
+chr18 <- datList[["chr18"]] ## we only have reads in chr18 in test data.
+chr18subset <- subset(chr18, seq.int(floor(length(chr18)/10))*10)
+chr18 <- assays(chr18subset)
+ylim <- range(c(chr18$ratio[, 1], 
+                chr18$bcRatio[, 1], 
+                chr18$smoothedRatio[, 1]))
+plot(chr18$ratio[, 1], 
+     ylim=ylim*c(.9, 1.1), 
+     type="l", main="chr18")
+abline(h=0, col="cyan", lty=2)
+points(chr18$bcRatio[, 1], type="l", col="green")
+points(chr18$smoothedRatio[, 1], type="l", col="red")
+legend("topright", 
+       legend = c("raw_ratio", "background_corrected", "smoothed"), 
+       fill = c("black", "green", "red"))
+## call peaks for each chromosome
+peaks <- lapply(datList, trimPeaks, 
+                backgroundPercentage=backgroundPercentage, 
+                cutoffPvalue=0.05, countFilter=1000)
+## plot the peaks in "chr18"
+peaks.subset <- countOverlaps(rowRanges(chr18subset), peaks$chr18)>=1
+peaks.run <- rle(peaks.subset)
+run <- cumsum(peaks.run$lengths)
+run <- data.frame(x0=c(1, run[-length(run)]), x1=run)
+run <- run[peaks.run$values, , drop=FALSE]
+rect(xleft = run$x0, ybottom = ylim[2]*.75, 
+     xright = run$x1, ytop = ylim[2]*.8,
+     col = "black")
+## convert list to a GRanges object
+peaks.gr <- unlist(GRangesList(peaks))
+```
+
+The called peaks could be saved and exported into files for downstream analysis.
+
+```{r}
+## output the peaks
+write.csv(as.data.frame(unname(peaks.gr)), "peaklist.csv", row.names=FALSE)
+## export peaks to a bed file.
+library(rtracklayer)
+export(peaks.gr, "peaklist.bed", "BED")
+```
+
+# Samples with duplicates
+
+Same as the pipeline of single sample, we should do reads count and then call
+peaks. The difference is that we use the power of limma to get more 
+statistical power for duplicates.
+
+```{r}
+library(NADfinder)
+## bam file path
+path <- "path/to/your/bam/files"
+f <- c("G26.bam", "G28.bam", "G29.bam", "N26.bam", "N28.bam", "N29.bam")
+ws <- 50000
+step <- 1000
+library(BSgenome.Mmusculus.UCSC.mm10)
+```
+
+```{r eval=FALSE}
+se <- tileCount(reads=file.path(path, f), 
+                genome=Mmusculus, 
+                windowSize=ws, 
+                step=step)
+```
+
+We load the counts from saved data. And then call peaks. 
+Here we use `callPeaks` to call peaks.
+
+```{r}
+data(triplicates.counts)
+se <- triplicates.counts
+
+## Calculate ratios for peak calling. We use signal vs input.
+gps <- c("26", "28", "29")
+se <- log2se(se, 
+             nucleosomeCols = paste0("N", gps, ".bam"),
+             genomeCols = paste0("G", gps, ".bam"))
+getCorrelations(se, "chr18")
+seList<- smoothRatiosByChromosome(se, chr="chr18")
+cumulativePercentage(seList[["chr18"]])
+peaks <- lapply(seList, callPeaks, 
+                cutoffAdjPvalue=0.05, countFilter=1000)
+peaks <- unlist(GRangesList(peaks))
+peaks
+```
+
+The peaks could be shown along the ideogram by `plotSig`. 
+
+```{r fig.height=1.5}
+ideo <- readRDS(system.file("extdata", "ideo.mm10.rds", 
+                            package = "NADfinder"))
+plotSig(ideo=ideo, grList=GRangesList(peaks), mcolName="AveSig", 
+        layout=list("chr18"), 
+        parameterList=list(types="heatmap"))
+```
+
+# Session Info
+```{r sessionInfo}
+sessionInfo()
+```
+
+# References
