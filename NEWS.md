@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 0.99.4
+
+* replace slidingWindows by GenomicRanges::slidingWindows
+
 # CHANGES IN VERSION 0.99.3
 
 * add new function cumulativePercentage

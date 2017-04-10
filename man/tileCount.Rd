@@ -4,9 +4,8 @@
 \alias{tileCount}
 \title{Perform overlap queries between reads and genome by windows}
 \usage{
-tileCount(reads, genome, windowSize = 1e+05, step = 10000,
-  keepPartialWindow = FALSE, mode = countByOverlaps,
-  dataOverSamples = FALSE, ...)
+tileCount(reads, genome, windowSize = 100000L, step = 10000L,
+  mode = countByOverlaps, dataOverSamples = FALSE, ...)
 }
 \arguments{
 \item{reads}{A \link[GenomicRanges]{GRanges},
@@ -22,8 +21,6 @@ counted by \code{\link[GenomicAlignments]{summarizeOverlaps}}.}
 \item{windowSize}{numeric(1) or integer(1). Size of windows.}
 
 \item{step}{numeric(1) or integer(1). Step of windows.}
-
-\item{keepPartialWindow}{logical(1). Keep last partial window or not.}
 
 \item{mode}{mode can be one of the pre-defined count methods.
 see \link[GenomicAlignments]{summarizeOverlaps}.

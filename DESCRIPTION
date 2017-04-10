@@ -1,10 +1,11 @@
 Package: NADfinder
 Type: Package
 Title: Call wide peaks for sequencing data
-Version: 0.99.3
-Date: 2017-03-24
+Version: 0.99.4
+Date: 2017-04-10
 Author: Jianhong Ou, Jun Yu, Paul Kaufman, Lihua Julie Zhu
-Maintainer: Jianhong Ou <jianhong.ou@umassmed.edu>
+Maintainer: Jianhong Ou <jianhong.ou@umassmed.edu>,
+            Lihua Julie Zhu <julie.zhu@umassmed.edu>
 Description: Call peaks for two samples: target and control. It will
         count the reads for tiles of the genome and then convert it to
         ratios. The ratios will be corrected and smoothed. The z-scores

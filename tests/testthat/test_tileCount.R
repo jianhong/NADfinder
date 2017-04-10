@@ -6,22 +6,6 @@ test_that("tileCount works not correct", {
                          width=c(rep(500, 3), 600, 900, 500, 300, 900,
                                  300, 500, 500),
                          names=letters[1:11]))
-    tg <- slidingWindows(genes, windowSize=50, step=10)
-    ## check output class
-    expect_is(tg, "GRanges")
-    ## check windowSize
-    expect_true(all(width(tg)==50))
-    ## check step
-    expect_true(all(diff(start(tg[queryHits(findOverlaps(tg, genes[1]))]))==10))
-    ## check keepPartialWindow
-    tg1 <- slidingWindows(genes, windowSize=50, step=10, keepPartialWindow = TRUE)
-    expect_false(all(width(tg1)==50))
-    expect_true(length(tg1)>length(tg))
-    expect_true(all(tg %in% tg1))
-    expect_false(all(tg1 %in% tg))
-    tg1.s <- tg1[!tg1 %in% tg]
-    expect_true(all(width(tg1.s)<50))
-
     ## check tileCount
     reads <- GRangesList(A=GRanges(), B=GRanges())
     # 0 reads
