@@ -9,6 +9,9 @@
 #'
 #' @param ratios A vector of numeric.
 #' It is the ratios of counts for each window.
+#' 
+#' @param ... parameters could be passed to
+#'  \link[baseline]{baseline.modpolyfit}.
 #'
 #' @return A vector of numeric.
 #' It is the background corrected ratios.
@@ -21,7 +24,7 @@
 #' background <- rep(c(20:1)/100, each=10)
 #' backgroundCorrection(x)
 #'
-backgroundCorrection <- function(ratios){
+backgroundCorrection <- function(ratios, ...){
     stopifnot(inherits(ratios, c("numeric", "integer")))
     if(any(is.na(ratios))){
         ratios[is.na(ratios)] <- 0
@@ -30,7 +33,7 @@ backgroundCorrection <- function(ratios){
         ratios[is.infinite(ratios)] <- 0
     }
     if(length(unique(ratios))>1){
-        bc <- baseline(t(ratios), method="modpolyfit")
+        bc <- baseline(t(ratios), method="modpolyfit", ...)
         as.numeric(getCorrected(bc))
     }else{
         ratios

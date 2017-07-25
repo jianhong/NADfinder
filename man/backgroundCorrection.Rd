@@ -4,11 +4,14 @@
 \alias{backgroundCorrection}
 \title{Correct ratios for background}
 \usage{
-backgroundCorrection(ratios)
+backgroundCorrection(ratios, ...)
 }
 \arguments{
 \item{ratios}{A vector of numeric.
 It is the ratios of counts for each window.}
+
+\item{...}{parameters could be passed to
+\link[baseline]{baseline.modpolyfit}.}
 }
 \value{
 A vector of numeric.

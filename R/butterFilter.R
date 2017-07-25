@@ -20,12 +20,17 @@
 #' butterFilter(ratios)
 #'
 butterFilter <- function(ratios, N=ceiling(length(ratios)/200)){
+    ## length(ratios) = chromosome length / step size
+    ## N = number of ratios in 200 regions for a given chromosome 
+    ### Divide the chromosome into 200 regions
     stopifnot(inherits(ratios, c("numeric", "integer")))
     stopifnot(length(N)==1)
     bf <- butter(2, 1/N, type="low")
     r2 <- as.numeric(filter(bf, ratios))
+    ## r2 filtered smoothed ratio
     W1 <- floor(N/2)+1
     W2 <- N-W1
+    ### the following loop is to shift the smoothed ration half window backward
     if(length(r2)>N && W2>0){
         y <- ratios[(length(r2)-W2):length(r2)]
         y[is.na(y)] <- min(y, na.rm=TRUE)

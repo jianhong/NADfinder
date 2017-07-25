@@ -1,3 +1,11 @@
+# CHANGES IN VERSION 1.1.2
+
+* update the documentations.
+
+# CHANGES IN VERSION 1.1.1
+
+* add parameter in backgroundCorrection.
+
 # CHANGES IN VERSION 0.99.4
 
 * replace slidingWindows by GenomicRanges::slidingWindows
