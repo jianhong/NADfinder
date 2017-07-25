@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.0.1
+
+* update the documentations.
+
 # CHANGES IN VERSION 0.99.4
 
 * replace slidingWindows by GenomicRanges::slidingWindows
