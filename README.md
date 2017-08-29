@@ -2,7 +2,6 @@
 
 [![platforms](http://bioconductor.org/shields/availability/3.5/NADfinder.svg)](http://bioconductor.org/packages/devel/bioc/html/NADfinder.html)
 [![build](http://bioconductor.org/shields/build/devel/bioc/NADfinder.svg)](http://bioconductor.org/packages/devel/bioc/html/NADfinder.html)
-[![test coverage](https://codecov.io/github/Bioconductor-mirror/NADfinder/branch/master)](http://bioconductor.org/packages/devel/bioc/html/NADfinder.html)
 
 Call wide peaks for sequencing data
 
