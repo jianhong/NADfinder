@@ -18,6 +18,9 @@
 #' @examples
 #' y <- runif(200)
 #' peakdet(y)
+#' ## The following example has been added by Julie Zhu
+#' y <- sin(seq(0,20))
+#' peakdet(y)
 
 peakdet <- function(y, delta=0, silence=TRUE){
     peakpos <- NULL

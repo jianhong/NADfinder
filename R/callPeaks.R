@@ -72,14 +72,21 @@ callPeaks <- function(se, backgroundCorrectionAssay="bcRatio",
         x <- c(1, x+1)
         peaks$peakpos <- c(peaks$peakpos, length(bc.smoothed))
     }
+### assume points between previous valley and this valley blong to the group of this valley
+### needs to improve
     group <- rep(x, times)
     if(length(group)!=length(bc.smoothed)){
         stop("The length of group is not identical with that of signals.",
              "Please report this bug.")
     }
+##### Assume the null is 0,not stringent
+
     fit <- lmFit(bc.norm)
     fit2 <- eBayes(fit)
     res <- topTable(fit2, number=nrow(fit2), sort.by="none")
+
+#### group windows by valley plus points after previous valley
+
     res$group <- group
 
     mcols(gr) <- DataFrame(res)

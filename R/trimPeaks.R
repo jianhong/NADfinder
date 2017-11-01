@@ -5,8 +5,8 @@
 #'
 #' @param se An object of 
 #' \link[SummarizedExperiment]{RangedSummarizedExperiment}
-#' with assays of raw counts, ratios, background correct ratios,
-#' smoothed ratios and z-scores. It should be an element of output of 
+#' with assays of raw counts, ratios, background corrected ratios,
+#' smoothed ratios and z-scores. It should be an element of the output of 
 #' \link{smoothRatiosByChromosome}
 #' @param cutoffPvalue numeric(1). Cutoff p-value.
 #' @param backgroundPercentage numeric(1). Cutoff value for the peaks height.
@@ -15,8 +15,8 @@
 #' @param ratioAssay character(1). The name of assay in se, which store the 
 #' values to be smoothed. 
 #' @param backgroundCorrectionAssay,smoothedRatioAssay,zscoreAssay Assays names 
-#' for background correction ratios, smoothed ratios and z-score based on
-#' background correction ratios.
+#' for background corrected ratios, smoothed ratios and z-score based on
+#' background corrected ratios.
 #'
 #' @return An object of \link[GenomicRanges]{GRanges}.
 #'
@@ -115,7 +115,8 @@ trimPeaks <- function(se, cutoffPvalue=0.05,
     })
     chr.rd <- unlist(GRangesList(chr.rd))
     ## trim the peaks to avoid overlaps
-    wh <- ceiling(windowSize/2)
+#    wh <- ceiling(windowSize/2)
+     wh <- ceiling(windowSize/20)
     start(chr.rd) <- start(chr.rd) + wh
     end(chr.rd) <- end(chr.rd) - wh
     chr.rd <- sort(chr.rd)

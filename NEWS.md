@@ -1,3 +1,9 @@
+# CHANGES IN VERSION 1.3.1
+
+* remove Bessel's correction for zscore calculation
+* narrow the distance when trim the peaks to avoid overlaps.
+* change the baseline.modpolyfit from degree 4 to degree 3.
+
 # CHANGES IN VERSION 1.1.2
 
 * update the documentations.

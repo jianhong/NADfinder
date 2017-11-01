@@ -4,11 +4,13 @@
 \alias{backgroundCorrection}
 \title{Correct ratios for background}
 \usage{
-backgroundCorrection(ratios, ...)
+backgroundCorrection(ratios, degree = 3, ...)
 }
 \arguments{
 \item{ratios}{A vector of numeric.
 It is the ratios of counts for each window.}
+
+\item{degree}{Degree of polynomial. default 3.}
 
 \item{...}{parameters could be passed to
 \link[baseline]{baseline.modpolyfit}.}

@@ -12,8 +12,8 @@ trimPeaks(se, cutoffPvalue = 0.05, backgroundPercentage = 0.25,
 \arguments{
 \item{se}{An object of 
 \link[SummarizedExperiment]{RangedSummarizedExperiment}
-with assays of raw counts, ratios, background correct ratios,
-smoothed ratios and z-scores. It should be an element of output of 
+with assays of raw counts, ratios, background corrected ratios,
+smoothed ratios and z-scores. It should be an element of the output of 
 \link{smoothRatiosByChromosome}}
 
 \item{cutoffPvalue}{numeric(1). Cutoff p-value.}
@@ -27,8 +27,8 @@ raw reads count in each window.}
 values to be smoothed.}
 
 \item{backgroundCorrectionAssay, smoothedRatioAssay, zscoreAssay}{Assays names 
-for background correction ratios, smoothed ratios and z-score based on
-background correction ratios.}
+for background corrected ratios, smoothed ratios and z-score based on
+background corrected ratios.}
 }
 \value{
 An object of \link[GenomicRanges]{GRanges}.
