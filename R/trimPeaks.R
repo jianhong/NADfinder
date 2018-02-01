@@ -43,7 +43,7 @@ trimPeaks <- function(se, cutoffPvalue=0.05,
                       zscoreAssay="zscore"){
     backgroundPercentage2=.5
     stopifnot(backgroundPercentage>0 && backgroundPercentage<1)
-    stopifnot(class(se)=="RangedSummarizedExperiment")
+    stopifnot(is(se, "RangedSummarizedExperiment"))
     asyNames <- c("nucleosome", "genome", ratioAssay, 
                    backgroundCorrectionAssay,
                    smoothedRatioAssay, zscoreAssay)

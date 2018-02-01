@@ -1,24 +1,23 @@
 #' Detect peak positions
 #'
-#' Detect the peaks positions and valley positions. The algorithm is modified
-#' from github::dgromer/peakdet
+#' Detect the peak positions and valley positions leveraging
+#' github::dgromer/peakdet
 #'
-#' @param y A vector of numeric where to search peaks
-#' @param delta A numeric of length 1, defining the local threshold
-#' for peak detection. If it is set to 0, the delta will be set to
-#' 1/10 of the range of y.
+#' @param y A numeric vector for searching peaks
+#' @param delta A numeric vector of length 1, defining the minimum absolute changes required  
+#' for local maximum or minimum detection when slope sign changes. If it is set to 0, 
+#' the delta will be set to 1/10 of the range of y.
 #' @param silence logical(1). 
 #' If false, echo the delta value when delta is set as 0.
 #'
 #' @return A list with peakpos and valleypos. Both peakpos and valleypos are
-#' vectors of numeric which indicate the positions of peak or valley.
+#' numeric vectors storing the positions of peaks or valleys.
 #'
 #' @export
 #'
 #' @examples
 #' y <- runif(200)
 #' peakdet(y)
-#' ## The following example has been added by Julie Zhu
 #' y <- sin(seq(0,20))
 #' peakdet(y)
 

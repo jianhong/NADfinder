@@ -41,7 +41,7 @@
 exportSignals <- function(dat, assayName, colName, 
                           con, format="bedGraph", ...){
     stopifnot(inherits(dat, c("GRanges", "RangedSummarizedExperiment")))
-    if(class(dat)=="GRanges"){
+    if(is(dat, "GRanges")){
         gr <- dat
     }else{## RangedSummarizedExperiment
         stopifnot(!missing(assayName))

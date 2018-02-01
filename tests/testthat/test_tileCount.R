@@ -16,12 +16,12 @@ test_that("tileCount works not correct", {
     # 100 reads, width=10
     reads$A <- GRanges("chr2L", IRanges(1:100, width=10))
     tc <- tileCount(reads$A, genes, windowSize=200, step=100)
-    expect_equal(assays(tc)$counts[1:2, 1], c(100, 9))
+    expect_equal(assays(tc)$counts[1:2, 1], c(100, 0))
     expect_error(tileCount(reads, genes, windowSize=200, step=100))
     tc2 <- tileCount(reads, genes, windowSize=200, step=100,
                      dataOverSamples=TRUE)
     expect_equal(assays(tc)$counts[, 1], assays(tc2)$counts[, 1])
     expect_true(all(assays(tc2)$counts[, "B"]==0))
     tc3 <- tileCount(reads, genes, windowSize=50, step=10, dataOverSamples=TRUE)
-    expect_equal(max(assays(tc3)$counts[, "A"]), 59)
+    expect_equal(max(assays(tc3)$counts[, "A"]), 41)
 })

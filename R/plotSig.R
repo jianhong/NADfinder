@@ -24,7 +24,7 @@
 #'
 
 plotSig <- function(ideo, grList, mcolName, ...){
-    stopifnot(class(grList)=="GRangesList")
+    stopifnot(is(grList, "GRangesList"))
     args <- list(...)
     ylabs <- lapply(seqlevels(ideo), function(.ele){
         c(.ele, names(grList))

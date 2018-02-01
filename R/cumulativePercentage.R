@@ -42,7 +42,7 @@
 cumulativePercentage <- function(se, binWidth=1e5,
                                  backgroundCorrectionAssay="bcRatio",
                                  ...){
-    stopifnot(class(se)=="RangedSummarizedExperiment")
+    stopifnot(is(se, "RangedSummarizedExperiment"))
     assayName <- c("nucleosome", "genome", backgroundCorrectionAssay)
     if(any(!assayName %in% names(assays(se)))){
         stop("nucleosome", "genome", backgroundCorrectionAssay, 

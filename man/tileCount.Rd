@@ -5,7 +5,7 @@
 \title{Perform overlap queries between reads and genome by windows}
 \usage{
 tileCount(reads, genome, windowSize = 100000L, step = 10000L,
-  mode = countByOverlaps, dataOverSamples = FALSE, ...)
+  mode = IntersectionNotStrict, dataOverSamples = FALSE, ...)
 }
 \arguments{
 \item{reads}{A \link[GenomicRanges]{GRanges},
@@ -35,13 +35,13 @@ countOverlaps(features, reads, ignore.strand=ignore.strand)}
 }
 \value{
 A \link[SummarizedExperiment]{RangedSummarizedExperiment} object. 
-The assays slot holds the counts, rowRanges holds the annotation from 
+The assays slot holds the counts, rowRanges holds the annotation from the
 sliding widows of genome.
+metadata contains lib.size.chrom for holding chromosome-level sequence depth
 }
 \description{
-tileCount extends \link[GenomicAlignments]{summarizeOverlaps} by providing
-fixed window size and step to split whole genome into windows and then do
-queries. It will return counts in each window.
+tileCount extends \link[GenomicAlignments]{summarizeOverlaps} by finding coverage for
+each fixed window in the whole genome
 }
 \examples{
 \dontrun{
@@ -53,9 +53,13 @@ se <- tileCount(fls, genes, windowSize=1000, step=500)
 }
 
 ##
-genome <- GRanges("chr1", IRanges(1, 1))
-seqlengths(genome) <- c(chr1=1000)
+genome <- GRanges(c("chr1","chr2"), IRanges(c(1,1), c(1000,1000)))
+seqlengths(genome) <- c(chr1=1000, chr2=1000)
 reads <- GRanges("chr1", IRanges((seq_len(90))*10, width=10))
 tileCount(reads, genome, windowSize=100, step=50)
-
+reads.2 <- GRangesList(GRanges("chr2", IRanges((seq_len(90))*10, width=10)), reads)
+tileCount(reads.2, genome, windowSize=100, step=50)
+}
+\author{
+Jianhong Ou and Julie Zhu
 }

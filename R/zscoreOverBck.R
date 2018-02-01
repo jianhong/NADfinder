@@ -1,20 +1,21 @@
 #' Z-scores over the background
 #'
-#' Calculate the z-scores over the lower percentage values.
+#' Calculate the z-scores over the background distribution.
 #'
-#' @param ratios A vector of numeric. It is the ratios of counts in each window.
-#' @param backgroundPercentage numeric(1). Percentage of value for background.
+#' @param ratios A numeric vector containing the transformed, background corrected and smoothed ratios in each window.
+#' @param backgroundPercentage numeric(1). Low percentile for background distribution.
 #' @return A vector of numeric. Z-scores.
 #' @export
 #' @examples
 #' r <- runif(200)
 #' zscoreOverBck(r)
-#'
+#' @author Jianhong Ou and Julie Zhu
+
 zscoreOverBck <- function(ratios, backgroundPercentage=0.25){
-    r <- quantile(ratios, probs = c(0, backgroundPercentage, 1))
-    r <- ratios[ratios<=r[2]]
-    pop_sd <- sd(r) 
-    pop_mean <- mean(r)
-    z <- (ratios - pop_mean)/pop_sd
+    r <- quantile(ratios, probs = backgroundPercentage)
+    bg.ratios <- ratios[ratios<=r]
+    pop.sd <- sd(bg.ratios) * sqrt(length(bg.ratios) - 1)/sqrt(length(bg.ratios)) 
+    pop.mean <- mean(bg.ratios)
+    z <- (ratios - pop.mean)/pop.sd
     z
 }

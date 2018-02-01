@@ -1,8 +1,8 @@
 ---
 title: "NADfinder Guide"
 author: "Jianhong Ou, Jun Yu, Paul Kaufman and Lihua Julie Zhu"
-date: "`r doc_date()`"
-package: "`r pkg_ver('NADfinder')`"
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('NADfinder')`"
 bibliography: bibliography.bib
 csl: nature.csl
 abstract: >
@@ -96,7 +96,7 @@ library(BSgenome.Mmusculus.UCSC.mm10)
 se <- tileCount(reads=file.path(path, f), 
                 genome=Mmusculus, 
                 windowSize=ws, 
-                step=step)
+                step=step, transformation = "log2OddsRatio")
 ```
 
 Here we load the pre-computed coverage data single.count to save build time.
@@ -117,7 +117,7 @@ between the two curves.
 
 ```{r}
 ## Calculate ratios for peak calling. We use nucleosome vs genomic DNA.
-dat <- log2se(se, nucleosomeCols = "nucleosome.bam", genomeCols="genome.bam")
+dat <- log2se(se, nucleosomeCols = "nucleosome.bam", genomeCols="genome.bam", transformation = "log2Ratio")
 ## Smooth the ratios for each chromosome.
 ## We found that for each chromosome, the ratios are higher in 5'end than 3'end.
 datList <- smoothRatiosByChromosome(dat, N=100)
@@ -215,7 +215,7 @@ se <- triplicates.counts
 gps <- c("26", "28", "29")
 se <- log2se(se, 
              nucleosomeCols = paste0("N", gps, ".bam"),
-             genomeCols = paste0("G", gps, ".bam"))
+             genomeCols = paste0("G", gps, ".bam"), transformation = "log2Ratio")
 getCorrelations(se, "chr18")
 seList<- smoothRatiosByChromosome(se, chr="chr18")
 cumulativePercentage(seList[["chr18"]])

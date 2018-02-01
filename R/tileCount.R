@@ -10,18 +10,19 @@
 #' @param inter.feature not used. This parameter is required by 
 #' \link[GenomicAlignments]{summarizeOverlaps}.
 #'
-#' @return return a vector of counts the same length as features.
+#' @return return a summarized experiment object with chromosome-level depth 
+#' information for each input sample as metadata.
 #'
-countByOverlaps <- function(features, reads,  ignore.strand, inter.feature) {
+IntersectionNotStrict <- function(features, reads,  ignore.strand = TRUE, inter.feature = FALSE) {
     ## NOT work for parallel
-    countOverlaps(features, reads, ignore.strand=ignore.strand)
+    ov <- findOverlaps(reads, features, type = "within", ignore.strand = ignore.strand)
+    countSubjectHits(ov)
 }
 
 #' Perform overlap queries between reads and genome by windows
 #'
-#' tileCount extends \link[GenomicAlignments]{summarizeOverlaps} by providing
-#' fixed window size and step to split whole genome into windows and then do
-#' queries. It will return counts in each window.
+#' tileCount extends \link[GenomicAlignments]{summarizeOverlaps} by finding coverage for
+#' each fixed window in the whole genome
 #'
 #' @param reads A \link[GenomicRanges]{GRanges},
 #' \link[GenomicRanges]{GRangesList} (should be one read per list element),
@@ -43,14 +44,16 @@ countByOverlaps <- function(features, reads,  ignore.strand, inter.feature) {
 #' \code{\link[GenomicAlignments]{summarizeOverlaps}}.
 #'
 #' @return A \link[SummarizedExperiment]{RangedSummarizedExperiment} object. 
-#' The assays slot holds the counts, rowRanges holds the annotation from 
+#' The assays slot holds the counts, rowRanges holds the annotation from the
 #' sliding widows of genome.
+#' metadata contains lib.size.chrom for holding chromosome-level sequence depth
+#' @import Rsamtools
 #' @import GenomicAlignments
 #' @import GenomicRanges
 #' @import GenomeInfoDb
 #' @import SummarizedExperiment
 #' @importFrom IRanges IRanges elementNROWS
-#' @importFrom BiocGenerics lengths
+#' @importFrom BiocGenerics lengths table
 #' @importFrom methods as
 #' @export
 #' @examples
@@ -63,14 +66,16 @@ countByOverlaps <- function(features, reads,  ignore.strand, inter.feature) {
 #' }
 #'
 #' ##
-#' genome <- GRanges("chr1", IRanges(1, 1))
-#' seqlengths(genome) <- c(chr1=1000)
+#' genome <- GRanges(c("chr1","chr2"), IRanges(c(1,1), c(1000,1000)))
+#' seqlengths(genome) <- c(chr1=1000, chr2=1000)
 #' reads <- GRanges("chr1", IRanges((seq_len(90))*10, width=10))
 #' tileCount(reads, genome, windowSize=100, step=50)
-#'
+#' reads.2 <- GRangesList(GRanges("chr2", IRanges((seq_len(90))*10, width=10)), reads)
+#' tileCount(reads.2, genome, windowSize=100, step=50)
+#' @author Jianhong Ou and Julie Zhu
 
 tileCount <- function(reads, genome, windowSize=1e5L, step=1e4L,
-                      mode=countByOverlaps, 
+                      mode=IntersectionNotStrict, 
                       dataOverSamples=FALSE, ...){
     targetRegions <- as(seqinfo(genome), "GRanges")
     tileTargetRegions <- 
@@ -84,8 +89,12 @@ tileCount <- function(reads, genome, windowSize=1e5L, step=1e4L,
     if(inherits(reads, "GRangesList")&&dataOverSamples){
         se <- do.call(cbind, lapply(reads, summarizeOverlaps, 
                                     features=tileTargetRegions,
+                                    inter.feature = FALSE,
                                     mode=mode, ...))
         if(length(names(reads))==ncol(se)) colnames(se) <- names(reads)
+        lib.size.chrom <- t(BiocGenerics::table(seqnames(reads))) 
+        lib.size.chrom <- cbind(rownames(lib.size.chrom), lib.size.chrom)
+        colnames(lib.size.chrom) <- c("chrom", paste("lib.size", 1:length(reads), sep="."))
     }else{
         if(inherits(reads, "GRangesList")){
             ol <- lapply(head(reads, 100), findOverlaps, 
@@ -94,11 +103,28 @@ tileCount <- function(reads, genome, windowSize=1e5L, step=1e4L,
                 stop("reads are GRangesList with overlaps in elements.",
                      "Please try to set dataOverSamples as TRUE.")
             }
+            lib.size.chrom <- as.data.frame(rowSums(t(BiocGenerics::table(seqnames(reads)))))
+            lib.size.chrom <- cbind(rownames(lib.size.chrom), lib.size.chrom)
+            colnames(lib.size.chrom) <- c("chrom", "lib.size")
+        }
+        else if (inherits(reads, "GRanges")) {
+            lib.size.chrom <- as.data.frame(BiocGenerics::table(seqnames(reads))) 
+            colnames(lib.size.chrom) <- c("chrom", "lib.size")
+        }
+        else {
+            aln <- scanBam(reads)
+            lib.size.chrom <- as.data.frame(BiocGenerics::table(aln[[1]]$rname))
+            if (length(aln) > 1)
+            {
+               lib.size.chrom <- cbind(lib.size.chrom, do.call(cbind, lapply(2:length(aln),function(i){
+                 as.data.frame(BiocGenerics::table(aln[[i]]$rname))[,2] } )))
+            }
         }
         se <- summarizeOverlaps(features=tileTargetRegions, reads=reads,
-                                mode=mode, ...)
+                                mode=mode, inter.feature = FALSE, ...)
     }
-    
+     
     names(assays(se)) <- "counts"
+    metadata(se)$lib.size.chrom <- lib.size.chrom
     se
 }

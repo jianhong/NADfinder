@@ -36,7 +36,7 @@ getCorrelations <- function(se, chr = paste0("chr", seq_len(21)),
                              ratioAssay = "ratio", window=10000, cutoff=1,
                              method=c("spearman", "pearson", "kendall"),
                              ...){
-    stopifnot(class(se)=="RangedSummarizedExperiment")
+    stopifnot(is(se, "RangedSummarizedExperiment"))
     stopifnot(length(ratioAssay)==1)
     stopifnot(ratioAssay %in% names(assays(se)))
     method <- match.arg(method)

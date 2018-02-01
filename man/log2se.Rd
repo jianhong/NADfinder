@@ -4,7 +4,9 @@
 \alias{log2se}
 \title{calculate the log2 transformed ratios for SummarizedExperiment class}
 \usage{
-log2se(se, nucleosomeCols, genomeCols, pseudocount)
+log2se(se, nucleosomeCols, genomeCols, pseudocount = 1L,
+  transformation = c("log2OddsRatio", "log2CPMRatio", "log2Ratio"),
+  chrom.level.lib = TRUE)
 }
 \arguments{
 \item{se}{A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
@@ -12,10 +14,14 @@ The output of \link{tileCount}.}
 
 \item{nucleosomeCols, genomeCols}{column Names of counts for nucleosome 
 and genome. They should be the column names in the assays of se. 
-Ratios will be calculated as log2(nucleosomeCols/genomeCols).}
+Ratios will be calculated as log2(transformed nucleosomeCols/transformed genomeCols).}
 
-\item{pseudocount}{pseudo-count will be used to aviod x/0 by x/pseudocount.
-If it is not set, pseudo-count will be the minimal count except 0 of inputs.}
+\item{pseudocount}{default to 1, pseudo-count used to aviod x/0 or log(0).}
+
+\item{transformation}{transformation type}
+
+\item{chrom.level.lib}{indicating whether calculating CPM or odds using 
+sequence depth of the whole genome or the corresponding chromosome}
 }
 \value{
 A RangedSummarizedExperiment object with log2 transformed ratios. 
@@ -23,16 +29,23 @@ Assays will be named as nucleosome, genome and ratio.
 }
 \description{
 Calculate the log2 transformed ratios for nucleosome vs genome.
-pseudo-count will be used to avoid x/0.
+pseudo-count will be used to avoid x/0 or log(0).
 }
 \examples{
 library(SummarizedExperiment)
-se <- 
- SummarizedExperiment(assays=list(counts=DataFrame(A=seq_len(3), 
-                                                   B=rep(1, 3))), 
-                      rowRanges=GRanges("chr1", 
-                                         IRanges(c(1, 10, 20), 
-                                                 width=9)))
-log2se(se, "A", "B")
-
+se <- SummarizedExperiment(assays=list(counts=DataFrame(A=seq_len(3),
+       B=rep(1, 3), C=rep(4, 3), D=rep(2, 3))),              
+                  rowRanges=GRanges("chr1",
+                      IRanges(c(1, 10, 20),
+                            width=9)))
+metadata(se)$lib.size.chrom <- data.frame(c("chr1"), c(1000), c(2000), c(200), c(300))
+as.data.frame(assays(log2se(se, nucleosomeCols = c("A", "C"), genomeCols = c("B", "D"), 
+    transformation = "log2Ratio")))
+as.data.frame(assays(log2se(se, nucleosomeCols = c("A", "C"), genomeCols = c("B", "D"),
+    transformation = "log2CPMRatio")))
+as.data.frame(assays(log2se(se, nucleosomeCols = c("A", "C"), genomeCols = c("B", "D"),
+    transformation = "log2OddsRatio")))
+}
+\author{
+Jianhong Ou and Julie Zhu
 }

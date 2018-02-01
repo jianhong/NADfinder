@@ -44,7 +44,7 @@ callPeaks <- function(se, backgroundCorrectionAssay="bcRatio",
     normlizationMethod <-
         match.arg(normlizationMethod,
                   c("none", "scale", "quantile", "cyclicloess"))
-    stopifnot(class(se)=="RangedSummarizedExperiment")
+    stopifnot(is(se, "RangedSummarizedExperiment"))
     if(any(!c("nucleosome", "genome", backgroundCorrectionAssay) %in% 
                       names(assays(se)))){
         stop("nucleosome", "genome", backgroundCorrectionAssay, 

@@ -7,18 +7,20 @@
 zscoreOverBck(ratios, backgroundPercentage = 0.25)
 }
 \arguments{
-\item{ratios}{A vector of numeric. It is the ratios of counts in each window.}
+\item{ratios}{A numeric vector containing the transformed, background corrected and smoothed ratios in each window.}
 
-\item{backgroundPercentage}{numeric(1). Percentage of value for background.}
+\item{backgroundPercentage}{numeric(1). Low percentile for background distribution.}
 }
 \value{
 A vector of numeric. Z-scores.
 }
 \description{
-Calculate the z-scores over the lower percentage values.
+Calculate the z-scores over the background distribution.
 }
 \examples{
 r <- runif(200)
 zscoreOverBck(r)
-
+}
+\author{
+Jianhong Ou and Julie Zhu
 }
