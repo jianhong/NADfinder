@@ -1,6 +1,6 @@
 ---
 title: "NADfinder Guide"
-author: "Jianhong Ou, Jun Yu, Paul Kaufman and Lihua Julie Zhu"
+author: "Jianhong Ou, Haibo, Jun Yu, Paul Kaufman and Lihua Julie Zhu"
 date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('NADfinder')`"
 bibliography: bibliography.bib
