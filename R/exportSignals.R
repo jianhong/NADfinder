@@ -24,7 +24,7 @@
 #' @import GenomicRanges
 #' @import rtracklayer
 #' @export
-#' @return If con is missing, a \link[IRanges::AtomicList-class]{SimpleRleList} will be returned.
+#' @return If con is missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be returned.
 #' Otherwise, nothing is returned.
 #' @examples
 #' gr <- GRanges("chr1", IRanges(seq_len(100), 201:300), reads=rep(1, 100))
