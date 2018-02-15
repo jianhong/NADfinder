@@ -26,7 +26,8 @@ License: GPL (>= 2)
 Depends: R (>= 3.4), BiocGenerics, IRanges, GenomicRanges, S4Vectors
 Imports: graphics, methods, baseline, signal, GenomicAlignments,
         GenomeInfoDb, rtracklayer, SummarizedExperiment, limma,
-        trackViewer, stats, utils, Rsamtools
+        trackViewer, stats, utils, Rsamtools, metap, EmpiricalBrownsMethod,
+        ATACseqQC
 Suggests: RUnit, BiocStyle, knitr, BSgenome.Mmusculus.UCSC.mm10,
         testthat
 biocViews: Sequencing, DNASeq, GeneRegulation, PeakDetection
