@@ -3,7 +3,7 @@
 #' Split the ratios by chromosome and do background correction and smooth.
 #'
 #' @param se An object of 
-#' \link[SummarizedExperiment]{RangedSummarizedExperiment} 
+#' \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} 
 #' with scores. Output of \link{log2se}
 #' @param chr A character vector, used to filter out seqnames. It should be the
 #' chromosome names to be kept.
@@ -21,8 +21,8 @@
 #' @param ... Parameters could be passed to \link{butterFilter}.
 #' @importFrom methods is
 #' @export
-#' @return A \link[S4Vectors]{SimpleList} of 
-#' \link[SummarizedExperiment]{RangedSummarizedExperiment}
+#' @return A \link[S4Vectors:SimpleList-class]{SimpleList} of 
+#' \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
 #' with smoothed ratios.
 #' @author Jianhong Ou and Julie Zhu
 #' @examples

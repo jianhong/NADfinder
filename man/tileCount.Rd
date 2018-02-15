@@ -8,39 +8,40 @@ tileCount(reads, genome, windowSize = 100000L, step = 10000L,
   mode = IntersectionNotStrict, dataOverSamples = FALSE, ...)
 }
 \arguments{
-\item{reads}{A \link[GenomicRanges]{GRanges},
-\link[GenomicRanges]{GRangesList} (should be one read per list element),
-\link[GenomicAlignments]{GAlignments},
-\link[GenomicAlignments]{GAlignmentsList},
-\link[GenomicAlignments]{GAlignmentPairs} or
-\link[Rsamtools]{BamFileList} object that represents the data to be
-counted by \code{\link[GenomicAlignments]{summarizeOverlaps}}.}
+\item{reads}{A \link[GenomicRanges:GRanges-class]{GRanges},
+\link[GenomicRanges:GRangesList-class]{GRangesList} (should be one read per list element),
+\link[GenomicAlignments:GAlignments-class]{GAlignments},
+\link[GenomicAlignments:GAlignmentsList-class]{GAlignmentsList},
+\link[GenomicAlignments:GAlignmentPairs-class]{GAlignmentPairs} or
+\link[Rsamtools:BamFileList-class]{BamFileList} object that represents the data to be
+counted by \code{\link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}}. If reads are more than 1 bam files,
+it should be a vector of character with full path, otherwise current working directory 
+is the default directory.}
 
-\item{genome}{The object from/on which to get/set the sequence information.}
+\item{genome}{A BSgenome object from/on which to get/set the sequence and metadata information.}
 
-\item{windowSize}{numeric(1) or integer(1). Size of windows.}
+\item{windowSize}{numeric(1) or integer(1). Size of the windows.}
 
-\item{step}{numeric(1) or integer(1). Step of windows.}
+\item{step}{numeric(1) or integer(1). Step of generating silding windows.}
 
-\item{mode}{mode can be one of the pre-defined count methods.
-see \link[GenomicAlignments]{summarizeOverlaps}.
-default is countByOverlaps, alia of
-countOverlaps(features, reads, ignore.strand=ignore.strand)}
+\item{mode}{One of the pre-defined count methods.
+see \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}.
+default is countByOverlaps, alia of countOverlaps(features, reads, ignore.strand=ignore.strand)}
 
-\item{dataOverSamples}{logical(1). Data over several samples when use 
-\link[GenomicRanges]{GRangesList} as input?}
+\item{dataOverSamples}{logical(1). Data over several samples when use
+\link[GenomicRanges:GRangesList-class]{GRangesList} as input.}
 
 \item{...}{Additional arguments passed to
-\code{\link[GenomicAlignments]{summarizeOverlaps}}.}
+\code{\link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}}.}
 }
 \value{
-A \link[SummarizedExperiment]{RangedSummarizedExperiment} object. 
+A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 The assays slot holds the counts, rowRanges holds the annotation from the
 sliding widows of genome.
 metadata contains lib.size.chrom for holding chromosome-level sequence depth
 }
 \description{
-tileCount extends \link[GenomicAlignments]{summarizeOverlaps} by finding coverage for
+tileCount extends \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps} by finding coverage for
 each fixed window in the whole genome
 }
 \examples{
@@ -61,5 +62,5 @@ reads.2 <- GRangesList(GRanges("chr2", IRanges((seq_len(90))*10, width=10)), rea
 tileCount(reads.2, genome, windowSize=100, step=50)
 }
 \author{
-Jianhong Ou and Julie Zhu
+Jianhong Ou, Haibo Liu and Julie Zhu
 }

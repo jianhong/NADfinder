@@ -2,21 +2,21 @@
 % Please edit documentation in R/callPeaks.R
 \name{callPeaks}
 \alias{callPeaks}
-\title{call peaks for ratios of repeats}
+\title{call peaks using transformed, background corrected, and smoothed ratios with biological replicates}
 \usage{
 callPeaks(se, backgroundCorrectionAssay = "bcRatio",
-  normlizationMethod = "quantile", N = 100, cutoffAdjPvalue = 0.05,
-  countFilter = 1000, ...)
+  normlizationMethod = "quantile", N = 100, cutoffAdjPvalue = 1e-04,
+  countFilter = 1000, method.combineP = "meansig", ...)
 }
 \arguments{
 \item{se}{An object of 
-\link[SummarizedExperiment]{RangedSummarizedExperiment}
-with assays of raw counts, ratios, background correct ratios,
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
+with assays of raw counts, tranformed ratios, background corrected ratios,
 smoothed ratios and z-scores. It should be an element of output of 
 \link{smoothRatiosByChromosome}}
 
 \item{backgroundCorrectionAssay}{character(1). Assays names 
-for background correction ratios}
+for background corrected ratios}
 
 \item{normlizationMethod}{character(1) specifying the normalization
 method to be used. Choices  are "none", "scale", "quantile" or "cyclicloess".
@@ -32,25 +32,33 @@ Default 100.}
 \item{countFilter}{numeric(1). Cutoff value for mean of raw reads count 
 in each window.}
 
+\item{method.combineP}{default meansig}
+
 \item{...}{Parameter not used.}
 }
 \value{
 An object of GRanges of peak list with metadata "AveSig", "P.Value", 
-and "adj.P.Val", where "AveSig" means average signals.
+and "adj.P.Val", where "AveSig" means average signal such as average log2OddsRatio, log2CPMRatio or log2Ratio.
 }
 \description{
-Use limma to call peaks for ratios of repeats
+Use limma to calculate p-values
+}
+\details{
+By default, use the mean smoothed ratio for each peak region to calculate p-values
 }
 \examples{
 
 data(triplicates.counts)
 se <- triplicates.counts
 gps <- c("26", "28", "29")
-se <- log2se(se, 
+se <- log2se(se,transformation = "log2Ratio", 
              nucleosomeCols = paste0("N", gps, ".bam"),
              genomeCols = paste0("G", gps, ".bam"))
 se<- smoothRatiosByChromosome(se, chr="chr18")
 peaks <- callPeaks(se[[1]][10000:15000, ], 
-                cutoffAdjPvalue=0.05, countFilter=1000)
+                cutoffAdjPvalue=0.001, countFilter=1000)
 
+}
+\author{
+Jianhong Ou and Julie Zhu
 }

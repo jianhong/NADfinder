@@ -1,9 +1,9 @@
 #' plot signals with ideograms
 #'
-#' Plot signals with ideograms for \link[GenomicRanges]{GRangesList}.
+#' Plot signals with ideograms for \link[GenomicRanges:GRangesList-class]{GRangesList}.
 #'
 #' @param ideo Output of \link[trackViewer]{loadIdeogram}.
-#' @param grList A \link[GenomicRanges]{GRangesList} of data to plot.
+#' @param grList A \link[GenomicRanges:GRangesList-class]{GRangesList} of data to plot.
 #' @param mcolName Column name of metadata of GRangesList for plotting.
 #' @param ... Parameters to pass to \link[trackViewer]{ideogramPlot}
 #' @importFrom trackViewer ideogramPlot

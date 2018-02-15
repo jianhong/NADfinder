@@ -2,16 +2,16 @@
 % Please edit documentation in R/cumulativePercentage.R
 \name{cumulativePercentage}
 \alias{cumulativePercentage}
-\title{Plot the cumulative percentage tag allocation in sample}
+\title{Plot the cumulative percentage tag allocation}
 \usage{
 cumulativePercentage(se, binWidth = 1e+05,
   backgroundCorrectionAssay = "bcRatio", ...)
 }
 \arguments{
 \item{se}{An object of 
-\link[SummarizedExperiment]{RangedSummarizedExperiment}
-with assays of raw counts, ratios, background correct ratios,
-smoothed ratios and z-scores. It should be an element of output of 
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
+with assays of raw counts, transfomred ratios, background correct ratios,
+smoothed ratios and z-scores. It should be an element of the output of 
 \link{smoothRatiosByChromosome}.}
 
 \item{binWidth}{numeric(1) or integer(1). The width of each bin.}
@@ -30,9 +30,10 @@ paired samples.
 }
 \examples{
 data(triplicates.counts)
+library(SummarizedExperiment)
 se <- triplicates.counts
 gps <- c("26", "28", "29")
-se <- log2se(se, 
+se <- log2se(se, transformation = "log2Ratio", 
              nucleosomeCols = paste0("N", gps, ".bam"),
              genomeCols = paste0("G", gps, ".bam"))
 se <- smoothRatiosByChromosome(se, chr="chr18")

@@ -1,14 +1,16 @@
-#' call peaks for ratios of repeats
+#' call peaks using transformed, background corrected, and smoothed ratios with biological replicates
 #'
-#' Use limma to call peaks for ratios of repeats
+#' Use limma to calculate p-values
+#'
+#' By default, use the mean smoothed ratio for each peak region to calculate p-values 
 #'
 #' @param se An object of 
-#' \link[SummarizedExperiment]{RangedSummarizedExperiment}
-#' with assays of raw counts, ratios, background correct ratios,
+#' \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
+#' with assays of raw counts, tranformed ratios, background corrected ratios,
 #' smoothed ratios and z-scores. It should be an element of output of 
 #' \link{smoothRatiosByChromosome}
 #' @param backgroundCorrectionAssay character(1). Assays names 
-#' for background correction ratios
+#' for background corrected ratios
 #' @param normlizationMethod character(1) specifying the normalization
 #' method to be used. Choices  are "none", "scale", "quantile" or "cyclicloess".
 #' See \link[limma]{normalizeBetweenArrays} for details.
@@ -19,32 +21,39 @@
 #' @param cutoffAdjPvalue numeric(1). Cutoff adjust p-value.
 #' @param countFilter numeric(1). Cutoff value for mean of raw reads count 
 #' in each window.
+#' @param method.combineP default meansig
 #' @param ... Parameter not used.
 #'
 #' @import limma
+#' @import EmpiricalBrownsMethod
+#' @import metap
 #' @export
 #' @return An object of GRanges of peak list with metadata "AveSig", "P.Value", 
-#' and "adj.P.Val", where "AveSig" means average signals.
+#' and "adj.P.Val", where "AveSig" means average signal such as average log2OddsRatio, log2CPMRatio or log2Ratio.
+#' @author Jianhong Ou and Julie Zhu
+
 #' @examples
 #'
 #' data(triplicates.counts)
 #' se <- triplicates.counts
 #' gps <- c("26", "28", "29")
-#' se <- log2se(se, 
+#' se <- log2se(se,transformation = "log2Ratio", 
 #'              nucleosomeCols = paste0("N", gps, ".bam"),
 #'              genomeCols = paste0("G", gps, ".bam"))
 #' se<- smoothRatiosByChromosome(se, chr="chr18")
 #' peaks <- callPeaks(se[[1]][10000:15000, ], 
-#'                 cutoffAdjPvalue=0.05, countFilter=1000)
+#'                 cutoffAdjPvalue=0.001, countFilter=1000)
 #'
 callPeaks <- function(se, backgroundCorrectionAssay="bcRatio",
                       normlizationMethod="quantile",
-                      N=100, cutoffAdjPvalue=0.05,
-                      countFilter=1000, ...){
+                      N=100, cutoffAdjPvalue=0.0001,
+                      countFilter=1000, method.combineP = "meansig", ...){
     normlizationMethod <-
         match.arg(normlizationMethod,
                   c("none", "scale", "quantile", "cyclicloess"))
-    stopifnot(is(se, "RangedSummarizedExperiment"))
+    method.combineP <- 
+       match.arg(method.combineP, c("Browns", "minimump", "logitp", "Fishers", "sumz", "meansig"))
+    stopifnot(class(se)=="RangedSummarizedExperiment")
     if(any(!c("nucleosome", "genome", backgroundCorrectionAssay) %in% 
                       names(assays(se)))){
         stop("nucleosome", "genome", backgroundCorrectionAssay, 
@@ -60,10 +69,11 @@ callPeaks <- function(se, backgroundCorrectionAssay="bcRatio",
     bc.norm <- normalizeBetweenArrays(bc, method=normlizationMethod)
     ### call peaks
     bc.norm.rowMeans <- rowMeans(bc.norm)
+# Jianhong, do you want to add a parameter as smooth.method (loess,  buttfilter)
     bc.smoothed <- butterFilter(bc.norm.rowMeans, N=N)
     peaks <- peakdet(bc.smoothed)
     if(length(peaks$peakpos)==0){
-        peaks$peakpos <- ceiling(length(bc.smoothed)/2)
+       peaks$peakpos <- which(bc.smoothed == max(bc.smoothed)) 
     }
     ## split the signals by peaks
     x <- seq.int(length(peaks$peakpos))
@@ -72,27 +82,29 @@ callPeaks <- function(se, backgroundCorrectionAssay="bcRatio",
         x <- c(1, x+1)
         peaks$peakpos <- c(peaks$peakpos, length(bc.smoothed))
     }
-### assume points between previous valley and this valley blong to the group of this valley
-### needs to improve
+### assume points between previous valley and this valley belong to the group of this valley
     group <- rep(x, times)
     if(length(group)!=length(bc.smoothed)){
         stop("The length of group is not identical with that of signals.",
              "Please report this bug.")
     }
-##### Assume the null is 0,not stringent
 
     fit <- lmFit(bc.norm)
     fit2 <- eBayes(fit)
     res <- topTable(fit2, number=nrow(fit2), sort.by="none")
-
+    res <- cbind(bc.norm, res)
 #### group windows by valley plus points after previous valley
 
     res$group <- group
 
     mcols(gr) <- DataFrame(res)
+    gr.all <- gr
+
     keep <- gr$adj.P.Val < cutoffAdjPvalue
     gr <- gr[keep]
     se <- se[keep, ]
+### add cpm filter or count filter to retain windows with at least half of the samples 
+### the following filter favors dataset with more replicates
     gr <-
         gr[rowMeans(cbind(assays(se)[["nucleosome"]], 
                           assays(se)[["genome"]])) > countFilter]
@@ -108,8 +120,9 @@ callPeaks <- function(se, backgroundCorrectionAssay="bcRatio",
     gr <- split(gr, gr$group)
     gr.rd <- lapply(gr, function(.e) {
         ## peak summit
+### Jianhong, do we need to smooth the data again? (you used butterFilter to smooth the data previously)
         if(length(.e)>10){
-            sig <- loess.smooth(x=seq_along(.e), y=.e$AveExpr,
+            sig <- loess.smooth(x=seq_along(.e), y=.e$AveExpr, 
                                 evaluation = length(.e))$y
         }else{
             sig <- .e$AveExpr
@@ -127,26 +140,76 @@ callPeaks <- function(se, backgroundCorrectionAssay="bcRatio",
             .e <- .e[.z & .e$AveExpr>max(.leftmin, .rightmin, na.rm=TRUE)]
         }
         ra <- range(.e)
+        all.windows.in.ra <- gr.all[seqnames(gr.all) == seqnames(ra) & 
+            (start(gr.all) + windowSize /2) >= start(ra) & 
+            (end(gr.all) - windowSize /2) <= end(ra), ]
         if(length(.e)>0){
-            ra$AveSig <- quantile(.e$AveExpr, probs=c(0, .75, 1), na.rm=TRUE)[2]
-            ra$P.value <- quantile(.e$P.Value, probs=c(0, .25, 1),
-                                   na.rm=TRUE)[2]
-            ra$adj.P.Val <- quantile(.e$adj.P.Val, probs=c(0, .25, 1),
-                                     na.rm=TRUE)[2]
+            ra$AveSig <- mean(all.windows.in.ra$AveExpr) 
+            #ra$AveSig <- quantile(all.windows.in.ra$AveExpr, probs=c(0, .75, 1), na.rm=TRUE)[2]
+            if (method.combineP  == "Browns")
+            {
+                 ra$P.value <- empiricalBrownsMethod(data_matrix = 
+                     mcols(all.windows.in.ra)[,1:dim(bc.norm)[2]],
+                     p_values = all.windows.in.ra$P.Value, extra_info=FALSE)
+                 ra$adj.P.Val <- empiricalBrownsMethod(data_matrix = 
+                     mcols(all.windows.in.ra)[,1:dim(bc.norm)[2]], 
+                     p_values = all.windows.in.ra$adj.P.Val, extra_info=FALSE)
+                 mcols(ra) <- cbind(t(colMeans(as.matrix(mcols(
+                     all.windows.in.ra)[,1:dim(bc.norm)[2]]))), mcols(ra)) 
+             }
+             else if (method.combineP  == "Fishers") {
+                 ra$P.value <- sumlog(all.windows.in.ra$P.Value)$p
+                 ra$adj.P.Val <- sumlog(all.windows.in.ra$adj.P.Val)$p
+                 mcols(ra) <- cbind(t(colMeans(as.matrix(mcols(
+                     all.windows.in.ra)[,1:dim(bc.norm)[2]]))), mcols(ra))
+              }
+             else if (method.combineP == "logitp") {
+                 ra$P.value <- logitp(all.windows.in.ra$P.Value)$p
+                 ra$adj.P.Val <- logitp(all.windows.in.ra$adj.P.Val)$p
+                 mcols(ra) <- cbind(t(colMeans(as.matrix(mcols(
+                     all.windows.in.ra)[,1:dim(bc.norm)[2]]))), mcols(ra))
+             }
+             else if (method.combineP == "minimump") {
+                 ra$P.value <- minimump(all.windows.in.ra$P.Value)$p
+                 ra$adj.P.Val <- minimump(all.windows.in.ra$adj.P.Val)$p
+                 mcols(ra) <- cbind(t(colMeans(as.matrix(mcols(
+                     all.windows.in.ra)[,1:dim(bc.norm)[2]]))), mcols(ra))
+             }
+             else if (method.combineP == "sumz") {
+		 ra$P.value <- sumz(all.windows.in.ra$P.Value)$p
+                 ra$adj.P.Val <- sumz(all.windows.in.ra$adj.P.Val)$p
+                 mcols(ra) <- cbind(t(colMeans(as.matrix(mcols(
+                     all.windows.in.ra)[,1:dim(bc.norm)[2]]))), mcols(ra))
+             }
+             else if (method.combineP == "meansig") {
+                mcols(ra) <- cbind(t(colMeans(as.matrix(mcols(
+                     all.windows.in.ra)[,1:dim(bc.norm)[2]]))), mcols(ra))
+             }
         }else{
             mcols(ra) <- DataFrame(AveSig=numeric(0),
-                                   P.Value=numeric(0),
-                                   adj.P.Val=numeric(0))
+                                   P.Value=numeric(1),
+                                   adj.P.Val=numeric(1))
             colnames(mcols(ra)) <- c("AveSig", "P.Value", "adj.P.Val")
+            mcols(ra) <- cbind(t(colMeans(as.matrix(mcols(
+                     all.windows.in.ra)[,1:dim(bc.norm)[2]]))), mcols(ra))
         }
         ra
     })
     gr <- unlist(GRangesList(gr.rd))
+    if (method.combineP == "meansig")
+    {
+        fit <- lmFit(mcols(gr)[,1:dim(bc.norm)[2]])
+        fit2 <- eBayes(fit)
+        res <- topTable(fit2, number=nrow(fit2), sort.by="none")
+        mcols(gr)$P.Value =  res$P.Value
+        mcols(gr)$adj.P.Val = res$adj.P.Val 
+        mcols(gr)$AveSig  = res$logFC
+    }
     ## avoid overlaps
     wh <- ceiling(windowSize/2)
-    gr <- gr[width(gr) > 2*wh]
-    start(gr) <- start(gr) + wh
-    end(gr) <- end(gr) - wh
+    #gr <- gr[width(gr) > 2*wh]
+    start(gr[width(gr) > wh]) <- start(gr[width(gr) > wh]) + wh
+    end(gr[width(gr) > wh]) <- end(gr[width(gr) > wh]) - wh
     gr <- sort(gr)
     gr
 }

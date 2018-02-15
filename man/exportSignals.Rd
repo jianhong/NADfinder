@@ -7,31 +7,31 @@
 exportSignals(dat, assayName, colName, con, format = "bedGraph", ...)
 }
 \arguments{
-\item{dat}{An object of \link[GenomicRanges]{GRanges}, 
-or \link[SummarizedExperiment]{RangedSummarizedExperiment}
+\item{dat}{An object of \link[GenomicRanges:GRanges-class]{GRanges}, 
+or \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
 with assays of raw counts, ratios, background correct ratios,
 smoothed ratios and z-scores. It should be an element of output of 
 \link{smoothRatiosByChromosome}}
 
 \item{assayName}{character(1). Assay name for 
-\link[SummarizedExperiment]{RangedSummarizedExperiment}}
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}}
 
 \item{colName}{character(1). Column name of metadata of dat or assay of dat 
 for coverage weight, see
-\link[GenomicRanges]{coverage}, 
-\link[SummarizedExperiment]{RangedSummarizedExperiment}.}
+\link[GenomicRanges:coverage-methods]{coverage}, 
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}.}
 
 \item{con}{The connection to which data is saved. If this is a character
 vector, it is assumed to be a filename and a corresponding file connection
 is created and then closed after exporting the object.
-If missing, a \link[IRanges]{SimpleRleList} will be returned.}
+If missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be returned.}
 
 \item{format}{The format of the output. see \link[rtracklayer]{export}.}
 
 \item{...}{Parameters to pass to \link[rtracklayer]{export}}
 }
 \value{
-If con is missing, a \link[IRanges]{SimpleRleList} will be returned.
+If con is missing, a \link[IRanges::AtomicList-class]{SimpleRleList} will be returned.
 Otherwise, nothing is returned.
 }
 \description{

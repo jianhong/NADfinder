@@ -2,7 +2,7 @@
 #' @description Get the correlations of replicates by the coverage of peaks.
 #'              The signals will be filter by the background cutoff value and
 #'              the correlations will be calculated.
-#' @param se A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
+#' @param se A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 #' The output of \link{log2se}.
 #' @param chr A vector of character. Filter for seqnames. It should be the
 #' chromosome names to be kept.

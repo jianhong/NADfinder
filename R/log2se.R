@@ -3,7 +3,7 @@
 #' @description Calculate the log2 transformed ratios for nucleosome vs genome.
 #' pseudo-count will be used to avoid x/0 or log(0).
 #'
-#' @param se A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
+#' @param se A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 #' The output of \link{tileCount}.
 #' @param nucleosomeCols,genomeCols column Names of counts for nucleosome 
 #' and genome. They should be the column names in the assays of se. 

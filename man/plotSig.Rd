@@ -9,7 +9,7 @@ plotSig(ideo, grList, mcolName, ...)
 \arguments{
 \item{ideo}{Output of \link[trackViewer]{loadIdeogram}.}
 
-\item{grList}{A \link[GenomicRanges]{GRangesList} of data to plot.}
+\item{grList}{A \link[GenomicRanges:GRangesList-class]{GRangesList} of data to plot.}
 
 \item{mcolName}{Column name of metadata of GRangesList for plotting.}
 
@@ -19,7 +19,7 @@ plotSig(ideo, grList, mcolName, ...)
 Invisible argument list for \link[trackViewer]{ideogramPlot}.
 }
 \description{
-Plot signals with ideograms for \link[GenomicRanges]{GRangesList}.
+Plot signals with ideograms for \link[GenomicRanges:GRangesList-class]{GRangesList}.
 }
 \examples{
 

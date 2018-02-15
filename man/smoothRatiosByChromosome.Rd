@@ -11,7 +11,7 @@ smoothRatiosByChromosome(se, chr = paste0("chr", c(seq_len(21), "X", "Y")),
 }
 \arguments{
 \item{se}{An object of 
-\link[SummarizedExperiment]{RangedSummarizedExperiment} 
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} 
 with scores. Output of \link{log2se}}
 
 \item{chr}{A character vector, used to filter out seqnames. It should be the
@@ -30,11 +30,13 @@ background, default lower 25 percent.
 chrom.level.background TRUE or FALSE, default to TRUE, use chromosome-level background
 to calculate z-score}
 
+\item{chrom.level.background}{logical(1).}
+
 \item{...}{Parameters could be passed to \link{butterFilter}.}
 }
 \value{
-A \link[S4Vectors]{SimpleList} of 
-\link[SummarizedExperiment]{RangedSummarizedExperiment}
+A \link[S4Vectors:SimpleList-class]{SimpleList} of 
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
 with smoothed ratios.
 }
 \description{

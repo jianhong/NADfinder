@@ -9,7 +9,7 @@ log2se(se, nucleosomeCols, genomeCols, pseudocount = 1L,
   chrom.level.lib = TRUE)
 }
 \arguments{
-\item{se}{A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
+\item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 The output of \link{tileCount}.}
 
 \item{nucleosomeCols, genomeCols}{column Names of counts for nucleosome 

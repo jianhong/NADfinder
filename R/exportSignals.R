@@ -2,21 +2,21 @@
 #'
 #' Output signals to bedgraph, bed, wig, etc, for track viewer
 #'
-#' @param dat An object of \link[GenomicRanges]{GRanges}, 
-#' or \link[SummarizedExperiment]{RangedSummarizedExperiment}
+#' @param dat An object of \link[GenomicRanges:GRanges-class]{GRanges}, 
+#' or \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
 #' with assays of raw counts, ratios, background correct ratios,
 #' smoothed ratios and z-scores. It should be an element of output of 
 #' \link{smoothRatiosByChromosome}
 #' @param assayName character(1). Assay name for 
-#' \link[SummarizedExperiment]{RangedSummarizedExperiment}
+#' \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
 #' @param colName character(1). Column name of metadata of dat or assay of dat 
 #' for coverage weight, see
-#' \link[GenomicRanges]{coverage}, 
-#' \link[SummarizedExperiment]{RangedSummarizedExperiment}.
+#' \link[GenomicRanges:coverage-methods]{coverage}, 
+#' \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}.
 #' @param con The connection to which data is saved. If this is a character
 #' vector, it is assumed to be a filename and a corresponding file connection
 #' is created and then closed after exporting the object.
-#' If missing, a \link[IRanges]{SimpleRleList} will be returned.
+#' If missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be returned.
 #' @param format The format of the output. see \link[rtracklayer]{export}.
 #' @param ... Parameters to pass to \link[rtracklayer]{export}
 #' @import GenomicAlignments
@@ -24,7 +24,7 @@
 #' @import GenomicRanges
 #' @import rtracklayer
 #' @export
-#' @return If con is missing, a \link[IRanges]{SimpleRleList} will be returned.
+#' @return If con is missing, a \link[IRanges::AtomicList-class]{SimpleRleList} will be returned.
 #' Otherwise, nothing is returned.
 #' @examples
 #' gr <- GRanges("chr1", IRanges(seq_len(100), 201:300), reads=rep(1, 100))

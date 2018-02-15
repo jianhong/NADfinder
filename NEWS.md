@@ -1,6 +1,8 @@
-# CHANGES IN VERSION 1.3.2
+# CHANGES IN VERSION 1.3.3
 
-* TO Be done.
+* Fix the warning in windows for the help files.
+* Add Haibo as a author.
+* add the changes from Julie.
 
 # CHANGES IN VERSION 1.3.1
 
