@@ -1,42 +1,46 @@
-#' get correlations for replicates
-#' @description Get the correlations of replicates by the coverage of peaks.
-#'              The signals will be filter by the background cutoff value and
-#'              the correlations will be calculated.
-#' @param se A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
-#' The output of \link{log2se}.
+#' Get correlation coefficinets and p-values between biological replicates
+#' @description Get correlations and p-values between biological replicates based on coverage signal for 
+#'              peak regions. The signals will be filtered by the background cutoff value before
+#'              calculated correlations. This function also output a correlation plots using the 
+#'              \link[corrplot]{corrplot}.
+#' @param se A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
+#' The output from \link{log2se}.
 #' @param chr A vector of character. Filter for seqnames. It should be the
 #' chromosome names to be kept.
 #' @param ratioAssay character(1). 
 #' Column name of ratio for correlation calculation.
 #' @param window numeric(1) or integer(1). 
 #' The window size for summary of the ratios.
-#' @param cutoff numeric(1). All the coverages lower than cutoff value 
+#' @param cutoff numeric(1). All the coverage signals lower than cutoff value 
 #' in a given window will be filtered out.
-#' @param method A character string indicating which correlation coefficient
+#' @param method character(1) indicating which correlation coefficient
 #'  is to be computed. See \link[stats]{cor}.
+#' @param file_name A file name for output correlation plots
 #' @param ... Parameters not used.
 #' @import GenomicRanges
 #' @import GenomeInfoDb
 #' @importFrom stats as.formula
 #' @importFrom utils combn
+#' @improtFrom corrplot corrplot
 #' @importFrom IRanges Views viewSums
 #' @export
-#' @return A list of matrixes of correlation and coefficient.
+#' @return A list of matrixes of correlation coefficients and p-values.
+#' @author Jianhong Ou, Haibo Liu
 #' @examples
 #' data(triplicates.counts)
 #' se <- triplicates.counts
 #' gps <- c("26", "28", "29")
-#' se <- log2se(se, 
+#' se <- log2se(se, transformation = "log2Ratio",
 #'              nucleosomeCols = paste0("N", gps, ".bam"),
 #'              genomeCols = paste0("G", gps, ".bam"))
 #' getCorrelations(se, chr="chr18")
 #'
 
 getCorrelations <- function(se, chr = paste0("chr", seq_len(21)),
-                             ratioAssay = "ratio", window=10000, cutoff=1,
-                             method=c("spearman", "pearson", "kendall"),
+                             ratioAssay = "ratio", window=10000L, cutoff=1,
+                             method=c("spearman", "pearson", "kendall"), file_name="Correlation plots.pdf",
                              ...){
-    stopifnot(is(se, "RangedSummarizedExperiment"))
+    stopifnot(class(se)=="RangedSummarizedExperiment")
     stopifnot(length(ratioAssay)==1)
     stopifnot(ratioAssay %in% names(assays(se)))
     method <- match.arg(method)
@@ -79,28 +83,48 @@ getCorrelations <- function(se, chr = paste0("chr", seq_len(21)),
     })
     ## rbind
     resample <- do.call(rbind, resample)
-    ## correlation
-    cor <- cor(resample, method = method)
-    ## coefficient
-    coe <- function(df){
+    ## R-squared from linear model fitting
+    ## Correlation coefficients can be calculaed using 3 different methods,
+    ## But here normality is assumed. So I changed the code to call cor.test
+    ## function to get both the correlation coefficients and the p-values.
+   
+    correlations <- function(df){
         coln <- colnames(df)
-        out <- matrix(0, nrow=length(coln), ncol=length(coln),
+        mat <- matrix(0, nrow=length(coln), ncol=length(coln),
                       dimnames = list(coln, coln))
         cb <- combn(coln, m=2, simplify = FALSE)
-        r.squared <- lapply(cb, function(.ele){
-            lm <- lm(as.formula(paste(.ele, collapse="~")), data=df)
-            summary(lm)$r.squared
+        corNp <- lapply(cb, function(.ele){
+            corTestOut <- cor.test(as.formula(paste("~", .ele[1], "+", .ele[2])), data=df)
+            c(rho = corTestOut$estimate, p = corTestOut$p.value)
         })
-        for(i in seq_along(cb)){
-            out[cb[[i]][1], cb[[i]][2]] <-
-                out[cb[[i]][2], cb[[i]][1]] <-
-                r.squared[[i]]
+ 
+        fillMatrix <- function(cb, mat, j){
+            for(i in seq_along(cb)){
+                mat[cb[[i]][1], cb[[i]][2]] <-
+                    mat[cb[[i]][2], cb[[i]][1]] <-
+                    corNp[[i]][j]
+            }
+            mat
         }
-        for(i in seq_along(coln)){
-            out[i, i] <- 1
-        }
-        out
+        out <- lapply(1:2, fillMatrix, cb=cb, mat=mat)
+        names(out) <- c("cor.coeff", "p.values")
     }
-    coe <- coe(as.data.frame(resample))
-    return(list(cor=cor, coe=coe))
+    
+    ## plot correlation and color the squares if p <= 0.01
+    
+    col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
+    
+    ## correlation plots
+    pdf(file_name)
+    corrplot(out$cor.coeff, method="color", col=col(200),  
+             type="upper", order="hclust", addgrid.col="gray",
+             addCoef.col = "black", # Add coefficient of correlation
+             tl.col="black", tl.srt=45, #Text label color and rotation
+             # Combine with significance
+             p.mat = out$p.values, sig.level = 0.01, insig = "blank", 
+             # hide correlation coefficient on the principal diagonal
+             diag=FALSE)
+    dev.off()
+    corOut <- correlations(as.data.frame(resample))
+    return(invisible(corOut))
 }
