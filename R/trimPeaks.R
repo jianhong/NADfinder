@@ -1,10 +1,10 @@
 #' Trim peaks
 #'
 #' Filter the peaks by pvalue and trim the range of peaks 
-#' for sample without duplicates.
+#' for an NAD experiment without biological replicates.
 #'
 #' @param se An object of 
-#' \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
+#' \link[SummarizedExperiment]{RangedSummarizedExperiment}
 #' with assays of raw counts, ratios, background corrected ratios,
 #' smoothed ratios and z-scores. It should be an element of the output of 
 #' \link{smoothRatiosByChromosome}
@@ -15,10 +15,10 @@
 #' @param ratioAssay character(1). The name of assay in se, which store the 
 #' values to be smoothed. 
 #' @param backgroundCorrectionAssay,smoothedRatioAssay,zscoreAssay Assays names 
-#' for background corrected ratios, smoothed ratios and z-score based on
+#' for background-corrected ratios, smoothed ratios and z-scores based on
 #' background corrected ratios.
 #'
-#' @return An object of \link[GenomicRanges:GRanges-class]{GRanges}.
+#' @return An object of \link[GenomicRanges]{GRanges}.
 #'
 #' @export
 #' @importFrom stats quantile
@@ -27,7 +27,8 @@
 #' data(single.count)
 #' se <- single.count
 #' ## Calculate ratios for peak calling. We use signal vs input.
-#' dat <- log2se(se, nucleosomeCols="nucleosome.bam", genomeCols="genome.bam")
+#' dat <- log2se(se, nucleoleusCols="nucleoleus.bam", genomeCols="genome.bam",
+#' transformation = "log2Ratio")
 #' ## Smooth the ratios for each chromosome.
 #' dat <- smoothRatiosByChromosome(dat, N=100)
 #' peaks <- trimPeaks(dat[["chr18"]],
@@ -43,12 +44,12 @@ trimPeaks <- function(se, cutoffPvalue=0.05,
                       zscoreAssay="zscore"){
     backgroundPercentage2=.5
     stopifnot(backgroundPercentage>0 && backgroundPercentage<1)
-    stopifnot(is(se, "RangedSummarizedExperiment"))
-    asyNames <- c("nucleosome", "genome", ratioAssay, 
+    stopifnot(class(se)=="RangedSummarizedExperiment")
+    asyNames <- c("nucleoleus", "genome", ratioAssay, 
                    backgroundCorrectionAssay,
                    smoothedRatioAssay, zscoreAssay)
     if(any(!asyNames %in% names(assays(se)))){
-        stop("se must be a list contain assays of nucleosome, genome,", 
+        stop("se must be a list contain assays of nucleoleus, genome,", 
              paste(ratioAssay, backgroundCorrectionAssay, 
                    smoothedRatioAssay, zscoreAssay,
              sep=", "))
@@ -59,6 +60,7 @@ trimPeaks <- function(se, cutoffPvalue=0.05,
     }
     windowSize <- width(chr)[1]
     sampleLen <- ncol(assays(se)[[zscoreAssay]])
+    
     ## this function is for single sample. For multiple samples, use callPeaks
     if(sampleLen!=1){
         stop("This function is for single sample.", 
@@ -115,8 +117,8 @@ trimPeaks <- function(se, cutoffPvalue=0.05,
     })
     chr.rd <- unlist(GRangesList(chr.rd))
     ## trim the peaks to avoid overlaps
-#    wh <- ceiling(windowSize/2)
-     wh <- ceiling(windowSize/20)
+    ## wh <- ceiling(windowSize/2)
+    wh <- ceiling(windowSize/20)
     start(chr.rd) <- start(chr.rd) + wh
     end(chr.rd) <- end(chr.rd) - wh
     chr.rd <- sort(chr.rd)
