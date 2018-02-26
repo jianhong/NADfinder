@@ -60,7 +60,7 @@ transformData <- function(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
     ## This will not bias the data
     A[A==0 | B==0] <- A[A==0 | B==0] + pseudo.count
     B[A==0 | B==0] <- B[A==0 | B==0] + pseudo.count
-
+    
     
     if (transformation != "log2Ratio")
     {
@@ -69,12 +69,10 @@ transformData <- function(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
             A <- data.frame(A, seqnames = as.character(seqnames.A), stringsAsFactors = FALSE)
             A <- merge(A, lib.size.A, by.x= "seqnames", by.y ="row.names", all.x = TRUE)
             colnames(A) <- c("seqnames", "count.A", "lib.size.A")
-            A$lib.size.A[A$lib.size.A == 0] <- pseudo.count
             
             B <- data.frame(B, seqnames = as.character(seqnames.B), stringsAsFactors = FALSE)
             B <- merge(B, lib.size.B, by.x = "seqnames", by.y = "row.names", all.x = TRUE)
             colnames(B) <- c("seqnames", "count.B", "lib.size.B")
-            A$lib.size.B[A$lib.size.B == 0] <- pseudo.count
         } else
         {
             genome.library.size.A <-  sum(as.numeric(lib.size.A[,1]))
@@ -87,6 +85,8 @@ transformData <- function(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
             {
                 r <- log2(A/(genome.library.size.A - A)) - log2(B/(genome.library.size.B - B))
             } else {
+                
+                print("HERE!")
                 odds.A <- as.numeric(A[, 2]) / (as.numeric(A[,3]) - as.numeric(A[, 2]))
                 odds.B <- as.numeric(B[, 2]) / (as.numeric(B[,3]) - as.numeric(B[, 2]))
                 r <- log2(odds.A / odds.B)
