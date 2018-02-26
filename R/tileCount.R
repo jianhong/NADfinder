@@ -89,6 +89,7 @@ IntersectionNotStrict <-function(features,
 
 tileCount_scanBam <- function(reads,
                       genome,
+                      excludeChrs = c("chrM", "M", "Mt", "MT")
                       windowSize = 1e5L,
                       step = 1e4L,
                       mode = IntersectionNotStrict,
@@ -98,23 +99,21 @@ tileCount_scanBam <- function(reads,
     stopifnot(all(grepl(".bam$", reads)), all(file.exists(paste0(reads, ".bai"))))
     stopifnot(class(genome) == "BSgenome")
     stopifnot(is.integer(windowSize), is.integer(step), windowSize>0, step > 0, step < windowSize)
-    targetRegions <- as(seqinfo(genome), "GRanges")
-    tileTargetRegions <-slidingWindows(x = targetRegions,
-                                       width = windowSize,
-                                       step = step)
-    tileTargetRegionsLen <- elementNROWS(tileTargetRegions)
-    tileTargetRegions <- unlist(tileTargetRegions)
-    mcols(tileTargetRegions)$oid <- rep(seq_along(targetRegions),tileTargetRegionsLen)
+
     
     ## the scanbam function canonly read a single bam file not a list of bamfiles at a time
     ## so for a list bamfiles, I modify the code as follows
     ## aln is a list of list of lists
     isPE <- testPairedEndBam(reads[1])
     
-    param <- ScanBamParam(what=c("rname", "qname"))
+    
+    targetRegions <- as(seqinfo(genome), "GRanges")
+    targetRegions <- targetRegions[!seqnames(targetRegions) %in% excludeChrs]
+    
+    param <- ScanBamParam(what=c("rname", "qname"), which = targetRegions)
     aln <- lapply(reads, scanBam, param = param)
     lib.size.chrom <- do.call(cbind, lapply(1:length(aln),function(i)
-        {
+    {
             ref_qnames <- unique(data.frame(rnames = aln[[i]][[1]]$rname, qnames = aln[[i]][[1]]$qname))
             if(i==1)
             {
@@ -130,9 +129,17 @@ tileCount_scanBam <- function(reads,
             ## using the bamfile names to name the column derived from a give bamfiles
             colnames(countByChr) <- reads[i]
             countByChr
-        }))
-
-
+    }))
+    
+    ## filtering GRanges to keep only those chromosomal scaffolds that are in the BAM file
+    targetRegions <- targetRegions[seqnames(tt) %in% rownames(lib.size.chrom)]
+    tileTargetRegions <-slidingWindows(x = targetRegions,
+                                       width = windowSize,
+                                       step = step)
+    tileTargetRegionsLen <- elementNROWS(tileTargetRegions)
+    tileTargetRegions <- unlist(tileTargetRegions)
+    mcols(tileTargetRegions)$oid <- rep(seq_along(targetRegions),tileTargetRegionsLen)
+    
     if (isPE)
     {
         rse <- summarizeOverlaps(features = tileTargetRegions,
