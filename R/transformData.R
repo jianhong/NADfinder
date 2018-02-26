@@ -68,14 +68,17 @@ transformData <- function(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
             A <- data.frame(A, seqnames = as.character(seqnames.A), stringsAsFactors = FALSE)
             A <- merge(A, lib.size.A, by.x= "seqnames", by.y ="row.names", all.x = TRUE)
             colnames(A) <- c("seqnames", "count.A", "lib.size.A")
-            
+                
             B <- data.frame(B, seqnames = as.character(seqnames.B), stringsAsFactors = FALSE)
             B <- merge(B, lib.size.B, by.x = "seqnames", by.y = "row.names", all.x = TRUE)
             colnames(B) <- c("seqnames", "count.B", "lib.size.B")
+            B[B[,3] == B[,2], 3] <- B[B[,3]== B[,2], 3] + pseudo.count
+            
         } else
         {
-            genome.library.size.A <-  sum(as.numeric(lib.size.A[,1]))
-            genome.library.size.B <-  sum(as.numeric(lib.size.B[,1]))
+            genome.library.size.A <-  sum(lib.size.A[,1])
+            genome.library.size.B <-  sum(lib.size.B[,1])
+            stopifnot(genome.library.size.A > 0, genome.library.size.B > 0)
         }
         
         if (transformation == "log2OddsRatio")
@@ -85,10 +88,15 @@ transformData <- function(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
                 r <- log2(A/(genome.library.size.A - A)) - log2(B/(genome.library.size.B - B))
             } else 
             {
-
-                odds.A <- as.numeric(A[, 2]) / (as.numeric(A[,3]) - as.numeric(A[, 2]))
-                odds.B <- as.numeric(B[, 2]) / (as.numeric(B[,3]) - as.numeric(B[, 2]))
-                r <- log2(odds.A / odds.B)
+                A2B3B2 <- A[, 2] * (B[,3] - B[, 2])
+                B2A3A2 <- B[, 2] * (A[,3] - A[, 2])
+                
+                if(any(B2A3A2 ==0) || any(B2A3A2 == 0) )
+                {
+                    B2A3A2[B2A3A2 == 0 | B2A3A2 == 0] <- B2A3A2[B2A3A2 == 0 | B2A3A2 == 0 ] + pseudo.count
+                    A2B3B2[B2A3A2 == 0 | B2A3A2 == 0] <- A2B3B2[B2A3A2 == 0 | B2A3A2 == 0 ] + pseudo.count
+                }
+                r <- log2( A2B3B2 / B2A3A2)
             }
         } else if (transformation == "log2CPMRatio")
         {
@@ -97,9 +105,17 @@ transformData <- function(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
                 r <- log2(A/genome.library.size.A) - log2(B/genome.library.size.B)
             } else 
             {
-                cpm.A <- as.numeric(A[,2]) / as.numeric(A[,3])
-                cpm.B <- as.numeric(B[,2]) / as.numeric(B[,3])
-                r <- log2(cpm.A / cpm.B)
+                B2A3 <- B[,2] * A[,3]
+                A2B3 <- A[,2] * B[,3]
+                
+                if(any(B2A3 == 0) || any(A2B3 == 0) )
+                {
+                    B2A3[B2A3 == 0 | A2B3 == 0 ] <- B2A3[B2A3 == 0 | A2B3 == 0] + pseudo.count
+                    A2B3[B2A3 == 0 | A2B3 == 0 ] <- A2B3[B2A3 == 0 | A2B3 == 0] + pseudo.count
+                }
+                print(B2A3)
+                print(A2B3 / B2A3)
+                r <- log2(A2B3 / B2A3)
             }
         }
     } else 
