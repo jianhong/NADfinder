@@ -134,7 +134,7 @@ tileCount_scanBam <- function(reads,
     lib.size.chrom <- lib.size.chrom[!rownames(lib.size.chrom) %in% excludeChrs, ]
     
     ## filtering GRanges to keep only those chromosomal scaffolds that are in the BAM file
-    targetRegions <- targetRegions[seqnames(tt) %in% rownames(lib.size.chrom)]
+    targetRegions <- targetRegions[seqnames(targetRegions) %in% rownames(lib.size.chrom)]
     tileTargetRegions <-slidingWindows(x = targetRegions,
                                        width = windowSize,
                                        step = step)
