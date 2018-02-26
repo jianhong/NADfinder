@@ -89,7 +89,7 @@ IntersectionNotStrict <-function(features,
 
 tileCount_scanBam <- function(reads,
                       genome,
-                      excludeChrs = c("chrM", "M", "Mt", "MT")
+                      excludeChrs = c("chrM", "M", "Mt", "MT"),
                       windowSize = 1e5L,
                       step = 1e4L,
                       mode = IntersectionNotStrict,
