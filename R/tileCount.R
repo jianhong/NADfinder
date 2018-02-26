@@ -108,9 +108,8 @@ tileCount_scanBam <- function(reads,
     
     
     targetRegions <- as(seqinfo(genome), "GRanges")
-    targetRegions <- targetRegions[!seqnames(targetRegions) %in% excludeChrs]
-    
-    param <- ScanBamParam(what=c("rname", "qname"), which = targetRegions)
+
+    param <- ScanBamParam(what=c("rname", "qname"))
     aln <- lapply(reads, scanBam, param = param)
     lib.size.chrom <- do.call(cbind, lapply(1:length(aln),function(i)
     {
@@ -130,6 +129,9 @@ tileCount_scanBam <- function(reads,
             colnames(countByChr) <- reads[i]
             countByChr
     }))
+    
+    ## remove excludeChr from lib.size.chrom
+    lib.size.chrom <- lib.size.chrom[!rownames(lib.size.chrom) %in% excludeChrs, ]
     
     ## filtering GRanges to keep only those chromosomal scaffolds that are in the BAM file
     targetRegions <- targetRegions[seqnames(tt) %in% rownames(lib.size.chrom)]
