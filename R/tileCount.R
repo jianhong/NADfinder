@@ -47,6 +47,7 @@ IntersectionNotStrict <-function(features,
 #' @param windowSize numeric(1) or integer(1). Size of the windows.
 #' @param step numeric(1) or integer(1). Step of generating silding windows.
 #' @param mode One of the pre-defined count methods.
+#' @param excludeChrs A vector of string: chromosomes/scaffolds of no interest for NAD analysis.
 #' see \link[GenomicAlignments]{summarizeOverlaps}.
 #' default is countByOverlaps, alia of countOverlaps(features, reads, ignore.strand=ignore.strand)
 #' @param dataOverSamples logical(1). Data over several samples when use
