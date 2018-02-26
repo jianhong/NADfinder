@@ -61,7 +61,6 @@ transformData <- function(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
     A[A==0 | B==0] <- A[A==0 | B==0] + pseudo.count
     B[A==0 | B==0] <- B[A==0 | B==0] + pseudo.count
     
-    
     if (transformation != "log2Ratio")
     {
         if(chrom.level.lib)
@@ -84,9 +83,9 @@ transformData <- function(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
             if (!chrom.level.lib)
             {
                 r <- log2(A/(genome.library.size.A - A)) - log2(B/(genome.library.size.B - B))
-            } else {
-                
-                print("HERE!")
+            } else 
+            {
+
                 odds.A <- as.numeric(A[, 2]) / (as.numeric(A[,3]) - as.numeric(A[, 2]))
                 odds.B <- as.numeric(B[, 2]) / (as.numeric(B[,3]) - as.numeric(B[, 2]))
                 r <- log2(odds.A / odds.B)
@@ -96,7 +95,8 @@ transformData <- function(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
             if (!chrom.level.lib)
             {        
                 r <- log2(A/genome.library.size.A) - log2(B/genome.library.size.B)
-            } else {
+            } else 
+            {
                 cpm.A <- as.numeric(A[,2]) / as.numeric(A[,3])
                 cpm.B <- as.numeric(B[,2]) / as.numeric(B[,3])
                 r <- log2(cpm.A / cpm.B)
@@ -106,5 +106,6 @@ transformData <- function(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
     {
         r <- log2(A / B)
     }
-    r
+    ## should I control the number of digits of r?
+    r 
 }
