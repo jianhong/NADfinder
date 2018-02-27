@@ -11,7 +11,8 @@
 #' zscoreOverBck(r)
 #' @author Jianhong Ou and Julie Zhu
 
-zscoreOverBck <- function(ratios, backgroundPercentage=0.25){
+zscoreOverBck <- function(ratios, backgroundPercentage=0.25)
+{
     r <- quantile(ratios, probs = backgroundPercentage)
     bg.ratios <- ratios[ratios<=r]
     pop.sd <- sd(bg.ratios) * sqrt(length(bg.ratios) - 1)/sqrt(length(bg.ratios)) 
