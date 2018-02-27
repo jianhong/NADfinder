@@ -41,7 +41,8 @@ backgroundCorrection <- function(ratios, degree = 3, ...)
     {
         bc <- baseline(t(ratios), method = "modpolyfit", degree = degree, ...)
         as.numeric(getCorrected(bc))
-    } else {
+    } else 
+    {
         ratios
     }
 }
