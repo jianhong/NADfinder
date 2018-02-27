@@ -31,7 +31,7 @@
 #' se <- triplicates.counts
 #' gps <- c("26", "28", "29")
 #' se <- log2se(se, transformation = "log2Ratio",
-#'              nucleosomeCols = paste0("N", gps, ".bam"),
+#'              nucleoleusCols = paste0("N", gps, ".bam"),
 #'              genomeCols = paste0("G", gps, ".bam"))
 #' getCorrelations(se, chr="chr18")
 #'
@@ -116,7 +116,10 @@ getCorrelations <- function(se,
         }
         out <- lapply(1:2, fillMatrix, cb = cb, mat = mat)
         names(out) <- c("cor.coeff", "p.values")
+        out
     }
+    
+    corOut <- correlations(as.data.frame(resample))
     
     ## plot correlation and color the squares if p <= 0.01
     
@@ -126,7 +129,7 @@ getCorrelations <- function(se,
     ## correlation plots
     pdf(file_name)
     corrplot(
-        out$cor.coeff,
+        corOut$cor.coeff,
         method = "color",
         col = col(200),
         type = "upper",
@@ -138,13 +141,13 @@ getCorrelations <- function(se,
         tl.srt = 45,
         #Text label color and rotation
         # Combine with significance
-        p.mat = out$p.values,
+        p.mat = corOut$p.values,
         sig.level = 0.01,
         insig = "blank",
         # hide correlation coefficient on the principal diagonal
         diag = FALSE
     )
     dev.off()
-    corOut <- correlations(as.data.frame(resample))
+
     return(invisible(corOut))
 }
