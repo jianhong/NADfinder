@@ -1,6 +1,6 @@
 #' Plot the cumulative percentage of tag allocation
 #' 
-#' Plot the difference between the cumulative percentage tag allocation in 
+#' Plot the difference between the cumulative percentage of tag allocation in 
 #' paired samples.
 #' 
 #' @param se An object of 
@@ -9,7 +9,7 @@
 #' smoothed ratios and z-scores. It should be an element of the output of 
 #' \link{smoothRatiosByChromosome}.
 #' @param binWidth numeric(1) or integer(1). The width of each bin.
-#' @param backgroundCorrectionAssay character(1). Assays names 
+#' @param backgroundCorrectedAssay character(1). Assays names 
 #' for background correction ratios.
 #' @param ... Parameter not used.
 #' @import SummarizedExperiment
@@ -35,24 +35,24 @@
 #' se <- triplicates.counts
 #' gps <- c("26", "28", "29")
 #' se <- log2se(se, transformation = "log2Ratio", 
-#'              NucleoleusCols = paste0("N", gps, ".bam"),
+#'              nucleoleusCols = paste0("N", gps, ".bam"),
 #'              genomeCols = paste0("G", gps, ".bam"))
 #' se <- smoothRatiosByChromosome(se, chr="chr18")
 #' cumulativePercentage(se[["chr18"]])
 
 cumulativePercentage <- function(se,
                                  binWidth = 1e5,
-                                 backgroundCorrectionAssay = "bcRatio",...) 
+                                 backgroundCorrectedAssay = "bcRatio",...) 
 {
     stopifnot(is(se, "RangedSummarizedExperiment"))
     assayName <-
-        c("Nucleoleus", "genome", backgroundCorrectionAssay)
+        c("nucleoleus", "genome", backgroundCorrectedAssay)
     if (any(!assayName %in% names(assays(se)))) 
     {
         stop(
-            "Nucleoleus",
+            "nucleoleus",
             "genome",
-            backgroundCorrectionAssay,
+            backgroundCorrectedAssay,
             "should be the assays of se.")
     }
     ## resample
@@ -80,7 +80,7 @@ cumulativePercentage <- function(se,
             viewMeans(v, na.rm = TRUE)
         })
         sig <- do.call(cbind, sig)
-        sig[order(sig[, "Nucleoleus"]),]
+        sig[order(sig[, "nucleoleus"]),]
     })
     sigCumsum <- lapply(sigBin, function(.ele) {
         .ele <- apply(.ele, 2, cumsum)
@@ -91,7 +91,7 @@ cumulativePercentage <- function(se,
               FUN = `/`)
     })
     sigEnrichStart <- sapply(sigBin, function(.ele) {
-        .r <- (.ele[, "Nucleoleus"] + 1) / (.ele[, "genome"] + 1)
+        .r <- (.ele[, "nucleoleus"] + 1) / (.ele[, "genome"] + 1)
         ## split .r into two parts, background and enriched
         .x <- cumsum(.r)
         .y <- sum(.r) - .x
@@ -127,7 +127,7 @@ cumulativePercentage <- function(se,
             )
             matlines(x = sigCumsum[[i]][, 1],
                      y = sigCumsum[[i]][, -1])
-            zero <- which(sigCumsum[[i]][, "Nucleoleus"] > 1 / binWidth)
+            zero <- which(sigCumsum[[i]][, "nucleoleus"] > 1 / binWidth)
             if (length(zero) > 0) 
             {
                 x.tick <- sigCumsum[[i]][zero[1], 1]
