@@ -36,12 +36,17 @@
 #' getCorrelations(se, chr="chr18")
 #'
 
-getCorrelations <- function(se, chr = paste0("chr", seq_len(21)),
-                             ratioAssay = "ratio", window=10000L, cutoff=1,
-                             method=c("spearman", "pearson", "kendall"), file_name="Correlation plots.pdf",
-                             ...){
-    stopifnot(class(se)=="RangedSummarizedExperiment")
-    stopifnot(length(ratioAssay)==1)
+getCorrelations <- function(se,
+                            chr = paste0("chr", seq_len(21)),
+                            ratioAssay = "ratio",
+                            window = 10000L,
+                            cutoff = 1,
+                            method = c("spearman", "pearson", "kendall"),
+                            file_name = "Correlation plots.pdf",
+                            ...) 
+{
+    stopifnot(class(se) == "RangedSummarizedExperiment")
+    stopifnot(length(ratioAssay) == 1)
     stopifnot(ratioAssay %in% names(assays(se)))
     method <- match.arg(method)
     gr <- rowRanges(se)
@@ -49,9 +54,8 @@ getCorrelations <- function(se, chr = paste0("chr", seq_len(21)),
     seqlevels(gr) <- chr
     seqlen <- seqlengths(gr)
     seqlen[is.na(seqlen)] <- sapply(names(seqlen)[is.na(seqlen)],
-                                    function(.ele){
-                                        end(range(gr[seqnames(gr) %in% .ele]))
-                                    })
+                                    function(.ele) {
+                                        end(range(gr[seqnames(gr) %in% .ele]))})
     seqlen <- unlist(seqlen)
     tiles <- tileGenome(seqlen, tilewidth = window)
     tiles <- unlist(tiles)
@@ -59,71 +63,87 @@ getCorrelations <- function(se, chr = paste0("chr", seq_len(21)),
     tiles <- lapply(tiles, ranges)
     ## resample the signals
     cn <- colnames(assays(se)[[ratioAssay]])
-    if(length(cn)==0){
+    if (length(cn) == 0) 
+    {
         cn <- paste0("sample", seq_len(ncol(assays(se)[[ratioAssay]])))
         colnames(assays(se)[[ratioAssay]]) <- cn
     }
-    resample <- lapply(cn, function(.ele){
-        .ele <- exportSignals(dat = se, 
-                              assayName = ratioAssay, 
+    resample <- lapply(cn, function(.ele) {
+        .ele <- exportSignals(dat = se,
+                              assayName = ratioAssay,
                               colName = .ele)
         .views <- Views(.ele, tiles[names(.ele)])
-        viewSums(.views)
-    })
+        viewSums(.views)})
     names(resample) <- cn
     ## swap resamples
     chr <- sort(unique(sapply(resample, names)))
-    resample <- lapply(chr, function(.ele){
-        do.call(cbind, lapply(resample, function(.e) .e[[.ele]]))
-    })
+    resample <- lapply(chr, function(.ele) {
+        do.call(cbind, lapply(resample, function(.e)
+            .e[[.ele]]))})
     names(resample) <- chr
     ## filter
-    resample <- lapply(resample, function(.ele){
-        .ele[rowSums(.ele >= cutoff) == ncol(.ele), , drop=FALSE]
-    })
+    resample <- lapply(resample, function(.ele) {
+        .ele[rowSums(.ele >= cutoff) == ncol(.ele), , drop = FALSE]})
     ## rbind
     resample <- do.call(rbind, resample)
     ## R-squared from linear model fitting
     ## Correlation coefficients can be calculaed using 3 different methods,
     ## But here normality is assumed. So I changed the code to call cor.test
     ## function to get both the correlation coefficients and the p-values.
-   
-    correlations <- function(df){
+    
+    correlations <- function(df) {
         coln <- colnames(df)
-        mat <- matrix(0, nrow=length(coln), ncol=length(coln),
-                      dimnames = list(coln, coln))
-        cb <- combn(coln, m=2, simplify = FALSE)
-        corNp <- lapply(cb, function(.ele){
-            corTestOut <- cor.test(as.formula(paste("~", .ele[1], "+", .ele[2])), data=df)
+        mat <- matrix(
+            0,
+            nrow = length(coln),
+            ncol = length(coln),
+            dimnames = list(coln, coln)
+        )
+        cb <- combn(coln, m = 2, simplify = FALSE)
+        corNp <- lapply(cb, function(.ele) {
+            corTestOut <-
+                cor.test(as.formula(paste("~", .ele[1], "+", .ele[2])), data = df)
             c(rho = corTestOut$estimate, p = corTestOut$p.value)
         })
- 
-        fillMatrix <- function(cb, mat, j){
-            for(i in seq_along(cb)){
+        
+        fillMatrix <- function(cb, mat, j) {
+            for (i in seq_along(cb)) {
                 mat[cb[[i]][1], cb[[i]][2]] <-
                     mat[cb[[i]][2], cb[[i]][1]] <-
                     corNp[[i]][j]
             }
             mat
         }
-        out <- lapply(1:2, fillMatrix, cb=cb, mat=mat)
+        out <- lapply(1:2, fillMatrix, cb = cb, mat = mat)
         names(out) <- c("cor.coeff", "p.values")
     }
     
     ## plot correlation and color the squares if p <= 0.01
     
-    col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
+    col <-
+        colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
     
     ## correlation plots
     pdf(file_name)
-    corrplot(out$cor.coeff, method="color", col=col(200),  
-             type="upper", order="hclust", addgrid.col="gray",
-             addCoef.col = "black", # Add coefficient of correlation
-             tl.col="black", tl.srt=45, #Text label color and rotation
-             # Combine with significance
-             p.mat = out$p.values, sig.level = 0.01, insig = "blank", 
-             # hide correlation coefficient on the principal diagonal
-             diag=FALSE)
+    corrplot(
+        out$cor.coeff,
+        method = "color",
+        col = col(200),
+        type = "upper",
+        order = "hclust",
+        addgrid.col = "gray",
+        addCoef.col = "black",
+        # Add coefficient of correlation
+        tl.col = "black",
+        tl.srt = 45,
+        #Text label color and rotation
+        # Combine with significance
+        p.mat = out$p.values,
+        sig.level = 0.01,
+        insig = "blank",
+        # hide correlation coefficient on the principal diagonal
+        diag = FALSE
+    )
     dev.off()
     corOut <- correlations(as.data.frame(resample))
     return(invisible(corOut))
