@@ -119,13 +119,13 @@ because most of NADs are broad regions as wide as 100 kb. However, we
 should observe clear differences between the two curves.
 
 ```{r}
-## Calculate ratios for peak calling. We use nucleosome vs genomic DNA.
-dat <- log2se(se, nucleosomeCols = "nucleosome.bam", genomeCols="genome.bam", transformation = "log2Ratio")
+## Calculate ratios for peak calling. We use nucleoleus vs genomic DNA.
+dat <- log2se(se, nucleoleusCols = "nucleoleus.bam", genomeCols="genome.bam", transformation = "log2Ratio")
 ## Smooth the ratios for each chromosome.
 ## We found that for each chromosome, the ratios are higher in 5'end than 3'end.
 datList <- smoothRatiosByChromosome(dat, N=100)
 ## check the difference between the cumulative percentage tag allocation 
-## in genome and nucleosome samples.
+## in genome and nucleoleus samples.
 cumulativePercentage(datList[["chr18"]])
 ```
 
@@ -217,7 +217,7 @@ se <- triplicates.counts
 ## Calculate ratios for nucleoli vs genomic sample.
 gps <- c("26", "28", "29")
 se <- log2se(se, 
-             nucleosomeCols = paste0("N", gps, ".bam"),
+             nucleoleusCols = paste0("N", gps, ".bam"),
              genomeCols = paste0("G", gps, ".bam"), transformation = "log2Ratio")
 getCorrelations(se, "chr18")
 seList<- smoothRatiosByChromosome(se, chr="chr18")
