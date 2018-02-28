@@ -55,10 +55,10 @@ names(fls) <- basename(fls)
 if (!require(BSgenome.Mmusculus.UCSC.mm10))
 {
     source("https://bioconductor.org/biocLite.R")
-    biocLite("BSgenome.Mmusculus.UCSC.mm10")
+    biocLite("BSgenome.Mmusculus.UCSC.mm10"))
     library(BSgenome.Mmusculus.UCSC.mm10)
 }
-se <- tileCount(fls, genome = Mmusculus, windowSize=1000, step=500)
+se <- tileCount(fls, genes, windowSize=1000, step=500)
 }
 
 ##
