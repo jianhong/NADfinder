@@ -57,24 +57,24 @@ these higher-order chromosome interactions in fixed and live single cells
 each 50kb moving window with step size of 1kb for nucleolar and genomic 
 samples. Log2 ratio between nucleolar and genomic samples was computed for 
 each window, followed by local background correction, smoothing, peak calling, 
-filtering and annotation.
-](Picture1.png)
+filtering and annotation.](Picture1.png)
 
-# Single sample
+# Single pair of nucleoleus associated DNA and whole genomic DNA sequencing 
+samples  
 Here is an example to use NADfinder for peak calling.
 
 ## Coverage calculation
 
 Here is the code snippet for calculating coverage with a sliding window in a 
 given step along the genome using a pair of bam files from genomic sample as 
-background and purified nucleoli as target signal. 
+background and purified nucleoleus-associated DNA as target signal. 
 
 ```{r quickStart, fig.width=6, fig.height=4}
 ## load the library
 library(NADfinder)
 library(SummarizedExperiment)
 ## test bam files in the package
-path <- system.file("data", package = "NADfinder", lib.loc = NULL,
+path <- system.file("extdata", package = "NADfinder", lib.loc = NULL,
             mustWork = TRUE)
 bamFiles <- dir(path, ".bam$")
 
@@ -214,7 +214,7 @@ Load saved coverage.
 data(triplicates.counts)
 se <- triplicates.counts
 
-## Calculate ratios for nucleoli vs genomic sample.
+## Calculate ratios for nucleoloar vs genomic samples.
 gps <- c("26", "28", "29")
 se <- log2se(se, 
              nucleoleusCols = paste0("N", gps, ".bam"),
