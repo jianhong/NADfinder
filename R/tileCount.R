@@ -71,10 +71,15 @@ IntersectionNotStrict <-function(features,
 #' @export
 #' @examples
 #' \dontrun{
-#' fls <- list.files(system.file("extdata", package="GenomicAlignments"),
-#' recursive=TRUE, pattern="*bam$", full=TRUE)
+#' fls <- list.files(system.file("extdata", package="NADfinder"),
+#' recursive=FALSE, pattern="*bam$", full=TRUE)
 #' names(fls) <- basename(fls)
-#' genes <- GRanges(seqlengths = c(chr2L=7000, chr2R=10000))
+#' if (!require(BSgenome.Mmusculus.UCSC.mm10))
+#' {
+#'     source("https://bioconductor.org/biocLite.R")
+#'     biocLite("BSgenome.Mmusculus.UCSC.mm10"))
+#'     library(BSgenome.Mmusculus.UCSC.mm10)
+#' }
 #' se <- tileCount(fls, genes, windowSize=1000, step=500)
 #' }
 #'
@@ -85,10 +90,10 @@ IntersectionNotStrict <-function(features,
 #' tileCount(reads, genome, windowSize=100, step=50)
 #' reads.2 <- GRangesList(GRanges("chr2", IRanges((seq_len(90))*10, width=10)), reads)
 #' tileCount(reads.2, genome, windowSize=100, step=50)
-#' @author Jianhong Ou and Julie Zhu
+#' @author Jianhong Ou, Haibo Liu and Julie Zhu
 
 
-tileCount_scanBam <- function(reads,
+tileCount<- function(reads,
                       genome,
                       excludeChrs = c("chrM", "M", "Mt", "MT"),
                       windowSize = 1e5L,
