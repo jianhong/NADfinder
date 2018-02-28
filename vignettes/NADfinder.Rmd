@@ -5,26 +5,10 @@ date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('NADfinder')`"
 bibliography: bibliography.bib
 csl: nature.csl
-abstract: >
-  Nucleolus is an important structure inside the nucleus 
-    in eukaryotic cells. It is the site for rRNA transcription 
-    and ribosome biogenesis. In addition, nucleoli are dynamic hubs 
-    through which numerous proteins shuttle and contact 
-    specific non-rDNA genomic loci. Deep sequencing 
-    analyses of DNA associated with isolated nucleoli (NAD-
-    seq) have shown that specific loci, termed nucleolar-
-    associated domains (NADs) form frequent three-
-    dimensional associations with nucleoli. NAD-seq has 
-    been used to study the biological functions of NAD and 
-    the dynamics of NAD distribution during embryonic 
-    stem cell (ESC) differentiation. 
-    Here, we developed a Bioconductor package NADfinder for bioinformatic 
-    analysis of the NAD-seq data, including normalization, 
-    smoothing, peak calling, peak trimming and annotation.
 vignette: >
-  %\VignetteIndexEntry{NADfinder Vignette}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{NADfinder Vignette}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 output:
   BiocStyle::html_document
 ---
@@ -46,12 +30,13 @@ associations with nucleoli [@nemeth2010initial, @van2010high]. Early mammalian
 development is a critical period to study NAD biological function, because 
 interactions between pericentromeric chromatin and perinucleolar regions are 
 particularly dynamic during embryonic development 
-[@aguirre20123d, @popken2014reprogramming]. 
-We therefore propose for the first time to map the 
-NADs in the mouse genome, determine how these associations are altered during 
-embryonic stem cell (ESC) differentiation, and develop tools for study of 
-these higher-order chromosome interactions in fixed and live single cells 
-(Fig. 1). 
+[@aguirre20123d, @popken2014reprogramming]. Here, we developed a Bioconductor 
+package NADfinder for bioinformatic analysis of the NAD-seq data, including 
+normalization, smoothing, peak calling, peak trimming and annotation.
+We demonstrate the application of NADfinder in mapping the NADs in the mouse 
+genome, determining how these associations are altered during embryonic stem 
+cell (ESC) differentiation, and develop tools for study of these higher-order
+chromosome interactions in fixed and live single cells (Fig. 1). 
 
 ![Fig. 1 Workflow for NAD peak identification. Read counts are summarized for 
 each 50kb moving window with step size of 1kb for nucleolar and genomic 
