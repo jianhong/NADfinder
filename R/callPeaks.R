@@ -26,7 +26,7 @@
 #' @param ... Parameter not used.
 #'
 #' @import limma
-#' @importFrom S4Vectors
+#' @import S4Vectors
 #' @import EmpiricalBrownsMethod  
 #' @import metap
 #' @export
