@@ -14,7 +14,7 @@
 #' raw reads count in each window.
 #' @param ratioAssay character(1). The name of assay in se, which store the 
 #' values to be smoothed. 
-#' @param backgroundCorrectionAssay,smoothedRatioAssay,zscoreAssay Assays names 
+#' @param backgroundCorrectedAssay,smoothedRatioAssay,zscoreAssay Assays names 
 #' for background-corrected ratios, smoothed ratios and z-scores based on
 #' background corrected ratios.
 #'
@@ -35,12 +35,13 @@
 #'                 backgroundPercentage=.25,
 #'                 cutoffPvalue=0.05, countFilter=1000)
 #'
+
 trimPeaks <- function(se,
                       cutoffPvalue = 0.05,
                       backgroundPercentage = .25,
                       countFilter = 1000,
                       ratioAssay = "ratio",
-                      backgroundCorrectionAssay = "bcRatio",
+                      backgroundCorrectedAssay = "bcRatio",
                       smoothedRatioAssay = "smoothedRatio",
                       zscoreAssay = "zscore") 
 {
@@ -51,7 +52,7 @@ trimPeaks <- function(se,
         "nucleoleus",
         "genome",
         ratioAssay,
-        backgroundCorrectionAssay,
+        backgroundCorrectedAssay,
         smoothedRatioAssay,
         zscoreAssay)
     if (any(!asyNames %in% names(assays(se)))) 
@@ -60,7 +61,7 @@ trimPeaks <- function(se,
             "se must be a list contain assays of nucleoleus, genome,",
             paste(
                 ratioAssay,
-                backgroundCorrectionAssay,
+                backgroundCorrectedAssay,
                 smoothedRatioAssay,
                 zscoreAssay,
                 sep = ", "
@@ -68,10 +69,13 @@ trimPeaks <- function(se,
         )
     }
     chr <- rowRanges(se)
-    if (!all(width(chr) == width(chr)[1]))
-    {
-        stop("The width of rowRanges should be identical.")
-    }
+    
+    ## NO,this might not the case for the last window of each chromosome
+    # if (!all(width(chr) == width(chr)[1]))
+    # {
+    #     stop("The width of rowRanges should be identical.")
+    # }
+    
     windowSize <- width(chr)[1]
     sampleLen <- ncol(assays(se)[[zscoreAssay]])
     
@@ -85,6 +89,7 @@ trimPeaks <- function(se,
     ## prepare data
     mcols(chr) <- do.call(cbind, assays(se)[asyNames])
     colnames(mcols(chr)) <- asyNames
+    
     ## call peaks by zscore.
     mcols(chr) <-
         cbind(mcols(chr),
@@ -106,6 +111,7 @@ trimPeaks <- function(se,
         colnames(mcols(chr)) <- c(zscoreAssay, "pvalue")
         return(chr)
     }
+    
     chr <- split(chr, chr$group)
     ## trim peaks by cut from shoulder
     chr.rd <- lapply(chr, function(.e) {
@@ -118,7 +124,7 @@ trimPeaks <- function(se,
                 min(mcols(.e)[.idx:length(.e), smoothedRatioAssay],
                     na.rm = TRUE)
             .z <-
-                zscoreOverBck(mcols(.e)[, backgroundCorrectionAssay],
+                zscoreOverBck(mcols(.e)[, backgroundCorrectedAssay],
                               backgroundPercentage2)
             .e <- .e[.z > 0 & mcols(.e)[, smoothedRatioAssay] >
                          max(.leftmin, .rightmin, na.rm = TRUE)]

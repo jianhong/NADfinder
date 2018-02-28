@@ -5,7 +5,7 @@
 #'
 #' @param se A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 #' The output of \link{tileCount}. Columnnames of counts data (fragment counts in each tile) 
-#' and metadata(total fragment counts per chromosome) are bam file names.
+#' and metadata (total fragment counts per chromosome) are bam file names.
 #' @param nucleoluesCols,genomeCols Column names of counts for nucleoleus-associated DNA
 #' and the whole genome DNA. They should be the column names in the assays slot of 
 #' an RangedSummarizedExperiment object. Ratios will be calculated as log2 (transformed-
@@ -55,19 +55,18 @@ log2se <- function(se,
     
     ## nA will be used as the column names of log2 transformed ratios
     nA <- make.names(nucleoleusCols, unique = TRUE)
-    nucleoleus = asy[, nucleoleusCols, drop = FALSE]
-    genome = asy[, genomeCols, drop = FALSE]
+    nucleoleus = data.frame(asy[, nucleoleusCols, drop = FALSE])
+    genome = data.frame(asy[, genomeCols, drop = FALSE])
+    chrNames <- rownames(metadata(se)$lib.size.chrom)
     
     args <- list()
     if (!missing(pseudocount)) {
         args$pseudocount <- pseudocount
     }
     args$transformation <- transformation
-    args$chrom.level.lib <- metadata(se)$lib.size.chrom
-    args$seqnames.A <- seqnames(se)
-    args$seqnames.B <- args$seqnames.A
-    
-    
+    args$chrom.level.lib <- chrom.level.lib
+    args$seqnames.A <-  args$seqnames.B <- seqnames(se)
+   
     if (transformation != "log2Ratio")
     {
         stopifnot("lib.size.chrom" %in% names(metadata(se)))
@@ -77,8 +76,9 @@ log2se <- function(se,
                         function(a, b, lib.size.a, lib.size.b) {
                         args$A <- a
                         args$B <- b
-                        args$lib.size.A <- lib.size.a
-                        args$lib.size.B <- lib.size.b
+                        args$lib.size.A <- as.data.frame(lib.size.a, row.names = chrNames)
+                        args$lib.size.B <- as.data.frame(lib.size.b, row.names = chrNames)
+                        
                         do.call(transformData, args = args)
                     },
                     nucleoleus, genome,

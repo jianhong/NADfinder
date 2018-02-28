@@ -2,10 +2,10 @@
 % Please edit documentation in R/cumulativePercentage.R
 \name{cumulativePercentage}
 \alias{cumulativePercentage}
-\title{Plot the cumulative percentage tag allocation}
+\title{Plot the cumulative percentage of tag allocation}
 \usage{
 cumulativePercentage(se, binWidth = 1e+05,
-  backgroundCorrectionAssay = "bcRatio", ...)
+  backgroundCorrectedAssay = "bcRatio", ...)
 }
 \arguments{
 \item{se}{An object of 
@@ -16,7 +16,7 @@ smoothed ratios and z-scores. It should be an element of the output of
 
 \item{binWidth}{numeric(1) or integer(1). The width of each bin.}
 
-\item{backgroundCorrectionAssay}{character(1). Assays names 
+\item{backgroundCorrectedAssay}{character(1). Assays names 
 for background correction ratios.}
 
 \item{...}{Parameter not used.}
@@ -25,7 +25,7 @@ for background correction ratios.}
 A list of data.frame with the cumulative percentages.
 }
 \description{
-Plot the difference between the cumulative percentage tag allocation in 
+Plot the difference between the cumulative percentage of tag allocation in 
 paired samples.
 }
 \examples{
@@ -34,7 +34,7 @@ library(SummarizedExperiment)
 se <- triplicates.counts
 gps <- c("26", "28", "29")
 se <- log2se(se, transformation = "log2Ratio", 
-             nucleosomeCols = paste0("N", gps, ".bam"),
+             nucleoleusCols = paste0("N", gps, ".bam"),
              genomeCols = paste0("G", gps, ".bam"))
 se <- smoothRatiosByChromosome(se, chr="chr18")
 cumulativePercentage(se[["chr18"]])

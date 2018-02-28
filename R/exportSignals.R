@@ -18,7 +18,7 @@
 #' is created and then closed after exporting the object.
 #' If missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be returned.
 #' @param format The format of the output. see \link[rtracklayer]{export}.
-#' @param ... Parameters to pass to \link[rtracklayer]{export}
+#' @param ... Parameters to be passed to \link[rtracklayer]{export}
 #' @import GenomicAlignments
 #' @import SummarizedExperiment
 #' @import GenomicRanges

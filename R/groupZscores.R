@@ -43,7 +43,6 @@ groupZscores <- function(zscore)
     times <- diff(c(0, peaks$valleypos, length(zscore)))
     if (length(times) != length(x)) 
     {
-        ## length(times) = length(x) + 1
         x <- c(1, x + 1)
         peaks$peakpos <- c(peaks$peakpos, length(zscore))
     }

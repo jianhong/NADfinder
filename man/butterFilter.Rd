@@ -7,12 +7,13 @@
 butterFilter(ratios, N = ceiling(length(ratios)/200))
 }
 \arguments{
-\item{ratios}{A vector of numeric. It is the ratios of counts in each window.}
+\item{ratios}{A vector of numeric. It is og2-transformed ratios,
+CPMRatios or OddRatios in each window.}
 
 \item{N}{numeric(1) or integer(1). 
 Critical frequencies of the low pass filter will be set as 1/N.
 1/N is a cutoff at 1/N-th of the Nyquist frequency.
-Default suppose there are about 200 peaks in the inputs.}
+By default, it is suppose there are about 200 peaks in the inputs.}
 }
 \value{
 A vector of numeric with same length of input ratios. 

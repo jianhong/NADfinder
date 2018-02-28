@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotSig.R
 \name{plotSig}
 \alias{plotSig}
-\title{plot signals with ideograms}
+\title{Plot signals with ideograms}
 \usage{
 plotSig(ideo, grList, mcolName, ...)
 }

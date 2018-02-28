@@ -27,12 +27,12 @@
 #'
 #' @import limma
 #' @import S4Vectors DataFrame
-#' @import EmpiricalBrownsMethod  (sample size too small here for this methods?)
+#' @import EmpiricalBrownsMethod  
 #' @import metap
 #' @export
 #' @return An object of GRanges of peak list with metadata "AveSig", "P.Value", 
 #' and "adj.P.Val", where "AveSig" means average signal such as average log2OddsRatio, log2CPMRatio or log2Ratio.
-#' @author Jianhong Ou and Julie Zhu
+#' @author Jianhong Ou, Haibo Liu and Julie Zhu
 
 #' @examples
 #'
@@ -195,6 +195,7 @@ callPeaks <- function(se,
             #ra$AveSig <- quantile(all.windows.in.ra$AveExpr, probs=c(0, .75, 1), na.rm=TRUE)[2]
             if (method.combineP  == "Browns")
             {
+                ## sample size too small here for using this methods?
                 ra$P.value <- empiricalBrownsMethod(
                     data_matrix =
                         mcols(all.windows.in.ra)[, 1:dim(bc.norm)[2]],

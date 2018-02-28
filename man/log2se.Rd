@@ -2,34 +2,36 @@
 % Please edit documentation in R/log2se.R
 \name{log2se}
 \alias{log2se}
-\title{calculate the log2 transformed ratios for SummarizedExperiment class}
+\title{Calculate the log2-transformed ratios of signal stored in a SummarizedExperiment object}
 \usage{
-log2se(se, nucleosomeCols, genomeCols, pseudocount = 1L,
+log2se(se, nucleoleusCols, genomeCols, pseudocount = 1L,
   transformation = c("log2OddsRatio", "log2CPMRatio", "log2Ratio"),
   chrom.level.lib = TRUE)
 }
 \arguments{
 \item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
-The output of \link{tileCount}.}
+The output of \link{tileCount}. Columnnames of counts data (fragment counts in each tile) 
+and metadata (total fragment counts per chromosome) are bam file names.}
 
-\item{nucleosomeCols, genomeCols}{column Names of counts for nucleosome 
-and genome. They should be the column names in the assays of se. 
-Ratios will be calculated as log2(transformed nucleosomeCols/transformed genomeCols).}
+\item{pseudocount}{Default to 1, pseudo-count used to aviod zero division or log(0).}
 
-\item{pseudocount}{default to 1, pseudo-count used to aviod x/0 or log(0).}
+\item{transformation}{Singal transformation method.}
 
-\item{transformation}{transformation type}
+\item{chrom.level.lib}{Logical (1) indicating whether calculating CPM or odds using 
+sequence depth of the whole genome or per chromosome.}
 
-\item{chrom.level.lib}{indicating whether calculating CPM or odds using 
-sequence depth of the whole genome or the corresponding chromosome}
+\item{nucleoluesCols, genomeCols}{Column names of counts for nucleoleus-associated DNA
+and the whole genome DNA. They should be the column names in the assays slot of 
+an RangedSummarizedExperiment object. Ratios will be calculated as log2 (transformed-
+nucleoluesCols/transformed genomeCols).}
 }
 \value{
 A RangedSummarizedExperiment object with log2 transformed ratios. 
-Assays will be named as nucleosome, genome and ratio.
+Assays will be named as nucleoleus, genome and ratios.
 }
 \description{
-Calculate the log2 transformed ratios for nucleosome vs genome.
-pseudo-count will be used to avoid x/0 or log(0).
+Calculate the log2 transformed ratios of signals for nucleoleus-associated 
+DNA vs the whole genome DNA reference. Pseudo-count will be used to avoid zero division or log(0).
 }
 \examples{
 library(SummarizedExperiment)
@@ -39,13 +41,13 @@ se <- SummarizedExperiment(assays=list(counts=DataFrame(A=seq_len(3),
                       IRanges(c(1, 10, 20),
                             width=9)))
 metadata(se)$lib.size.chrom <- data.frame(c("chr1"), c(1000), c(2000), c(200), c(300))
-as.data.frame(assays(log2se(se, nucleosomeCols = c("A", "C"), genomeCols = c("B", "D"), 
+as.data.frame(assays(log2se(se, nucleoleusCols = c("A", "C"), genomeCols = c("B", "D"), 
     transformation = "log2Ratio")))
-as.data.frame(assays(log2se(se, nucleosomeCols = c("A", "C"), genomeCols = c("B", "D"),
+as.data.frame(assays(log2se(se, nucleoleusCols = c("A", "C"), genomeCols = c("B", "D"),
     transformation = "log2CPMRatio")))
-as.data.frame(assays(log2se(se, nucleosomeCols = c("A", "C"), genomeCols = c("B", "D"),
+as.data.frame(assays(log2se(se, nucleoleusCols = c("A", "C"), genomeCols = c("B", "D"),
     transformation = "log2OddsRatio")))
 }
 \author{
-Jianhong Ou and Julie Zhu
+Jianhong Ou, Haibo Liu and Julie Zhu
 }

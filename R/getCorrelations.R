@@ -21,7 +21,7 @@
 #' @import GenomeInfoDb
 #' @importFrom stats as.formula
 #' @importFrom utils combn
-#' @improtFrom corrplot corrplot
+#' @importFrom corrplot corrplot
 #' @importFrom IRanges Views viewSums
 #' @export
 #' @return A list of matrixes of correlation coefficients and p-values.

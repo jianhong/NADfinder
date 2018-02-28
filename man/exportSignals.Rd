@@ -2,7 +2,7 @@
 % Please edit documentation in R/exportSignals.R
 \name{exportSignals}
 \alias{exportSignals}
-\title{output signals to file}
+\title{Output signals for visualization}
 \usage{
 exportSignals(dat, assayName, colName, con, format = "bedGraph", ...)
 }
@@ -28,7 +28,7 @@ If missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be returned.}
 
 \item{format}{The format of the output. see \link[rtracklayer]{export}.}
 
-\item{...}{Parameters to pass to \link[rtracklayer]{export}}
+\item{...}{Parameters to be passed to \link[rtracklayer]{export}}
 }
 \value{
 If con is missing, a \link[IRanges::AtomicList-class]{SimpleRleList} will be returned.

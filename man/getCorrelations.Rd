@@ -2,15 +2,15 @@
 % Please edit documentation in R/getCorrelations.R
 \name{getCorrelations}
 \alias{getCorrelations}
-\title{get correlations for replicates}
+\title{Get correlation coefficinets and p-values between biological replicates}
 \usage{
 getCorrelations(se, chr = paste0("chr", seq_len(21)), ratioAssay = "ratio",
-  window = 10000, cutoff = 1, method = c("spearman", "pearson",
-  "kendall"), ...)
+  window = 10000L, cutoff = 1, method = c("spearman", "pearson",
+  "kendall"), file_name = "Correlation plots.pdf", ...)
 }
 \arguments{
-\item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
-The output of \link{log2se}.}
+\item{se}{A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
+The output from \link{log2se}.}
 
 \item{chr}{A vector of character. Filter for seqnames. It should be the
 chromosome names to be kept.}
@@ -21,29 +21,35 @@ Column name of ratio for correlation calculation.}
 \item{window}{numeric(1) or integer(1). 
 The window size for summary of the ratios.}
 
-\item{cutoff}{numeric(1). All the coverages lower than cutoff value 
+\item{cutoff}{numeric(1). All the coverage signals lower than cutoff value 
 in a given window will be filtered out.}
 
-\item{method}{A character string indicating which correlation coefficient
+\item{method}{character(1) indicating which correlation coefficient
 is to be computed. See \link[stats]{cor}.}
+
+\item{file_name}{A file name for output correlation plots}
 
 \item{...}{Parameters not used.}
 }
 \value{
-A list of matrixes of correlation and coefficient.
+A list of matrixes of correlation coefficients and p-values.
 }
 \description{
-Get the correlations of replicates by the coverage of peaks.
-             The signals will be filter by the background cutoff value and
-             the correlations will be calculated.
+Get correlations and p-values between biological replicates based on coverage signal for 
+             peak regions. The signals will be filtered by the background cutoff value before
+             calculated correlations. This function also output a correlation plots using the 
+             \link[corrplot]{corrplot}.
 }
 \examples{
 data(triplicates.counts)
 se <- triplicates.counts
 gps <- c("26", "28", "29")
-se <- log2se(se, 
-             nucleosomeCols = paste0("N", gps, ".bam"),
+se <- log2se(se, transformation = "log2Ratio",
+             nucleoleusCols = paste0("N", gps, ".bam"),
              genomeCols = paste0("G", gps, ".bam"))
 getCorrelations(se, chr="chr18")
 
+}
+\author{
+Jianhong Ou, Haibo Liu
 }
