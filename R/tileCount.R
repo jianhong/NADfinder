@@ -104,7 +104,7 @@ tileCount<- function(reads,
 {
     stopifnot(all(grepl(".bam$", reads)), all(file.exists(paste0(reads, ".bai"))))
     stopifnot(class(genome) == "BSgenome")
-    stopifnot(is.integer(windowSize), is.integer(step), windowSize>0, step > 0, step < windowSize)
+    stopifnot(windowSize %% 1 == 0, step %% 1 ==0, windowSize > 0, step > 0, step < windowSize)
 
     
     ## the scanbam function canonly read a single bam file not a list of bamfiles at a time
