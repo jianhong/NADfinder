@@ -3,7 +3,7 @@
 #' The Butterworth filter is a type of signal processing filter designed to
 #' have as flat a frequency response as possible in the passband.
 #'
-#' @param ratios A vector of numeric. It is og2-transformed ratios,
+#' @param ratios A vector of numeric. It is log2-transformed ratios,
 #' CPMRatios or OddRatios in each window.
 #' @param N numeric(1) or integer(1). 
 #' Critical frequencies of the low pass filter will be set as 1/N.
@@ -34,7 +34,7 @@ butterFilter <- function(ratios, N = ceiling(length(ratios) / 200))
     
     W1 <- floor(N / 2) + 1
     W2 <- N - W1
-    ### the following loop is to shift the smoothed ration half window backward
+    ### the following loop is to shift the smoothed ratios half window backward
     if (length(r2) > N && W2 > 0)
     {
         y <- ratios[(length(r2) - W2):length(r2)]
