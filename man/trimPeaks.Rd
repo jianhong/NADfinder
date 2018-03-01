@@ -41,11 +41,10 @@ for an NAD experiment without biological replicates.
 
 data(single.count)
 se <- single.count
-## Calculate ratios for peak calling. We use signal vs input.
-dat <- log2se(se, nucleoleusCols="nucleoleus.bam", genomeCols="genome.bam",
-transformation = "log2Ratio")
+dat <- log2se(se, nucleoleusCols="N18.subsampled.srt.bam", genomeCols="G18.subsampled.srt.bam", 
+transformation="log2CPMRatio")
 ## Smooth the ratios for each chromosome.
-dat <- smoothRatiosByChromosome(dat, N=100)
+dat <- smoothRatiosByChromosome(dat, N=100, chr=c("chr18","chr19"))
 peaks <- trimPeaks(dat[["chr18"]],
                 backgroundPercentage=.25,
                 cutoffPvalue=0.05, countFilter=1000)

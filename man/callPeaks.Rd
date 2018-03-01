@@ -48,12 +48,15 @@ By default, use the mean smoothed ratio for each peak region to calculate p-valu
 }
 \examples{
 
-data(triplicates.counts)
-se <- triplicates.counts
-gps <- c("26", "28", "29")
-se <- log2se(se,transformation = "log2Ratio", 
-             nucleoleusCols = paste0("N", gps, ".bam"),
-             genomeCols = paste0("G", gps, ".bam"))
+data(triplicate.count)
+se <- triplicate.count
+se <- log2se(se, transformation = "log2CPMRatio",
+             nucleoleusCols = c("N18.subsampled.srt-2.bam",
+             "N18.subsampled.srt-3.bam",
+             "N18.subsampled.srt.bam"),
+             genomeCols = c("G18.subsampled.srt-2.bam",
+             "G18.subsampled.srt-3.bam",
+             "G18.subsampled.srt.bam"))
 se<- smoothRatiosByChromosome(se, chr="chr18")
 peaks <- callPeaks(se[[1]][10000:15000, ], 
                 cutoffAdjPvalue=0.001, countFilter=1000)

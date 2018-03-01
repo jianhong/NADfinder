@@ -7,7 +7,7 @@
 butterFilter(ratios, N = ceiling(length(ratios)/200))
 }
 \arguments{
-\item{ratios}{A vector of numeric. It is og2-transformed ratios,
+\item{ratios}{A vector of numeric. It is log2-transformed ratios,
 CPMRatios or OddRatios in each window.}
 
 \item{N}{numeric(1) or integer(1). 

@@ -4,7 +4,7 @@
 \alias{getCorrelations}
 \title{Get correlation coefficinets and p-values between biological replicates}
 \usage{
-getCorrelations(se, chr = paste0("chr", seq_len(21)), ratioAssay = "ratio",
+getCorrelations(se, chr = paste0("chr", seq_len(19)), ratioAssay = "ratio",
   window = 10000L, cutoff = 1, method = c("spearman", "pearson",
   "kendall"), file_name = "Correlation plots.pdf", ...)
 }
@@ -41,12 +41,15 @@ Get correlations and p-values between biological replicates based on coverage si
              \link[corrplot]{corrplot}.
 }
 \examples{
-data(triplicates.counts)
-se <- triplicates.counts
-gps <- c("26", "28", "29")
-se <- log2se(se, transformation = "log2Ratio",
-             nucleoleusCols = paste0("N", gps, ".bam"),
-             genomeCols = paste0("G", gps, ".bam"))
+data(triplicate.count)
+se <- triplicate.count
+se <- log2se(se, transformation = "log2CPMRatio",
+             nucleoleusCols = c("N18.subsampled.srt-2.bam",
+             "N18.subsampled.srt-3.bam",
+             "N18.subsampled.srt.bam"),
+             genomeCols = c("G18.subsampled.srt-2.bam",
+             "G18.subsampled.srt-3.bam",
+             "G18.subsampled.srt.bam"))
 getCorrelations(se, chr="chr18")
 
 }

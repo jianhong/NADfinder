@@ -3,8 +3,8 @@
 \docType{data}
 \name{single.count}
 \alias{single.count}
-\title{counts data for single experiment of chromosome 18}
+\title{Counts data for chromosome 18 for an experiment of a single pair of samples}
 \description{
-counts data for single experiment of chromosome 18
+Counts data for chromosome 18 for an experiment of a single pair of samples
 }
 \keyword{data}
