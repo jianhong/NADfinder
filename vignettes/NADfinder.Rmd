@@ -104,12 +104,14 @@ because most of NADs are broad regions as wide as 100 kb. However, we
 should observe clear differences between the two curves.
 
 ```{r}
+
 ## Calculate ratios for peak calling. We use nucleoleus vs genomic DNA.
-dat <- log2se(se, nucleoleusCols = "nucleoleus.bam", genomeCols="genome.bam",
-              transformation = "log2Ratio")
+dat <- log2se(se, nucleoleusCols = "N18.subsampled.srt.bam", 
+              genomeCols ="G18.subsampled.srt.bam",
+              transformation = "log2CPMRatio")
 ## Smooth the ratios for each chromosome.
 ## We found that for each chromosome, the ratios are higher in 5'end than 3'end.
-datList <- smoothRatiosByChromosome(dat, N=100)
+datList <- smoothRatiosByChromosome(dat, chr = c("chr18", "chr19"), N = 100)
 ## check the difference between the cumulative percentage tag allocation 
 ## in genome and nucleoleus samples.
 cumulativePercentage(datList[["chr18"]])
@@ -170,7 +172,7 @@ library(rtracklayer)
 export(peaks.gr, "peaklist.bed", "BED")
 ```
 
-# Samples with duplicates
+# Samples with more than one replicate
 
 Data analysis with multiple biological replicates follows the same steps as 
 that of a single paired samples, i.e., coverage calculation, normalization 
@@ -180,8 +182,11 @@ to determine the statistical significance in peak calling.
 ```{r}
 library(NADfinder)
 ## bam file path
-path <- "path/to/your/bam/files"
-f <- c("G26.bam", "G28.bam", "G29.bam", "N26.bam", "N28.bam", "N29.bam")
+path <- system.file("extdata", package = "NADfinder", lib.loc = NULL,
+            mustWork = TRUE)
+bamFiles <- dir(path, ".bam$")
+
+f <- bamFiles
 ws <- 50000
 step <- 1000
 library(BSgenome.Mmusculus.UCSC.mm10)
@@ -201,10 +206,14 @@ data(triplicates.counts)
 se <- triplicates.counts
 
 ## Calculate ratios for nucleoloar vs genomic samples.
-gps <- c("26", "28", "29")
 se <- log2se(se, 
-             nucleoleusCols = paste0("N", gps, ".bam"),
-             genomeCols = paste0("G", gps, ".bam"), transformation = "log2Ratio")
+             nucleoleusCols = c("N18.subsampled.srt-2.bam", 
+                                "N18.subsampled.srt-3.bam",
+                                "N18.subsampled.srt.bam" ),
+             genomeCols = c("G18.subsampled.srt-2.bam",
+                            "G18.subsampled.srt-3.bam",
+                            "G18.subsampled.srt.bam"), 
+             transformation = "log2CPMRatio")
 getCorrelations(se, "chr18")
 seList<- smoothRatiosByChromosome(se, chr="chr18")
 cumulativePercentage(seList[["chr18"]])

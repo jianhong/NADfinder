@@ -1,4 +1,4 @@
-#' counts data for single experiment of chromosome 18
+#' Counts data for chromosome 18 for an experiment of a single pair of samples
 #'
 #' @name single.count
 #' @docType data

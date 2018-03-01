@@ -11,7 +11,7 @@
 #' @param ignore.strand logical(1). ignore strand?
 #' @param inter.feature not used. This parameter is required by
 #' \link[GenomicAlignments]{summarizeOverlaps}.
-#'
+#' @export
 #' @return return a summarized experiment object with chromosome-level depth
 #' information for each input sample as metadata.
 #'

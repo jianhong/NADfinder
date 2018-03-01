@@ -21,18 +21,15 @@
 #' @author Jianhong Ou, Haibo Liu and Julie Zhu
 #' @examples
 #' library(SummarizedExperiment)
-#' se <- SummarizedExperiment(assays=list(counts=DataFrame(A=seq_len(3),
-#'        B=rep(1, 3), C=rep(4, 3), D=rep(2, 3))),              
-#'                   rowRanges=GRanges("chr1",
-#'                       IRanges(c(1, 10, 20),
-#'                             width=9)))
-#' metadata(se)$lib.size.chrom <- data.frame(c("chr1"), c(1000), c(2000), c(200), c(300))
-#' as.data.frame(assays(log2se(se, nucleoleusCols = c("A", "C"), genomeCols = c("B", "D"), 
-#'     transformation = "log2Ratio")))
-#' as.data.frame(assays(log2se(se, nucleoleusCols = c("A", "C"), genomeCols = c("B", "D"),
-#'     transformation = "log2CPMRatio")))
-#' as.data.frame(assays(log2se(se, nucleoleusCols = c("A", "C"), genomeCols = c("B", "D"),
-#'     transformation = "log2OddsRatio")))
+#' data(triplicate.count)
+#' se <- triplicate.count
+#' se <- log2se(se, transformation = "log2CPMRatio",
+#'              nucleoleusCols = c("N18.subsampled.srt-2.bam",
+#'              "N18.subsampled.srt-3.bam",
+#'              "N18.subsampled.srt.bam"),
+#'              genomeCols = c("G18.subsampled.srt-2.bam",
+#'              "G18.subsampled.srt-3.bam",
+#'              "G18.subsampled.srt.bam"))
 
 
 log2se <- function(se,

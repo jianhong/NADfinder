@@ -30,13 +30,17 @@
 #'  Published online 2012 Mar 31.  doi: 10.1515/1544-6115.1750
 #'  PMCID: PMC3342857
 #' @examples 
-#' data(triplicates.counts)
+
 #' library(SummarizedExperiment)
-#' se <- triplicates.counts
-#' gps <- c("26", "28", "29")
-#' se <- log2se(se, transformation = "log2Ratio", 
-#'              nucleoleusCols = paste0("N", gps, ".bam"),
-#'              genomeCols = paste0("G", gps, ".bam"))
+#' data(triplicate.count)
+#' se <- triplicate.count
+#' se <- log2se(se, transformation = "log2CPMRatio",
+#'              nucleoleusCols = c("N18.subsampled.srt-2.bam",
+#'              "N18.subsampled.srt-3.bam",
+#'              "N18.subsampled.srt.bam"),
+#'              genomeCols = c("G18.subsampled.srt-2.bam",
+#'              "G18.subsampled.srt-3.bam",
+#'              "G18.subsampled.srt.bam"))
 #' se <- smoothRatiosByChromosome(se, chr="chr18")
 #' cumulativePercentage(se[["chr18"]])
 
