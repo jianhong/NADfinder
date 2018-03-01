@@ -105,7 +105,8 @@ should observe clear differences between the two curves.
 
 ```{r}
 ## Calculate ratios for peak calling. We use nucleoleus vs genomic DNA.
-dat <- log2se(se, nucleoleusCols = "nucleoleus.bam", genomeCols="genome.bam", transformation = "log2Ratio")
+dat <- log2se(se, nucleoleusCols = "nucleoleus.bam", genomeCols="genome.bam",
+              transformation = "log2Ratio")
 ## Smooth the ratios for each chromosome.
 ## We found that for each chromosome, the ratios are higher in 5'end than 3'end.
 datList <- smoothRatiosByChromosome(dat, N=100)
