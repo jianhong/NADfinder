@@ -24,11 +24,10 @@ Description: Nucleolus is an important structure inside the nucleus
     analysis of the NAD-seq data, including normalization, 
     smoothing, peak calling, peak trimming and annotation.
 License: GPL (>= 2)
-Depends: R (>= 3.4), BiocGenerics, IRanges, GenomicRanges, S4Vectors
+Depends: R (>= 3.4), BiocGenerics, IRanges, GenomicRanges, S4Vectors, SummarizedExperiment
 Imports: graphics, methods, baseline, signal, GenomicAlignments,
-        GenomeInfoDb, rtracklayer, SummarizedExperiment, limma,
-        trackViewer, stats, utils, Rsamtools, metap, EmpiricalBrownsMethod,
-        ATACseqQC, corrplot
+        GenomeInfoDb, rtracklayer, limma, trackViewer, stats, utils, 
+        Rsamtools, metap, EmpiricalBrownsMethod,ATACseqQC, corrplot
 Suggests: RUnit, BiocStyle, knitr, BSgenome.Mmusculus.UCSC.mm10,
         testthat
 biocViews: Sequencing, DNASeq, GeneRegulation, PeakDetection
