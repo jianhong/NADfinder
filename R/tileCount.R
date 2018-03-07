@@ -70,17 +70,18 @@ IntersectionNotStrict <-function(features,
 #' @importFrom ATACseqQC readBamFile
 #' @export
 #' @examples
-#' \dontrun{
-#' fls <- list.files(system.file("extdata", package="NADfinder"),
-#' recursive=FALSE, pattern="*bam$", full=TRUE)
-#' names(fls) <- basename(fls)
-#' if (!require(BSgenome.Mmusculus.UCSC.mm10))
+#' if (interactive())
 #' {
-#'     source("https://bioconductor.org/biocLite.R")
-#'     biocLite("BSgenome.Mmusculus.UCSC.mm10")
-#'     library(BSgenome.Mmusculus.UCSC.mm10)
-#' }
-#' se <- tileCount(fls, genes, windowSize=1000, step=500)
+#'     fls <- list.files(system.file("extdata", package="NADfinder"),
+#'     recursive=FALSE, pattern="*bam$", full=TRUE)
+#'     names(fls) <- basename(fls)
+#'     if (!require(BSgenome.Mmusculus.UCSC.mm10))
+#'     {
+#'         source("https://bioconductor.org/biocLite.R")
+#'         biocLite("BSgenome.Mmusculus.UCSC.mm10")
+#'         library(BSgenome.Mmusculus.UCSC.mm10)
+#'     }
+#'     se <- tileCount(fls, genes, windowSize=1000, step=500)
 #' }
 #'
 #' ##
