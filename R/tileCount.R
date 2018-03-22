@@ -69,6 +69,7 @@ IntersectionNotStrict <-function(features,
 #' @importFrom methods as
 #' @importFrom ATACseqQC readBamFile
 #' @export
+#' @author Jianhong Ou, Haibo Liu and Julie Zhu
 #' @examples
 #' if (interactive())
 #' {
@@ -81,7 +82,11 @@ IntersectionNotStrict <-function(features,
 #'         biocLite("BSgenome.Mmusculus.UCSC.mm10")
 #'         library(BSgenome.Mmusculus.UCSC.mm10)
 #'     }
-#'     se <- tileCount(fls, genes, windowSize=1000, step=500)
+#'     se <- tileCount(reads = fls, 
+#'                     genome = Mmusculus,
+#'                     excludeChrs = c("chrM", paste0("chr", c(1:17,19)), 
+#'                                     "chrX", "chrY"), 
+#'                     windowSize=50000, step=10000)
 #' }
 #'
 #' ##
@@ -91,7 +96,8 @@ IntersectionNotStrict <-function(features,
 #' tileCount(reads, genome, windowSize=100, step=50)
 #' reads.2 <- GRangesList(GRanges("chr2", IRanges((seq_len(90))*10, width=10)), reads)
 #' tileCount(reads.2, genome, windowSize=100, step=50)
-#' @author Jianhong Ou, Haibo Liu and Julie Zhu
+#' 
+
 
 
 tileCount<- function(reads,
