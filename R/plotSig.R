@@ -1,4 +1,4 @@
-#' plot signals with ideograms
+#' Plot signals with ideograms
 #'
 #' Plot signals with ideograms for \link[GenomicRanges:GRangesList-class]{GRangesList}.
 #'
@@ -23,21 +23,23 @@
 #'
 #'
 
-plotSig <- function(ideo, grList, mcolName, ...){
+plotSig <- function(ideo, grList, mcolName, ...) 
+{
     stopifnot(is(grList, "GRangesList"))
     args <- list(...)
-    ylabs <- lapply(seqlevels(ideo), function(.ele){
-        c(.ele, names(grList))
-    })
+    ylabs <- lapply(seqlevels(ideo), function(.ele) {
+        c(.ele, names(grList))})
     names(ylabs) <- seqlevels(ideo)
-    if(length(args$parameterList)){
-        if(!length(args$parameterList$dataColumn))
+    if (length(args$parameterList)) 
+    {
+        if (!length(args$parameterList$dataColumn))
             args$parameterList$dataColumn <- mcolName
-        if(!length(args$parameterList$ylabs))
+        if (!length(args$parameterList$ylabs))
             args$parameterList$ylabs <- ylabs
-    }else{
-        args$parameterList <- list(dataColumn=mcolName,
-                                   ylabs=ylabs)
+    } else
+    {
+        args$parameterList <- list(dataColumn = mcolName,
+                                   ylabs = ylabs)
     }
     args$ideo <- ideo
     args$dataList <- grList

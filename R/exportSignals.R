@@ -1,4 +1,4 @@
-#' output signals to file
+#' Output signals for visualization
 #'
 #' Output signals to bedgraph, bed, wig, etc, for track viewer
 #'
@@ -18,7 +18,7 @@
 #' is created and then closed after exporting the object.
 #' If missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be returned.
 #' @param format The format of the output. see \link[rtracklayer]{export}.
-#' @param ... Parameters to pass to \link[rtracklayer]{export}
+#' @param ... Parameters to be passed to \link[rtracklayer]{export}
 #' @import GenomicAlignments
 #' @import SummarizedExperiment
 #' @import GenomicRanges
@@ -38,28 +38,41 @@
 #' exportSignals(triplicates.counts, "counts", 
 #'               "G26.bam", "test.bw", format="bigWig")
 #'
-exportSignals <- function(dat, assayName, colName, 
-                          con, format="bedGraph", ...){
-    stopifnot(inherits(dat, c("GRanges", "RangedSummarizedExperiment")))
-    if(is(dat, "GRanges")){
+exportSignals <- function(dat, assayName, colName,
+                          con, format = "bedGraph", ...) 
+{
+    stopifnot(inherits(dat, c(
+        "GRanges", "RangedSummarizedExperiment")))
+    if (is(dat, "GRanges")) 
+    {
         gr <- dat
-    }else{## RangedSummarizedExperiment
+    } else
+    {
+        ## RangedSummarizedExperiment
         stopifnot(!missing(assayName))
         stopifnot(assayName %in% names(assays(dat)))
         gr <- rowRanges(dat)
         mcols(gr) <- assays(dat)[[assayName]]
     }
-    if(!colName %in% colnames(mcols(gr))){
-        stop("colName in not valid.")
+    if (!colName %in% colnames(mcols(gr))) 
+    {
+        stop("colName is not valid.")
     }
-    seqlevels(gr) <- seqlevels(gr)[seqlevels(gr) %in% unique(seqnames(gr))]
+    seqlevels(gr) <-
+        seqlevels(gr)[seqlevels(gr) %in% unique(seqnames(gr))]
     dat1 <- coverage(gr, weight = mcols(gr)[, colName])
     dat2 <- coverage(gr)
-    dat <- dat1/dat2
+    dat <- dat1 / dat2
     dat[is.na(dat)] <- 0
-    if(missing(con)){
+    if (missing(con)) 
+    {
         return(dat)
-    }else{
-        return(export(object=dat, con=con, format=format, ...))
+    } else
+    {
+        return(export(
+            object = dat,
+            con = con,
+            format = format,
+            ...))
     }
 }

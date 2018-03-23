@@ -6,12 +6,12 @@
 \usage{
 trimPeaks(se, cutoffPvalue = 0.05, backgroundPercentage = 0.25,
   countFilter = 1000, ratioAssay = "ratio",
-  backgroundCorrectionAssay = "bcRatio",
+  backgroundCorrectedAssay = "bcRatio",
   smoothedRatioAssay = "smoothedRatio", zscoreAssay = "zscore")
 }
 \arguments{
 \item{se}{An object of 
-\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
+\link[SummarizedExperiment]{RangedSummarizedExperiment}
 with assays of raw counts, ratios, background corrected ratios,
 smoothed ratios and z-scores. It should be an element of the output of 
 \link{smoothRatiosByChromosome}}
@@ -26,25 +26,25 @@ raw reads count in each window.}
 \item{ratioAssay}{character(1). The name of assay in se, which store the 
 values to be smoothed.}
 
-\item{backgroundCorrectionAssay, smoothedRatioAssay, zscoreAssay}{Assays names 
-for background corrected ratios, smoothed ratios and z-score based on
+\item{backgroundCorrectedAssay, smoothedRatioAssay, zscoreAssay}{Assays names 
+for background-corrected ratios, smoothed ratios and z-scores based on
 background corrected ratios.}
 }
 \value{
-An object of \link[GenomicRanges:GRanges-class]{GRanges}.
+An object of \link[GenomicRanges]{GRanges}.
 }
 \description{
 Filter the peaks by pvalue and trim the range of peaks 
-for sample without duplicates.
+for an NAD experiment without biological replicates.
 }
 \examples{
 
 data(single.count)
 se <- single.count
-## Calculate ratios for peak calling. We use signal vs input.
-dat <- log2se(se, nucleosomeCols="nucleosome.bam", genomeCols="genome.bam")
+dat <- log2se(se, nucleoleusCols="N18.subsampled.srt.bam", genomeCols="G18.subsampled.srt.bam", 
+transformation="log2CPMRatio")
 ## Smooth the ratios for each chromosome.
-dat <- smoothRatiosByChromosome(dat, N=100)
+dat <- smoothRatiosByChromosome(dat, N=100, chr=c("chr18","chr19"))
 peaks <- trimPeaks(dat[["chr18"]],
                 backgroundPercentage=.25,
                 cutoffPvalue=0.05, countFilter=1000)

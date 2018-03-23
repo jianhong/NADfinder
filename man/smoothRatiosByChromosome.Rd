@@ -2,35 +2,34 @@
 % Please edit documentation in R/smoothRatiosByChromosome.R
 \name{smoothRatiosByChromosome}
 \alias{smoothRatiosByChromosome}
-\title{backgound correction and smooth by chromosome}
+\title{Backgound correction and signal smoothing per chromosome}
 \usage{
 smoothRatiosByChromosome(se, chr = paste0("chr", c(seq_len(21), "X", "Y")),
-  ratioAssay = "ratio", backgroundCorrectionAssay = "bcRatio",
+  ratioAssay = "ratio", backgroundCorrectedAssay = "bcRatio",
   smoothedRatioAssay = "smoothedRatio", zscoreAssay = "zscore",
   backgroundPercentage = 0.25, chrom.level.background = TRUE, ...)
 }
 \arguments{
 \item{se}{An object of 
 \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} 
-with scores. Output of \link{log2se}}
+with log2-transformed ratios, CPMRatios or OddRatios. Output of \link{log2se}}
 
 \item{chr}{A character vector, used to filter out seqnames. It should be the
 chromosome names to be kept.}
 
-\item{ratioAssay}{The name of assay in se, which store the values 
-to be smoothed.}
+\item{ratioAssay}{The name of assay in se, which store the values (log2-transformed ratios,
+CPMRatios or OddRatios) to be smoothed.}
 
-\item{backgroundCorrectionAssay, smoothedRatioAssay, zscoreAssay}{character(1).
+\item{backgroundCorrectedAssay, smoothedRatioAssay, zscoreAssay}{character(1).
 Assays names for background corrected ratios, smoothed ratios and 
 z-scores based on background corrected ratios.}
 
 \item{backgroundPercentage}{numeric(1). Percentage of values for background, 
-see \link{zscoreOverBck}. How many percent lower values will be treated as
-background, default lower 25 percent.
-chrom.level.background TRUE or FALSE, default to TRUE, use chromosome-level background
-to calculate z-score}
+see \link{zscoreOverBck}. The percentage of values lower than this threshold 
+will be treated as background, with 25 percentile as default.}
 
-\item{chrom.level.background}{logical(1).}
+\item{chrom.level.background}{logical(1): TRUE or FALSE, default to TRUE, use chromosome-level 
+background to calculate z-score}
 
 \item{...}{Parameters could be passed to \link{butterFilter}.}
 }
@@ -40,18 +39,18 @@ A \link[S4Vectors:SimpleList-class]{SimpleList} of
 with smoothed ratios.
 }
 \description{
-Split the ratios by chromosome and do background correction and smooth.
+Split the ratios by chromosome and do background correction and signal smoothing.
 }
 \examples{
 
 data(single.count)
 se <- single.count
-dat <- log2se(se, nucleosomeCols="nucleosome.bam", genomeCols="genome.bam", 
-transformation="log2Ratio")
-dat1 <- smoothRatiosByChromosome(dat, N=100)
-dat2 <- smoothRatiosByChromosome(dat, N=100, chrom.level.background = FALSE)
+dat <- log2se(se, nucleoleusCols="N18.subsampled.srt.bam", genomeCols="G18.subsampled.srt.bam", 
+transformation="log2CPMRatio")
+dat1 <- smoothRatiosByChromosome(dat, N=100, chr = c("chr18", "chr19"))
+dat2 <- smoothRatiosByChromosome(dat, N=100, chr = c("chr18", "chr19"), chrom.level.background = FALSE)
 
 }
 \author{
-Jianhong Ou and Julie Zhu
+Jianhong Ou, Haibo Liu and Julie Zhu
 }

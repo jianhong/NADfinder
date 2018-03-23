@@ -7,8 +7,8 @@
 backgroundCorrection(ratios, degree = 3, ...)
 }
 \arguments{
-\item{ratios}{A vector of numeric.
-It is the ratios of counts for each window.}
+\item{ratios}{A vector of numeric. It is log2-transformed ratios, CPMRatios 
+or OddRatios of counts for each window.}
 
 \item{degree}{Degree of polynomial. default 3.}
 
@@ -17,10 +17,10 @@ It is the ratios of counts for each window.}
 }
 \value{
 A vector of numeric.
-It is the background corrected ratios.
+It is the background corrected log2-transformed ratios, CPMRatios or OddRatios.
 }
 \description{
-Background correct ratios of read counts for each window.
+Correct ratios of read counts per sliding window for background.
 }
 \details{
 This function implements the backgound correction methods of

@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformData.R
 \name{transformData}
 \alias{transformData}
-\title{transform counts to log2 cpm ratios, log2 ratios or log2 odds ratios}
+\title{Transform counts to log2 cpm ratios, log2 ratios or log2 odds ratios}
 \usage{
 transformData(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
   transformation = c("log2OddsRatio", "log2CPMRatio", "log2Ratio"),
@@ -31,8 +31,8 @@ a numeric vector of log2 ratios, log2 CPM ratios or log2 odds ratios.
 }
 \description{
 calculate the log2 ratios, log2 cpm (count per million) ratios, or 
-log2 odds ratios for nucleolus vs genome.
-pseudo-count will be used to avoid x/0 or log(0).
+log2 odds ratios for nucleolus vs genome. Pseudo-count will be used to avoid 
+zero division or log(0).
 }
 \examples{
 transformData(seq_len(10), 10:1, seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
@@ -54,5 +54,5 @@ lib.size.B = cbind(c("chr1", "chr2"), c(10000, 200)))
 transformData(seq_len(10), 10:1, transformation = "log2Ratio")
 }
 \author{
-Julie Zhu
+Julie Zhu and Haibo Liu
 }

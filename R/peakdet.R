@@ -21,43 +21,52 @@
 #' y <- sin(seq(0,20))
 #' peakdet(y)
 
-peakdet <- function(y, delta=0, silence=TRUE){
+peakdet <- function(y, delta = 0, silence = TRUE)
+{
     peakpos <- NULL
     valleypos <- NULL
-    stopifnot(delta>=0)
-    if(delta==0){
+    stopifnot(delta >= 0)
+    if (delta == 0) 
+    {
         ry <- quantile(y, c(0, .25, .75, 1))[2:3]
-        delta <- diff(ry)/10
-        if(!silence){
+        delta <- diff(ry) / 10
+        if (!silence) 
+        {
             message("auto set delta = ", prettyNum(delta))
         }
     }
     minpos <- 1
     maxpos <- 1
     lookformax <- TRUE
-
-    for(i in seq_along(y)){
-        if (y[i] > y[maxpos]){
+    
+    for (i in seq_along(y)) 
+    {
+        if (y[i] > y[maxpos]) 
+        {
             maxpos <- i
         }
-        if (y[i] < y[minpos]){
+        if (y[i] < y[minpos]) 
+        {
             minpos <- i
         }
-
-        if (lookformax){
-            if (y[i] < y[maxpos] - delta){
+        if (lookformax) 
+        {
+            if (y[i] < y[maxpos] - delta) 
+            {
                 peakpos <- c(peakpos, maxpos)
                 minpos <- i
                 lookformax <- FALSE
             }
-        }else{
-            if (y[i] > y[minpos] + delta){
+        } else
+        {
+            if (y[i] > y[minpos] + delta) 
+            {
                 valleypos <- c(valleypos, minpos)
                 maxpos <- i
                 lookformax <- TRUE
             }
         }
     }
-
+    
     list(peakpos = peakpos, valleypos = valleypos)
 }

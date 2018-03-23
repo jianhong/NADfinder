@@ -1,32 +1,14 @@
 ---
 title: "NADfinder Guide"
-author: "Jianhong Ou, Haibo, Jun Yu, Paul Kaufman and Lihua Julie Zhu"
+author: "Jianhong Ou, Haibo Liu, Jun Yu, Paul Kaufman and Lihua Julie Zhu"
 date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('NADfinder')`"
 bibliography: bibliography.bib
 csl: nature.csl
-abstract: >
-  Nucleolus is an important structure inside the nucleus 
-    in eukaryotic cells. It is the site for transcribing rDNA 
-    into rRNA and for assembling ribosomes, aka ribosome 
-    biogenesis. In addition, nucleoli are dynamic hubs 
-    through which numerous proteins shuttle and contact 
-    specific non-rDNA genomic loci. Deep sequencing 
-    analyses of DNA associated with isolated nucleoli (NAD-
-    seq) have shown that specific loci, termed nucleolar-
-    associated domains (NADs) form frequent three-
-    dimensional associations with nucleoli. NAD-seq has 
-    been used to study the biological functions of NAD and 
-    the dynamics of NAD distribution during embryonic 
-    stem cell (ESC) differentiation. 
-    Here, we developed a 
-    Bioconductor package NADfinder for bioinformatic 
-    analysis of the NAD-seq data, including normalization, 
-    smoothing, peak calling, peak trimming and annotation.
 vignette: >
-  %\VignetteIndexEntry{NADfinder Vignette}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{NADfinder Vignette}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 output:
   BiocStyle::html_document
 ---
@@ -48,36 +30,39 @@ associations with nucleoli [@nemeth2010initial, @van2010high]. Early mammalian
 development is a critical period to study NAD biological function, because 
 interactions between pericentromeric chromatin and perinucleolar regions are 
 particularly dynamic during embryonic development 
-[@aguirre20123d, @popken2014reprogramming]. 
-We therefore propose for the first time to map the 
-NADs in the mouse genome, determine how these associations are altered during 
-embryonic stem cell (ESC) differentiation, and develop tools for study of 
-these higher-order chromosome interactions in fixed and live single cells 
-(Fig. 1). 
+[@aguirre20123d, @popken2014reprogramming]. Here, we developed a Bioconductor 
+package NADfinder for bioinformatic analysis of the NAD-seq data, including 
+normalization, smoothing, peak calling, peak trimming and annotation.
+We demonstrate the application of NADfinder in mapping the NADs in the mouse 
+genome, determining how these associations are altered during embryonic stem 
+cell (ESC) differentiation, and develop tools for study of these higher-order
+chromosome interactions in fixed and live single cells (Fig. 1). 
 
 ![Fig. 1 Workflow for NAD peak identification. Read counts are summarized for 
 each 50kb moving window with step size of 1kb for nucleolar and genomic 
 samples. Log2 ratio between nucleolar and genomic samples was computed for 
 each window, followed by local background correction, smoothing, peak calling, 
-filtering and annotation.
-](Picture1.png)
+filtering and annotation.](Picture1.png)
 
-# Single sample
+# Single pair of nucleoleus associated DNA and whole genomic DNA sequencing 
+samples  
 Here is an example to use NADfinder for peak calling.
 
 ## Coverage calculation
 
 Here is the code snippet for calculating coverage with a sliding window in a 
 given step along the genome using a pair of bam files from genomic sample as 
-background and purified nucleoli as target signal. 
+background and purified nucleoleus-associated DNA as target signal. 
 
 ```{r quickStart, fig.width=6, fig.height=4}
 ## load the library
 library(NADfinder)
 library(SummarizedExperiment)
-## bam file path
-path <- "path/to/your/bam/files"
-f <- c(genome="genome.bam", nucleosome="nucleosome.bam")
+## test bam files in the package
+path <- system.file("extdata", package = "NADfinder", lib.loc = NULL,
+            mustWork = TRUE)
+bamFiles <- dir(path, ".bam$")
+
 ## window size for tile of genome. Here we set it to a big window size,
 ## ie., 50k because of the following two reasons:
 ## 1. peaks of NADs are wide;
@@ -92,11 +77,14 @@ backgroundPercentage <- 0.25
 ## The output will be a GRanges object.
 library(BSgenome.Mmusculus.UCSC.mm10)
 ```
+
 ```{r eval=FALSE}
-se <- tileCount(reads=file.path(path, f), 
+se <- tileCount(reads=file.path(path, bamFiles), 
                 genome=Mmusculus, 
                 windowSize=ws, 
-                step=step, transformation = "log2OddsRatio")
+                step=step,
+                mode = IntersectionNotStrict,
+                dataOverSamples = FALSE)
 ```
 
 Here we load the pre-computed coverage data single.count to save build time.
@@ -107,22 +95,25 @@ se <- single.count
 ```
 
 For quality asessment, `cumulativePercentage` can be used to plot the 
-cumulative sums of sorted read counts for nucleosome and genomic DNA. 
-We expect the cumulative sum in the genomic DNA to be close to a straight 
-line because the coverage for the genomic DNA sample should be uniformly 
-distributed. Unlike ChIP-seq data, the cumulative sum in the nucleosome 
-sample will not exhibit sharp changes because most of NADs are broad 
-regions as wide as 100 kb. However, we should observe clear differences 
-between the two curves.
+cumulative sums of sorted read counts for nucleolus-associated DNA and 
+whole genomic DNA. We expect the cumulative sum in the genomic DNA to
+be close to a straight line because the coverage for the genomic DNA
+sample should be uniformly distributed. Unlike ChIP-seq data, the 
+cumulative sum for the nucleoleus sample will not exhibit sharp changes
+because most of NADs are broad regions as wide as 100 kb. However, we
+should observe clear differences between the two curves.
 
 ```{r}
-## Calculate ratios for peak calling. We use nucleosome vs genomic DNA.
-dat <- log2se(se, nucleosomeCols = "nucleosome.bam", genomeCols="genome.bam", transformation = "log2Ratio")
+
+## Calculate ratios for peak calling. We use nucleoleus vs genomic DNA.
+dat <- log2se(se, nucleoleusCols = "N18.subsampled.srt.bam", 
+              genomeCols ="G18.subsampled.srt.bam",
+              transformation = "log2CPMRatio")
 ## Smooth the ratios for each chromosome.
 ## We found that for each chromosome, the ratios are higher in 5'end than 3'end.
-datList <- smoothRatiosByChromosome(dat, N=100)
+datList <- smoothRatiosByChromosome(dat, chr = c("chr18", "chr19"), N = 100)
 ## check the difference between the cumulative percentage tag allocation 
-## in genome and nucleosome samples.
+## in genome and nucleoleus samples.
 cumulativePercentage(datList[["chr18"]])
 ```
 
@@ -181,7 +172,7 @@ library(rtracklayer)
 export(peaks.gr, "peaklist.bed", "BED")
 ```
 
-# Samples with duplicates
+# Samples with more than one replicate
 
 Data analysis with multiple biological replicates follows the same steps as 
 that of a single paired samples, i.e., coverage calculation, normalization 
@@ -191,8 +182,11 @@ to determine the statistical significance in peak calling.
 ```{r}
 library(NADfinder)
 ## bam file path
-path <- "path/to/your/bam/files"
-f <- c("G26.bam", "G28.bam", "G29.bam", "N26.bam", "N28.bam", "N29.bam")
+path <- system.file("extdata", package = "NADfinder", lib.loc = NULL,
+            mustWork = TRUE)
+bamFiles <- dir(path, ".bam$")
+
+f <- bamFiles
 ws <- 50000
 step <- 1000
 library(BSgenome.Mmusculus.UCSC.mm10)
@@ -211,11 +205,15 @@ Load saved coverage.
 data(triplicates.counts)
 se <- triplicates.counts
 
-## Calculate ratios for nucleoli vs genomic sample.
-gps <- c("26", "28", "29")
+## Calculate ratios for nucleoloar vs genomic samples.
 se <- log2se(se, 
-             nucleosomeCols = paste0("N", gps, ".bam"),
-             genomeCols = paste0("G", gps, ".bam"), transformation = "log2Ratio")
+             nucleoleusCols = c("N18.subsampled.srt-2.bam", 
+                                "N18.subsampled.srt-3.bam",
+                                "N18.subsampled.srt.bam" ),
+             genomeCols = c("G18.subsampled.srt-2.bam",
+                            "G18.subsampled.srt-3.bam",
+                            "G18.subsampled.srt.bam"), 
+             transformation = "log2CPMRatio")
 getCorrelations(se, "chr18")
 seList<- smoothRatiosByChromosome(se, chr="chr18")
 cumulativePercentage(seList[["chr18"]])

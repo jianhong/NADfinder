@@ -1,6 +1,6 @@
-#' counts data for triplicates of chromosome 18
+#' Counts data for chromosome 18 for an expriment with triplicates
 #'
-#' @name triplicates.counts
+#' @name triplicate.count
 #' @docType data
 #' @keywords data
 NULL

@@ -8,7 +8,7 @@ groupZscores(zscore)
 }
 \arguments{
 \item{zscore}{A vector of numeric.
-It is the z-scores of ratios in each window.}
+It is the z-scores of ratios for each window.}
 }
 \value{
 A data.frame with column names as "zscore", "group", "grp.zscore", 
