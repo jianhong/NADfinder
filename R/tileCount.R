@@ -28,6 +28,39 @@ IntersectionNotStrict <-function(features,
     countSubjectHits(ov)
 }
 
+computeLibSizeChrom <- function(aln_list)
+     {
+         stopifnot(is.list(aln_list))
+         lib_size_list <- lapply(aln_list,
+             function(aln) {
+                 qname <- names(aln)
+                 if (is.null(qname))
+                     stop(wmsg("Some of the GAlignments or
+GAlignmentsList ",
+                               "objects in 'aln_list' don't have names. ",
+                               "Did you use 'use.names=TRUE' when loading ",
+                               "them with readGAlignments() or ",
+                               "readGAlignmentsList()?"))
+                 if (is(aln, "GAlignmentsList")) {
+                     rname <- seqnames(unlist(aln, use.names=FALSE))
+                     qname <- rep.int(qname, lengths(aln, use.names=FALSE))
+                 } else {
+                     rname <- seqnames(aln)
+                 }
+                 lengths(unique(split(qname, rname)))
+             })
+         rnames <- unique(names(unlist(unname(lib_size_list))))
+         lib_size_list <- lapply(lib_size_list,
+             function(lib_size) {
+                 lib_size2 <- setNames(integer(length(rnames)), rnames)
+                 lib_size2[names(lib_size)] <- lib_size
+                 lib_size2
+             })
+         ans <- do.call(cbind, unname(lib_size_list))
+         colnames(ans) <- names(lib_size_list)
+         ans
+    }
+
 
 #' Perform overlap queries between reads and genome by windows
 #'
@@ -106,38 +139,26 @@ tileCount<- function(reads,
     stopifnot(class(genome) == "BSgenome")
     stopifnot(windowSize %% 1 == 0, step %% 1 ==0, windowSize > 0, step > 0, step < windowSize)
 
-    
-    ## the scanbam function canonly read a single bam file not a list of bamfiles at a time
-    ## so for a list bamfiles, I modify the code as follows
-    ## aln is a list of list of lists
-    isPE <- testPairedEndBam(reads[1])
-    
-    
     targetRegions <- as(seqinfo(genome), "GRanges")
 
-    param <- ScanBamParam(what=c("rname", "qname"))
-    aln <- lapply(reads, scanBam, param = param)
-    lib.size.chrom <- do.call(cbind, lapply(1:length(aln),function(i)
-    {
-            ref_qnames <- unique(data.frame(rnames = aln[[i]][[1]]$rname, qnames = aln[[i]][[1]]$qname))
-            if(i==1)
-            {
-                countByChr = as.data.frame(BiocGenerics::table(ref_qnames$rname))
-                rownames(countByChr) <- countByChr[,1]
-                countByChr <- countByChr[, 2, drop =FALSE]
-                
-            } else 
-            {
-                countByChr = as.data.frame(BiocGenerics::table(ref_qnames$rname))[, 2, drop =FALSE]  
-            }
-    
-            ## using the bamfile names to name the column derived from a give bamfiles
-            colnames(countByChr) <- reads[i]
-            countByChr
-    }))
+     if (is.null(names(reads)))
+         names(reads) <- basename(reads)
+
+     aln_list <- lapply(reads,
+         function(file) {
+             isPE <- testPairedEndBam(file)
+             if (isPE)
+                 readGAlignmentsList(file, use.names=TRUE)
+             else
+                 readGAlignments(file, use.names=TRUE)
+
+         })
+
+    ## aln is a list of list of lists
+    lib.size.chrom <- computeLibSizeChrom(aln_list)
     
     ## remove excludeChr from lib.size.chrom
-    lib.size.chrom <- lib.size.chrom[!rownames(lib.size.chrom) %in% excludeChrs, ]
+    lib.size.chrom <- lib.size.chrom[!rownames(lib.size.chrom) %in% excludeChrs, drop = FALSE, ]
     
     ## filtering GRanges to keep only those chromosomal scaffolds that are in the BAM file
     targetRegions <- targetRegions[seqnames(targetRegions) %in% rownames(lib.size.chrom)]
@@ -148,23 +169,14 @@ tileCount<- function(reads,
     tileTargetRegions <- unlist(tileTargetRegions)
     mcols(tileTargetRegions)$oid <- rep(seq_along(targetRegions),tileTargetRegionsLen)
     
-    if (isPE)
-    {
-        rse <- summarizeOverlaps(features = tileTargetRegions,
-                                reads = reads,
-                                mode = mode,
-                                singleEnd = FALSE,
-                                fragments = TRUE,
-                                inter.feature = FALSE)
-        
-    } else
-    {
-        rse <- summarizeOverlaps(features = tileTargetRegions,
-                                reads = reads,
-                                mode = mode,
-                                singleEnd = TRUE,
-                                inter.feature = FALSE)
-    }
+     rse_list <- lapply(aln_list,
+         function(aln) summarizeOverlaps(features=tileTargetRegions,
+                                         reads=aln,
+                                         mode=mode,
+                                         inter.feature=FALSE))
+     rse <- do.call(cbind, unname(rse_list))
+     colnames(rse) <- names(rse_list)
+
     names(assays(rse)) <- "counts"
     metadata(rse)$lib.size.chrom <- lib.size.chrom
     rse

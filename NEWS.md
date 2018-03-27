@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.3.5
+
+* update tileCount
+
 # CHANGES IN VERSION 1.3.3
 
 * Fix the warning in windows for the help files.
