@@ -1,7 +1,7 @@
 Package: NADfinder
 Type: Package
 Title: Call wide peaks for sequencing data
-Version: 1.3.3
+Version: 1.3.4
 Author: Jianhong Ou, Haibo Liu, Jun Yu, Paul Kaufman, Lihua Julie Zhu
 Maintainer: Jianhong Ou <jianhong.ou@umassmed.edu>,
             Haibo Liu <Haibo.Liu@umassmed.edu>

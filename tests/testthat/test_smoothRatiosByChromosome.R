@@ -2,7 +2,7 @@ test_that("smoothRatiosbyChromosome works not correct", {
     data(single.count)
     se <- single.count
     se <- log2se(se, 
-                nucleoleusCols = "nucleoleus.bam", 
+                nucleolusCols = "nucleoleus.bam", 
                  genomeCols = "genome.bam")
     se <- smoothRatiosByChromosome(se, N=100)
     chr18 <- assays(se[["chr18"]])

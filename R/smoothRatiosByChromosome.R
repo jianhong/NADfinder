@@ -29,7 +29,7 @@
 #'
 #' data(single.count)
 #' se <- single.count
-#' dat <- log2se(se, nucleoleusCols="N18.subsampled.srt.bam", genomeCols="G18.subsampled.srt.bam", 
+#' dat <- log2se(se, nucleolusCols="N18.subsampled.srt.bam", genomeCols="G18.subsampled.srt.bam", 
 #' transformation="log2CPMRatio")
 #' dat1 <- smoothRatiosByChromosome(dat, N=100, chr = c("chr18", "chr19"))
 #' dat2 <- smoothRatiosByChromosome(dat, N=100, chr = c("chr18", "chr19"), chrom.level.background = FALSE)

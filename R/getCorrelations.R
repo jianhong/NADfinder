@@ -54,7 +54,7 @@ getCorrelations <- function(se,
     method <- match.arg(method)
     gr <- rowRanges(se)
     se <- subset(se, seqnames(gr) %in% chr)
-    seqlevels(gr) <- chr
+    gr <- keepSeqlevels(gr, chr, pruning.mode="coarse")
     seqlen <- seqlengths(gr)
     seqlen[is.na(seqlen)] <- sapply(names(seqlen)[is.na(seqlen)],
                                     function(.ele) {
