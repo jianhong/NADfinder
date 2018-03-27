@@ -89,13 +89,6 @@ IntersectionNotStrict <-function(features,
 #'                     windowSize=50000, step=10000)
 #' }
 #'
-#' ##
-#' genome <- GRanges(c("chr1","chr2"), IRanges(c(1,1), c(1000,1000)))
-#' seqlengths(genome) <- c(chr1=1000, chr2=1000)
-#' reads <- GRanges("chr1", IRanges((seq_len(90))*10, width=10))
-#' tileCount(reads, genome, windowSize=100, step=50)
-#' reads.2 <- GRangesList(GRanges("chr2", IRanges((seq_len(90))*10, width=10)), reads)
-#' tileCount(reads.2, genome, windowSize=100, step=50)
 #' 
 
 
