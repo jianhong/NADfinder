@@ -34,9 +34,9 @@
 #'                     visibility="full")
 #' exportSignals(gr, colName="reads", 
 #'               con="test.bedGraph", trackLine=myTrackLine)
-#' data(triplicates.counts)
-#' exportSignals(triplicates.counts, "counts", 
-#'               "G26.bam", "test.bw", format="bigWig")
+#' data(triplicate.count)
+#' exportSignals(triplicate.count, "counts", 
+#'               "G18.subsampled.srt.bam", "test.bw", format="bigWig")
 #'
 exportSignals <- function(dat, assayName, colName,
                           con, format = "bedGraph", ...) 

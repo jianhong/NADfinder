@@ -6,10 +6,10 @@
 #' @param se A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 #' The output of \link{tileCount}. Columnnames of counts data (fragment counts in each tile) 
 #' and metadata (total fragment counts per chromosome) are bam file names.
-#' @param nucleoluesCols,genomeCols Column names of counts for nucleoleus-associated DNA
+#' @param nucleolusCols,genomeCols Column names of counts for nucleolus-associated DNA
 #' and the whole genome DNA. They should be the column names in the assays slot of 
 #' an RangedSummarizedExperiment object. Ratios will be calculated as log2 (transformed-
-#' nucleoluesCols/transformed genomeCols).
+#' nucleolusCols/transformed genomeCols).
 #' @param pseudocount Default to 1, pseudo-count used to aviod zero division or log(0).
 #' @param transformation Singal transformation method.
 #' @param chrom.level.lib Logical (1) indicating whether calculating CPM or odds using 
@@ -24,7 +24,7 @@
 #' data(triplicate.count)
 #' se <- triplicate.count
 #' se <- log2se(se, transformation = "log2CPMRatio",
-#'              nucleoleusCols = c("N18.subsampled.srt-2.bam",
+#'              nucleolusCols = c("N18.subsampled.srt-2.bam",
 #'              "N18.subsampled.srt-3.bam",
 #'              "N18.subsampled.srt.bam"),
 #'              genomeCols = c("G18.subsampled.srt-2.bam",
@@ -33,7 +33,7 @@
 
 
 log2se <- function(se,
-                   nucleoleusCols,
+                   nucleolusCols,
                    genomeCols,
                    pseudocount = 1L,
                    transformation = c("log2OddsRatio", "log2CPMRatio", "log2Ratio"),
@@ -41,18 +41,18 @@ log2se <- function(se,
 {
     stopifnot(inherits(se, "RangedSummarizedExperiment"))
     stopifnot("counts" %in% names(assays(se)))
-    stopifnot(length(nucleoleusCols) == length(genomeCols))
-    stopifnot(length(nucleoleusCols) > 0)
-    stopifnot(all(c(nucleoleusCols, genomeCols) %in% colnames(assays(se)$counts)))
+    stopifnot(length(nucleolusCols) == length(genomeCols))
+    stopifnot(length(nucleolusCols) > 0)
+    stopifnot(all(c(nucleolusCols, genomeCols) %in% colnames(assays(se)$counts)))
     transformation <- match.arg(transformation)
     
     asy <- assays(se)$counts
-    nucleoleusCols.ind <- which(colnames(asy) %in% nucleoleusCols)
+    nucleolusCols.ind <- which(colnames(asy) %in% nucleolusCols)
     genomeCols.ind <- which(colnames(asy) %in% genomeCols)
     
     ## nA will be used as the column names of log2 transformed ratios
-    nA <- make.names(nucleoleusCols, unique = TRUE)
-    nucleoleus = data.frame(asy[, nucleoleusCols, drop = FALSE])
+    nA <- make.names(nucleolusCols, unique = TRUE)
+    nucleoleus = data.frame(asy[, nucleolusCols, drop = FALSE])
     genome = data.frame(asy[, genomeCols, drop = FALSE])
     chrNames <- rownames(metadata(se)$lib.size.chrom)
     
@@ -82,7 +82,7 @@ log2se <- function(se,
                     
                     ## my lib.size.chrom is a data frame with chromosome names as rownames, 
                     ## and sample names as colnames so +1 for the index is not necessary
-                    data.frame(lib.size[, nucleoleusCols.ind, drop = FALSE], stringsAsFactors = FALSE),
+                    data.frame(lib.size[, nucleolusCols.ind, drop = FALSE], stringsAsFactors = FALSE),
                     data.frame(lib.size[, genomeCols.ind, drop = FALSE], stringsAsFactors = FALSE),
                     SIMPLIFY = FALSE))
     } else

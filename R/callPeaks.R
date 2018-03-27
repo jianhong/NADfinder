@@ -39,7 +39,7 @@
 #' data(triplicate.count)
 #' se <- triplicate.count
 #' se <- log2se(se, transformation = "log2CPMRatio",
-#'              nucleoleusCols = c("N18.subsampled.srt-2.bam",
+#'              nucleolusCols = c("N18.subsampled.srt-2.bam",
 #'              "N18.subsampled.srt-3.bam",
 #'              "N18.subsampled.srt.bam"),
 #'              genomeCols = c("G18.subsampled.srt-2.bam",

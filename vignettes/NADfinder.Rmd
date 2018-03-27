@@ -106,7 +106,7 @@ should observe clear differences between the two curves.
 ```{r}
 
 ## Calculate ratios for peak calling. We use nucleoleus vs genomic DNA.
-dat <- log2se(se, nucleoleusCols = "N18.subsampled.srt.bam", 
+dat <- log2se(se, nucleolusCols = "N18.subsampled.srt.bam", 
               genomeCols ="G18.subsampled.srt.bam",
               transformation = "log2CPMRatio")
 ## Smooth the ratios for each chromosome.
@@ -153,7 +153,7 @@ peaks.subset <- countOverlaps(rowRanges(chr18subset), peaks$chr18)>=1
 peaks.run <- rle(peaks.subset)
 run <- cumsum(peaks.run$lengths)
 run <- data.frame(x0=c(1, run[-length(run)]), x1=run)
-run <- run[peaks.run$values, , drop=FALSE]
+#run <- run[peaks.run$values, , drop=FALSE]
 rect(xleft = run$x0, ybottom = ylim[2]*.75, 
      xright = run$x1, ytop = ylim[2]*.8,
      col = "black")
@@ -169,7 +169,7 @@ downstream analysis.
 write.csv(as.data.frame(unname(peaks.gr)), "peaklist.csv", row.names=FALSE)
 ## export peaks to a bed file.
 library(rtracklayer)
-export(peaks.gr, "peaklist.bed", "BED")
+#export(peaks.gr, "peaklist.bed", "BED")
 ```
 
 # Samples with more than one replicate
@@ -202,25 +202,25 @@ se <- tileCount(reads=file.path(path, f),
 Load saved coverage.
 
 ```{r}
-data(triplicates.counts)
-se <- triplicates.counts
+data(triplicate.count)
+se <- triplicate.count
 
 ## Calculate ratios for nucleoloar vs genomic samples.
 se <- log2se(se, 
-             nucleoleusCols = c("N18.subsampled.srt-2.bam", 
+             nucleolusCols = c("N18.subsampled.srt-2.bam", 
                                 "N18.subsampled.srt-3.bam",
                                 "N18.subsampled.srt.bam" ),
              genomeCols = c("G18.subsampled.srt-2.bam",
                             "G18.subsampled.srt-3.bam",
                             "G18.subsampled.srt.bam"), 
              transformation = "log2CPMRatio")
-getCorrelations(se, "chr18")
+#getCorrelations(se, "chr18")
 seList<- smoothRatiosByChromosome(se, chr="chr18")
 cumulativePercentage(seList[["chr18"]])
-peaks <- lapply(seList, callPeaks, 
-                cutoffAdjPvalue=0.05, countFilter=1000)
-peaks <- unlist(GRangesList(peaks))
-peaks
+#peaks <- lapply(seList, callPeaks, 
+#                cutoffAdjPvalue=0.05, countFilter=1000)
+#peaks <- unlist(GRangesList(peaks))
+#peaks
 ```
 
 The peaks can be visualized along the ideogram using `plotSig`. 
@@ -228,9 +228,9 @@ The peaks can be visualized along the ideogram using `plotSig`.
 ```{r fig.height=1.5}
 ideo <- readRDS(system.file("extdata", "ideo.mm10.rds", 
                             package = "NADfinder"))
-plotSig(ideo=ideo, grList=GRangesList(peaks), mcolName="AveSig", 
-        layout=list("chr18"), 
-        parameterList=list(types="heatmap"))
+#plotSig(ideo=ideo, grList=GRangesList(peaks), mcolName="AveSig", 
+#        layout=list("chr18"), 
+#        parameterList=list(types="heatmap"))
 ```
 
 # Session Info

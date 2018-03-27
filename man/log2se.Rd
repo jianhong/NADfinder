@@ -4,7 +4,7 @@
 \alias{log2se}
 \title{Calculate the log2-transformed ratios of signal stored in a SummarizedExperiment object}
 \usage{
-log2se(se, nucleoleusCols, genomeCols, pseudocount = 1L,
+log2se(se, nucleolusCols, genomeCols, pseudocount = 1L,
   transformation = c("log2OddsRatio", "log2CPMRatio", "log2Ratio"),
   chrom.level.lib = TRUE)
 }
@@ -13,17 +13,17 @@ log2se(se, nucleoleusCols, genomeCols, pseudocount = 1L,
 The output of \link{tileCount}. Columnnames of counts data (fragment counts in each tile) 
 and metadata (total fragment counts per chromosome) are bam file names.}
 
+\item{nucleolusCols, genomeCols}{Column names of counts for nucleolus-associated DNA
+and the whole genome DNA. They should be the column names in the assays slot of 
+an RangedSummarizedExperiment object. Ratios will be calculated as log2 (transformed-
+nucleolusCols/transformed genomeCols).}
+
 \item{pseudocount}{Default to 1, pseudo-count used to aviod zero division or log(0).}
 
 \item{transformation}{Singal transformation method.}
 
 \item{chrom.level.lib}{Logical (1) indicating whether calculating CPM or odds using 
 sequence depth of the whole genome or per chromosome.}
-
-\item{nucleoluesCols, genomeCols}{Column names of counts for nucleoleus-associated DNA
-and the whole genome DNA. They should be the column names in the assays slot of 
-an RangedSummarizedExperiment object. Ratios will be calculated as log2 (transformed-
-nucleoluesCols/transformed genomeCols).}
 }
 \value{
 A RangedSummarizedExperiment object with log2 transformed ratios. 
@@ -38,7 +38,7 @@ library(SummarizedExperiment)
 data(triplicate.count)
 se <- triplicate.count
 se <- log2se(se, transformation = "log2CPMRatio",
-             nucleoleusCols = c("N18.subsampled.srt-2.bam",
+             nucleolusCols = c("N18.subsampled.srt-2.bam",
              "N18.subsampled.srt-3.bam",
              "N18.subsampled.srt.bam"),
              genomeCols = c("G18.subsampled.srt-2.bam",
