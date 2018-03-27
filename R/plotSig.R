@@ -23,8 +23,7 @@
 #'
 #'
 
-plotSig <- function(ideo, grList, mcolName, ...) 
-{
+plotSig <- function(ideo, grList, mcolName, ...){
     stopifnot(is(grList, "GRangesList"))
     args <- list(...)
     ylabs <- lapply(seqlevels(ideo), function(.ele) {
