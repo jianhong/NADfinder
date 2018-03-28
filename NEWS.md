@@ -2,10 +2,7 @@
 
 * Speed up tileCount per Herve's recommendation
 * Add Herve Pages as a coauthor
-<<<<<<< HEAD
-=======
 * resave triplicate.count and single.count
->>>>>>> 899ccc73fca9e4ba241984158080bbdeb3b09a3d
  
 # CHANGES IN VERSION 1.3.3
 
