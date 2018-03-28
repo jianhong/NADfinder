@@ -102,7 +102,7 @@ GAlignmentsList ",
 #' @importFrom methods as
 #' @importFrom ATACseqQC readBamFile
 #' @export
-#' @author Jianhong Ou, Haibo Liu, Herve Pages and Julie Zhu
+#' @author Jianhong Ou, Haibo Liu and Julie Zhu
 #' @examples
 #' if (interactive())
 #' {

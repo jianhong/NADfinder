@@ -1,10 +1,10 @@
 Package: NADfinder
 Type: Package
 Title: Call wide peaks for sequencing data
-Version: 1.3.5
-Author: Jianhong Ou, Haibo Liu, Jun Yu, Paul Kaufman, Lihua Julie Zhu
+Version: 1.3.6
+Encoding: UTF-8
+Author: Jianhong Ou, Haibo Liu, Jun Yu, Hervé Pagès, Paul Kaufman, Lihua Julie Zhu
 Maintainer: Jianhong Ou <jianhong.ou@umassmed.edu>,
-            Haibo Liu <Haibo.Liu@umassmed.edu>
             Lihua Julie Zhu <julie.zhu@umassmed.edu>
 Description: Nucleolus is an important structure inside the nucleus 
     in eukaryotic cells. It is the site for transcribing rDNA 
