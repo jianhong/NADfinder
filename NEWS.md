@@ -1,12 +1,14 @@
 # CHANGES IN VERSION 1.3.5
 
-* update tileCount
-
+* Speed up tileCount per Herve's recommendation
+* Add Herve Pages as a coauthor
+* resave triplicate.count and single.count
+ 
 # CHANGES IN VERSION 1.3.3
 
 * Fix the warning in windows for the help files.
-* Add Haibo as a author.
-* add the changes from Julie.
+* Add Haibo Liu as a coauthor.
+* Add different methods for transformation and combining p-values.
 
 # CHANGES IN VERSION 1.3.1
 
