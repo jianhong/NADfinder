@@ -24,7 +24,8 @@ sequence depth of the whole genome or the corresponding chromosome}
 
 \item{lib.size.A, lib.size.B}{library size for A and B.
 these two dataframes contain chromosome-level sequence depth for the chromosomes,
-which can be extracted from the metadata of the output of the tileCounts function}
+which can be extracted from the metadata of the output of the tileCounts function.
+The row.names are the chromosome names, i.e., seqnames.}
 
 \item{\dots}{not used.}
 }
@@ -37,23 +38,41 @@ log2 odds ratios for nucleolus vs genome. Pseudo-count will be used to avoid
 zero division or log(0).
 }
 \examples{
-#transformData(seq_len(10), 10:1, seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
-#Rle(c("chr1", "chr2" ) , c(5,5)), transformation = "log2OddsRatio",
-#chrom.level.lib = FALSE, lib.size.A = cbind(c("chr1", "chr2"), c(10000, 12000)), 
-#lib.size.B = cbind(c("chr1", "chr2"), c(10000, 12000)))
-#transformData(seq_len(10), 10:1, seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)), 
-#Rle(c("chr1", "chr2" ) , c(5,5)), transformation = "log2CPMRatio",
-#chrom.level.lib = FALSE, lib.size.A = cbind(c("chr1", "chr2"), c(10000, 12000)), 
-#lib.size.B = cbind(c("chr1", "chr2"), c(10000, 12000)))
-#transformData(seq_len(10), 10:1, seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)), 
-#Rle(c("chr1", "chr2" ) , c(5,5)), transformation = "log2CPMRatio",
-#chrom.level.lib = TRUE, lib.size.A = cbind(c("chr1", "chr2"), c(100, 12000)), 
-#lib.size.B = cbind(c("chr1", "chr2"), c(10000, 200)))
-#transformData(seq_len(10), 10:1, seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
-#Rle(c("chr1", "chr2" ) , c(5,5)), transformation = "log2OddsRatio",
-#chrom.level.lib = TRUE, lib.size.A = cbind(c("chr1", "chr2"), c(100, 12000)),
-#lib.size.B = cbind(c("chr1", "chr2"), c(10000, 200)))
-#transformData(seq_len(10), 10:1, transformation = "log2Ratio")
+# example 1
+transformData(A = seq_len(10), 
+              B = 10:1, 
+              seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
+              seqnames.B = Rle(c("chr1", "chr2" ) , c(5,5)), 
+              transformation = "log2OddsRatio",
+              chrom.level.lib = FALSE, 
+              lib.size.A = data.frame (count = c(10000, 12000), 
+                                       row.names = c("chr1", "chr2")),
+              lib.size.B =  data.frame(count = c(10000, 12000), 
+                                      row.names = c("chr1", "chr2")))
+                                      
+# example 2
+transformData(A = seq_len(10), 
+              B = 10:1, 
+              seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
+              seqnames.B = Rle(c("chr1", "chr2" ) , c(5,5)), 
+              transformation = "log2CPMRatio",
+              chrom.level.lib = FALSE, 
+              lib.size.A = data.frame (count = c(10000, 12000), 
+                                       row.names = c("chr1", "chr2")),
+              lib.size.B =  data.frame(count = c(10000, 12000), 
+                                      row.names = c("chr1", "chr2")))
+                                      
+# example 3
+transformData(A = seq_len(10), 
+              B = 10:1, 
+              seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
+              seqnames.B = Rle(c("chr1", "chr2" ) , c(5,5)), 
+              transformation = "log2Ratio",
+              chrom.level.lib = FALSE, 
+              lib.size.A = data.frame (count = c(10000, 12000), 
+                                       row.names = c("chr1", "chr2")),
+              lib.size.B =  data.frame(count = c(10000, 12000), 
+                                      row.names = c("chr1", "chr2")))                                       
 }
 \author{
 Julie Zhu and Haibo Liu

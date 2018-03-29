@@ -69,5 +69,5 @@ if (interactive())
 
 }
 \author{
-Jianhong Ou, Haibo Liu and Julie Zhu
+Jianhong Ou, Haibo Liu, Herve Pages and Julie Zhu
 }
