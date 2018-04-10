@@ -130,7 +130,7 @@ tileCount<- function(reads,
                       genome,
                       excludeChrs = c("chrM", "M", "Mt", "MT"),
                       windowSize = 50000,
-                      step = 1000,
+                      step = 10000,
                       mode = IntersectionNotStrict,
                       dataOverSamples = FALSE,
                       ...) 
