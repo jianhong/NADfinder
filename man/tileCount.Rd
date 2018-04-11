@@ -5,24 +5,24 @@
 \title{Perform overlap queries between reads and genome by windows}
 \usage{
 tileCount(reads, genome, excludeChrs = c("chrM", "M", "Mt", "MT"),
-  windowSize = 50000, step = 1000, mode = IntersectionNotStrict,
+  windowSize = 50000, step = 10000, mode = IntersectionNotStrict,
   dataOverSamples = FALSE, ...)
 }
 \arguments{
-\item{reads}{A \link[GenomicRanges]{GRanges},
-\link[GenomicRanges]{GRangesList} (should be one read per list element),
-\link[GenomicAlignments]{GAlignments},
-\link[GenomicAlignments]{GAlignmentsList},
-\link[GenomicAlignments]{GAlignmentPairs} or
-\link[Rsamtools]{BamFileList} object that represents the data to be
-counted by \code{\link[GenomicAlignments]{summarizeOverlaps}}. If reads are more than 1 bam files,
+\item{reads}{A \link[GenomicRanges:GRanges-class]{GRanges},
+\link[GenomicRanges:GRangesList-class]{GRangesList} (should be one read per list element),
+\link[GenomicAlignments:GAlignments-class]{GAlignments},
+\link[GenomicAlignments:GAlignmentsList-class]{GAlignmentsList},
+\link[GenomicAlignments:GAlignmentPairs-class]{GAlignmentPairs} or
+\link[Rsamtools:BamFile-class]{BamFileList} object that represents the data to be
+counted by \code{\link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}}. If reads are more than 1 bam files,
 it should be a vector of character with full path, otherwise current working directory 
 is the default directory.}
 
 \item{genome}{A BSgenome object from/on which to get/set the sequence and metadata information.}
 
 \item{excludeChrs}{A vector of string: chromosomes/scaffolds of no interest for NAD analysis.
-see \link[GenomicAlignments]{summarizeOverlaps}.
+see \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}.
 default is countByOverlaps, alia of countOverlaps(features, reads, ignore.strand=ignore.strand)}
 
 \item{windowSize}{numeric(1) or integer(1). Size of the windows.}
@@ -32,13 +32,13 @@ default is countByOverlaps, alia of countOverlaps(features, reads, ignore.strand
 \item{mode}{One of the pre-defined count methods.}
 
 \item{dataOverSamples}{logical(1). Data over several samples when use
-\link[GenomicRanges]{GRangesList} as input.}
+\link[GenomicRanges:GRangesList-class]{GRangesList} as input.}
 
 \item{...}{Additional arguments passed to
-\code{\link[GenomicAlignments]{summarizeOverlaps}}.}
+\code{\link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}}.}
 }
 \value{
-A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
+A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 The assays slot holds the counts, rowRanges holds the annotation from the
 sliding widows of genome.
 metadata contains lib.size.chrom for holding chromosome-level sequence depth

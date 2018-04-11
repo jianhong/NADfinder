@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.3.8
+
+* update the documentation of tileCount, log2se and trimPeaks
+
 # CHANGES IN VERSION 1.3.5
 
 * Speed up tileCount per Herve's recommendation

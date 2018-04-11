@@ -4,7 +4,7 @@
 #' for an NAD experiment without biological replicates.
 #'
 #' @param se An object of 
-#' \link[SummarizedExperiment]{RangedSummarizedExperiment}
+#' \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
 #' with assays of raw counts, ratios, background corrected ratios,
 #' smoothed ratios and z-scores. It should be an element of the output of 
 #' \link{smoothRatiosByChromosome}
@@ -18,7 +18,7 @@
 #' for background-corrected ratios, smoothed ratios and z-scores based on
 #' background corrected ratios.
 #'
-#' @return An object of \link[GenomicRanges]{GRanges}.
+#' @return An object of \link[GenomicRanges:GRanges-class]{GRanges}.
 #'
 #' @export
 #' @importFrom stats quantile

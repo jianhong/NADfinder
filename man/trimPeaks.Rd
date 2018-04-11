@@ -11,7 +11,7 @@ trimPeaks(se, cutoffPvalue = 0.05, backgroundPercentage = 0.25,
 }
 \arguments{
 \item{se}{An object of 
-\link[SummarizedExperiment]{RangedSummarizedExperiment}
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
 with assays of raw counts, ratios, background corrected ratios,
 smoothed ratios and z-scores. It should be an element of the output of 
 \link{smoothRatiosByChromosome}}
@@ -31,7 +31,7 @@ for background-corrected ratios, smoothed ratios and z-scores based on
 background corrected ratios.}
 }
 \value{
-An object of \link[GenomicRanges]{GRanges}.
+An object of \link[GenomicRanges:GRanges-class]{GRanges}.
 }
 \description{
 Filter the peaks by pvalue and trim the range of peaks 

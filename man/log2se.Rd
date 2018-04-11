@@ -2,49 +2,52 @@
 % Please edit documentation in R/log2se.R
 \name{log2se}
 \alias{log2se}
-\title{Calculate the log2-transformed ratios of signal stored in a SummarizedExperiment object}
+\title{calculate the log2 transformed ratios for SummarizedExperiment class}
 \usage{
 log2se(se, nucleolusCols, genomeCols, pseudocount = 1L,
   transformation = c("log2OddsRatio", "log2CPMRatio", "log2Ratio"),
   chrom.level.lib = TRUE)
 }
 \arguments{
-\item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
-The output of \link{tileCount}. Columnnames of counts data (fragment counts in each tile) 
-and metadata (total fragment counts per chromosome) are bam file names.}
+\item{se}{A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
+The output of \link{tileCount}.}
 
-\item{nucleolusCols, genomeCols}{Column names of counts for nucleolus-associated DNA
-and the whole genome DNA. They should be the column names in the assays slot of 
-an RangedSummarizedExperiment object. Ratios will be calculated as log2 (transformed-
-nucleolusCols/transformed genomeCols).}
+\item{nucleolusCols, genomeCols}{column Names of counts for nucleoleus 
+and genome. They should be the column names in the assays of se. 
+Ratios will be calculated as log2(transformed nucleolusCols/transformed genomeCols).}
 
-\item{pseudocount}{Default to 1, pseudo-count used to aviod zero division or log(0).}
+\item{pseudocount}{default to 1, pseudo-count used to aviod x/0 or log(0).}
 
-\item{transformation}{Singal transformation method.}
+\item{transformation}{transformation type}
 
-\item{chrom.level.lib}{Logical (1) indicating whether calculating CPM or odds using 
-sequence depth of the whole genome or per chromosome.}
+\item{chrom.level.lib}{indicating whether calculating CPM or odds using 
+sequence depth of the whole genome or the corresponding chromosome}
 }
 \value{
 A RangedSummarizedExperiment object with log2 transformed ratios. 
-Assays will be named as nucleoleus, genome and ratios.
+Assays will be named as nucleoleus, genome and ratio.
 }
 \description{
-Calculate the log2 transformed ratios of signals for nucleoleus-associated 
-DNA vs the whole genome DNA reference. Pseudo-count will be used to avoid zero division or log(0).
+Calculate the log2 transformed ratios for nucleoleus vs genome.
+pseudo-count will be used to avoid x/0 or log(0).
 }
 \examples{
 library(SummarizedExperiment)
-data(triplicate.count)
-se <- triplicate.count
-se <- log2se(se, transformation = "log2CPMRatio",
-             nucleolusCols = c("N18.subsampled.srt-2.bam",
-             "N18.subsampled.srt-3.bam",
-             "N18.subsampled.srt.bam"),
-             genomeCols = c("G18.subsampled.srt-2.bam",
-             "G18.subsampled.srt-3.bam",
-             "G18.subsampled.srt.bam"))
+se <- SummarizedExperiment(assays=list(counts=DataFrame(A=seq_len(3),
+       B=rep(1, 3), C=rep(4, 3), D=rep(2, 3))),              
+                  rowRanges=GRanges(c("chr1","chr1", "chr2"),
+                      IRanges(c(1, 10, 20),
+                            width=9)))
+metadata(se)$lib.size.chrom <- data.frame( c(1000, 1000), c(2000, 2000), c(200,200), c(300,300))
+colnames(metadata(se)$lib.size.chrom) <- c("A", "B", "C", "D")
+rownames(metadata(se)$lib.size.chrom) <- c("chr1", "chr2")
+as.data.frame(assays(log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"), 
+    transformation = "log2Ratio")))
+as.data.frame(assays(log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"),
+    transformation = "log2CPMRatio")))
+as.data.frame(assays(log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"),
+    transformation = "log2OddsRatio")))
 }
 \author{
-Jianhong Ou, Haibo Liu and Julie Zhu
+Jianhong Ou and Julie Zhu
 }

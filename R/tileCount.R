@@ -2,15 +2,15 @@
 #'
 #' Count reads overlapping a set of genimc features represented as
 #' genomic ranges. This function does not work for parallel.
-#' @param features A object of \link[GenomicRanges]{GRanges} representing the
+#' @param features A object of \link[GenomicRanges:GRanges-class]{GRanges} representing the
 #' feature regions to be counted.
 #' @param reads An object that represents the data to be counted. See
-#' \link[GenomicAlignments]{summarizeOverlaps}. If reads are more than 1 bam files,
+#' \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}. If reads are more than 1 bam files,
 #' it should be a vector of character with full path, otherwise current working directory 
 #' is the default directory. For paired end reads, 
 #' @param ignore.strand logical(1). ignore strand?
 #' @param inter.feature not used. This parameter is required by
-#' \link[GenomicAlignments]{summarizeOverlaps}.
+#' \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}.
 #' @export
 #' @return return a summarized experiment object with chromosome-level depth
 #' information for each input sample as metadata.
@@ -67,13 +67,13 @@ GAlignmentsList ",
 #' tileCount extends \link[GenomicAlignments]{summarizeOverlaps} by finding coverage for
 #' each fixed window in the whole genome
 #'
-#' @param reads A \link[GenomicRanges]{GRanges},
-#' \link[GenomicRanges]{GRangesList} (should be one read per list element),
-#' \link[GenomicAlignments]{GAlignments},
-#' \link[GenomicAlignments]{GAlignmentsList},
-#' \link[GenomicAlignments]{GAlignmentPairs} or
-#' \link[Rsamtools]{BamFileList} object that represents the data to be
-#' counted by \code{\link[GenomicAlignments]{summarizeOverlaps}}. If reads are more than 1 bam files,
+#' @param reads A \link[GenomicRanges:GRanges-class]{GRanges},
+#' \link[GenomicRanges:GRangesList-class]{GRangesList} (should be one read per list element),
+#' \link[GenomicAlignments:GAlignments-class]{GAlignments},
+#' \link[GenomicAlignments:GAlignmentsList-class]{GAlignmentsList},
+#' \link[GenomicAlignments:GAlignmentPairs-class]{GAlignmentPairs} or
+#' \link[Rsamtools:BamFile-class]{BamFileList} object that represents the data to be
+#' counted by \code{\link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}}. If reads are more than 1 bam files,
 #' it should be a vector of character with full path, otherwise current working directory 
 #' is the default directory.
 #' @param genome A BSgenome object from/on which to get/set the sequence and metadata information.
@@ -81,14 +81,14 @@ GAlignmentsList ",
 #' @param step numeric(1) or integer(1). Step of generating silding windows.
 #' @param mode One of the pre-defined count methods.
 #' @param excludeChrs A vector of string: chromosomes/scaffolds of no interest for NAD analysis.
-#' see \link[GenomicAlignments]{summarizeOverlaps}.
+#' see \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}.
 #' default is countByOverlaps, alia of countOverlaps(features, reads, ignore.strand=ignore.strand)
 #' @param dataOverSamples logical(1). Data over several samples when use
-#' \link[GenomicRanges]{GRangesList} as input.
+#' \link[GenomicRanges:GRangesList-class]{GRangesList} as input.
 #' @param ... Additional arguments passed to
-#' \code{\link[GenomicAlignments]{summarizeOverlaps}}.
+#' \code{\link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}}.
 #'
-#' @return A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
+#' @return A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 #' The assays slot holds the counts, rowRanges holds the annotation from the
 #' sliding widows of genome.
 #' metadata contains lib.size.chrom for holding chromosome-level sequence depth
