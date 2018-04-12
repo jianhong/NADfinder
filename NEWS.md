@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.3.9
+
+* Fix the warning in windows for the help files.
+
 # CHANGES IN VERSION 1.3.8
 
 * update the documentation of tileCount, log2se and trimPeaks

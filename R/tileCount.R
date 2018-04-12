@@ -64,7 +64,7 @@ GAlignmentsList ",
 
 #' Perform overlap queries between reads and genome by windows
 #'
-#' tileCount extends \link[GenomicAlignments]{summarizeOverlaps} by finding coverage for
+#' tileCount extends \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps} by finding coverage for
 #' each fixed window in the whole genome
 #'
 #' @param reads A \link[GenomicRanges:GRanges-class]{GRanges},

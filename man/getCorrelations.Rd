@@ -9,7 +9,7 @@ getCorrelations(se, chr = paste0("chr", seq_len(19)), ratioAssay = "ratio",
   "kendall"), file_name = "Correlation plots.pdf", ...)
 }
 \arguments{
-\item{se}{A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
+\item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 The output from \link{log2se}.}
 
 \item{chr}{A vector of character. Filter for seqnames. It should be the

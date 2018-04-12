@@ -44,7 +44,7 @@ sliding widows of genome.
 metadata contains lib.size.chrom for holding chromosome-level sequence depth
 }
 \description{
-tileCount extends \link[GenomicAlignments]{summarizeOverlaps} by finding coverage for
+tileCount extends \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps} by finding coverage for
 each fixed window in the whole genome
 }
 \examples{

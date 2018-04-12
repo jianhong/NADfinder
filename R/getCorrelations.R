@@ -3,7 +3,7 @@
 #'              peak regions. The signals will be filtered by the background cutoff value before
 #'              calculated correlations. This function also output a correlation plots using the 
 #'              \link[corrplot]{corrplot}.
-#' @param se A \link[SummarizedExperiment]{RangedSummarizedExperiment} object.
+#' @param se A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 #' The output from \link{log2se}.
 #' @param chr A vector of character. Filter for seqnames. It should be the
 #' chromosome names to be kept.
