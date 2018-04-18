@@ -214,13 +214,12 @@ se <- log2se(se,
                             "G18.subsampled.srt-3.bam",
                             "G18.subsampled.srt.bam"), 
              transformation = "log2CPMRatio")
-#getCorrelations(se, "chr18")
 seList<- smoothRatiosByChromosome(se, chr="chr18")
 cumulativePercentage(seList[["chr18"]])
-#peaks <- lapply(seList, callPeaks, 
-#                cutoffAdjPvalue=0.05, countFilter=1000)
-#peaks <- unlist(GRangesList(peaks))
-#peaks
+peaks <- lapply(seList, callPeaks, 
+                cutoffAdjPvalue=0.05, countFilter=1)
+peaks <- unlist(GRangesList(peaks))
+peaks
 ```
 
 The peaks can be visualized along the ideogram using `plotSig`. 
@@ -228,9 +227,9 @@ The peaks can be visualized along the ideogram using `plotSig`.
 ```{r fig.height=1.5}
 ideo <- readRDS(system.file("extdata", "ideo.mm10.rds", 
                             package = "NADfinder"))
-#plotSig(ideo=ideo, grList=GRangesList(peaks), mcolName="AveSig", 
-#        layout=list("chr18"), 
-#        parameterList=list(types="heatmap"))
+plotSig(ideo=ideo, grList=GRangesList(peaks), mcolName="AveSig", 
+        layout=list("chr18"), 
+        parameterList=list(types="heatmap"))
 ```
 
 # Session Info

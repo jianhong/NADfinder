@@ -50,11 +50,11 @@ cumulativePercentage <- function(se,
 {
     stopifnot(is(se, "RangedSummarizedExperiment"))
     assayName <-
-        c("nucleoleus", "genome", backgroundCorrectedAssay)
+        c("nucleolus", "genome", backgroundCorrectedAssay)
     if (any(!assayName %in% names(assays(se)))) 
     {
         stop(
-            "nucleoleus",
+            "nucleolus",
             "genome",
             backgroundCorrectedAssay,
             "should be the assays of se.")
@@ -84,7 +84,7 @@ cumulativePercentage <- function(se,
             viewMeans(v, na.rm = TRUE)
         })
         sig <- do.call(cbind, sig)
-        sig[order(sig[, "nucleoleus"]),]
+        sig[order(sig[, "nucleolus"]),]
     })
     sigCumsum <- lapply(sigBin, function(.ele) {
         .ele <- apply(.ele, 2, cumsum)
@@ -95,7 +95,7 @@ cumulativePercentage <- function(se,
               FUN = `/`)
     })
     sigEnrichStart <- sapply(sigBin, function(.ele) {
-        .r <- (.ele[, "nucleoleus"] + 1) / (.ele[, "genome"] + 1)
+        .r <- (.ele[, "nucleolus"] + 1) / (.ele[, "genome"] + 1)
         ## split .r into two parts, background and enriched
         .x <- cumsum(.r)
         .y <- sum(.r) - .x
@@ -131,7 +131,7 @@ cumulativePercentage <- function(se,
             )
             matlines(x = sigCumsum[[i]][, 1],
                      y = sigCumsum[[i]][, -1])
-            zero <- which(sigCumsum[[i]][, "nucleoleus"] > 1 / binWidth)
+            zero <- which(sigCumsum[[i]][, "nucleolus"] > 1 / binWidth)
             if (length(zero) > 0) 
             {
                 x.tick <- sigCumsum[[i]][zero[1], 1]

@@ -12,7 +12,7 @@ log2se(se, nucleolusCols, genomeCols, pseudocount = 1L,
 \item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 The output of \link{tileCount}.}
 
-\item{nucleolusCols, genomeCols}{column Names of counts for nucleoleus 
+\item{nucleolusCols, genomeCols}{column Names of counts for nucleolus 
 and genome. They should be the column names in the assays of se. 
 Ratios will be calculated as log2(transformed nucleolusCols/transformed genomeCols).}
 
@@ -25,10 +25,10 @@ sequence depth of the whole genome or the corresponding chromosome}
 }
 \value{
 A RangedSummarizedExperiment object with log2 transformed ratios. 
-Assays will be named as nucleoleus, genome and ratio.
+Assays will be named as nucleolus, genome and ratio.
 }
 \description{
-Calculate the log2 transformed ratios for nucleoleus vs genome.
+Calculate the log2 transformed ratios for nucleolus vs genome.
 pseudo-count will be used to avoid x/0 or log(0).
 }
 \examples{
