@@ -1,11 +1,11 @@
 #' calculate the log2 transformed ratios for SummarizedExperiment class
 #'
-#' @description Calculate the log2 transformed ratios for nucleoleus vs genome.
+#' @description Calculate the log2 transformed ratios for nucleolus vs genome.
 #' pseudo-count will be used to avoid x/0 or log(0).
 #'
 #' @param se A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 #' The output of \link{tileCount}.
-#' @param nucleolusCols,genomeCols column Names of counts for nucleoleus 
+#' @param nucleolusCols,genomeCols column Names of counts for nucleolus 
 #' and genome. They should be the column names in the assays of se. 
 #' Ratios will be calculated as log2(transformed nucleolusCols/transformed genomeCols).
 #' @param pseudocount default to 1, pseudo-count used to aviod x/0 or log(0).
@@ -15,7 +15,7 @@
 #' @export
 #' @import SummarizedExperiment
 #' @return A RangedSummarizedExperiment object with log2 transformed ratios. 
-#' Assays will be named as nucleoleus, genome and ratio.
+#' Assays will be named as nucleolus, genome and ratio.
 #' @examples
 #' library(SummarizedExperiment)
 #' se <- SummarizedExperiment(assays=list(counts=DataFrame(A=seq_len(3),
@@ -94,10 +94,10 @@ log2se <- function(se, nucleolusCols, genomeCols, pseudocount = 1L,
      data.frame(asy[, genomeCols, drop=FALSE]),
      SIMPLIFY = FALSE))
   }
-  nucleoleus=asy[, nucleolusCols, drop=FALSE]
+  nucleolus=asy[, nucleolusCols, drop=FALSE]
   genome=asy[, genomeCols, drop=FALSE]
-  colnames(nucleoleus) <- colnames(genome) <- colnames(log2ratios) <- nA
-  SummarizedExperiment(assays=list(nucleoleus=nucleoleus,
+  colnames(nucleolus) <- colnames(genome) <- colnames(log2ratios) <- nA
+  SummarizedExperiment(assays=list(nucleolus=nucleolus,
                                    genome=genome,
                                    ratio=log2ratios), 
                        rowRanges=rowRanges(se))

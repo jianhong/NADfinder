@@ -48,7 +48,7 @@ trimPeaks <- function(se,
     stopifnot(backgroundPercentage > 0 && backgroundPercentage < 1)
     stopifnot(class(se) == "RangedSummarizedExperiment")
     asyNames <- c(
-        "nucleoleus",
+        "nucleolus",
         "genome",
         ratioAssay,
         backgroundCorrectedAssay,
@@ -57,7 +57,7 @@ trimPeaks <- function(se,
     if (any(!asyNames %in% names(assays(se)))) 
     {
         stop(
-            "se must be a list contain assays of nucleoleus, genome,",
+            "se must be a list contain assays of nucleolus, genome,",
             paste(
                 ratioAssay,
                 backgroundCorrectedAssay,

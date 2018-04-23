@@ -25,6 +25,8 @@
 #' @param method.combineP A method used to combine P-values. Default meansig
 #' @param ... Parameter not used.
 #'
+#' @import signal
+#' @import SummarizedExperiment
 #' @import limma
 #' @import S4Vectors
 #' @import EmpiricalBrownsMethod  
@@ -59,11 +61,11 @@ callPeaks <- function(se,
                       ...) {
     stopifnot(class(se) == "RangedSummarizedExperiment")
     stopifnot(ncol(assays(se)[[backgroundCorrectedAssay]]) >= 2)
-    if (any(!c("nucleoleus", "genome", backgroundCorrectedAssay) %in%
+    if (any(!c("nucleolus", "genome", backgroundCorrectedAssay) %in%
             names(assays(se))))
     {
         stop(
-            "nucleoleus",
+            "nucleolus",
             "genome",
             backgroundCorrectedAssay,
             "should be the assays of se."
@@ -86,8 +88,8 @@ callPeaks <- function(se,
     
     gr <- rowRanges(se)
     ## fixed window size
-    stopifnot(all(width(gr) == width(gr)[1]))
-    windowSize <- width(gr)[1]
+    #stopifnot(all(width(gr) == width(gr)[1]))
+    windowSize <- median(width(gr))
     ## normalization among ratios
     bc <- as.data.frame(assays(se)[[backgroundCorrectedAssay]])
     bc.norm <- normalizeBetweenArrays(bc, method = normlizationMethod)
@@ -138,19 +140,11 @@ callPeaks <- function(se,
     ### the following filter favors dataset with more replicates
     
     #### This combined data.frame has already exist in tileCount() output
-    gr <- gr[rowMeans(cbind(assays(se)[["nucleoleus"]],
+    gr <- gr[rowMeans(cbind(assays(se)[["nucleolus"]],
                             assays(se)[["genome"]])) > countFilter]
     
-    if (length(gr) == 0)
+    if (length(gr) > 0)
     {
-        mcols(gr) <- DataFrame(
-            AveSig = numeric(0),
-            P.Value = numeric(0),
-            adj.P.Val = numeric(0)
-        )
-        colnames(mcols(gr)) <- c("AveSig", "P.Value", "adj.P.Val")
-        return(gr)
-    }
     
     gr <- split(gr, gr$group)
     
@@ -267,5 +261,11 @@ callPeaks <- function(se,
     start(gr[width(gr) > wh]) <- start(gr[width(gr) > wh]) + wh
     end(gr[width(gr) > wh]) <- end(gr[width(gr) > wh]) - wh
     gr <- sort(gr)
+    }
+    else
+    {
+       colnames(mcols(gr)) <-
+                c("AveSig", "P.Value", "adj.P.Val")
+    }
     gr
 }
