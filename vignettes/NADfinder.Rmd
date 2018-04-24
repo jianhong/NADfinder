@@ -69,7 +69,7 @@ bamFiles <- dir(path, ".bam$")
 ## 2. data will be smoothed better with bigger window size.
 ws <- 50000
 ## step for tile of genome
-step <- 1000
+step <- 5000
 ## Set the background. 
 ## 0.25 means 25% of the lower ratios will be used for background training.
 backgroundPercentage <- 0.25
@@ -188,7 +188,7 @@ bamFiles <- dir(path, ".bam$")
 
 f <- bamFiles
 ws <- 50000
-step <- 1000
+step <- 5000
 library(BSgenome.Mmusculus.UCSC.mm10)
 ```
 

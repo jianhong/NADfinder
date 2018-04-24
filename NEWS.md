@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.3.11
+
+* update documentation of NADfinder.
+
 # CHANGES IN VERSION 1.3.10
 
 * Update the callPeaks.

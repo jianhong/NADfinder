@@ -24,7 +24,8 @@
 #' in each window.
 #' @param method.combineP A method used to combine P-values. Default meansig
 #' @param ... Parameter not used.
-#'
+#' 
+#' @import SummarizedExperiment
 #' @import limma
 #' @import S4Vectors
 #' @import EmpiricalBrownsMethod 
