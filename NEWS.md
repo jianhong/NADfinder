@@ -1,3 +1,12 @@
+# CHANGES IN VERSION 1.3.11
+
+* update documentation of NADfinder.
+
+# CHANGES IN VERSION 1.3.10
+
+* Update the callPeaks.
+* Fix typo of nucleolus.
+
 # CHANGES IN VERSION 1.3.9
 
 * Fix the warning in windows for the help files.

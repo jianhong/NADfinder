@@ -9,13 +9,13 @@ callPeaks(se, backgroundCorrectedAssay = "bcRatio",
   countFilter = 1000, method.combineP = "meansig", ...)
 }
 \arguments{
-\item{se}{An object of 
+\item{se}{An object of
 \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
 with assays of raw counts, tranformed ratios, background corrected ratios,
-smoothed ratios and z-scores. It should be an element of output of 
+smoothed ratios and z-scores. It should be an element of output of
 \link{smoothRatiosByChromosome}}
 
-\item{backgroundCorrectedAssay}{character(1). Assays names 
+\item{backgroundCorrectedAssay}{character(1). Assays names
 for background corrected log2-transformed ratios, CPMRatios or OddRatios.}
 
 \item{normlizationMethod}{character(1) specifying the normalization
@@ -29,7 +29,7 @@ Default 100.}
 
 \item{cutoffAdjPvalue}{numeric(1). Cutoff adjust p-value.}
 
-\item{countFilter}{numeric(1). Cutoff value for mean of raw reads count 
+\item{countFilter}{numeric(1). Cutoff value for mean of raw reads count
 in each window.}
 
 \item{method.combineP}{A method used to combine P-values. Default meansig}
@@ -37,7 +37,7 @@ in each window.}
 \item{...}{Parameter not used.}
 }
 \value{
-An object of GRanges of peak list with metadata "AveSig", "P.Value", 
+An object of GRanges of peak list with metadata "AveSig", "P.Value",
 and "adj.P.Val", where "AveSig" means average signal such as average log2OddsRatio, log2CPMRatio or log2Ratio.
 }
 \description{
@@ -58,7 +58,7 @@ se <- log2se(se, transformation = "log2CPMRatio",
              "G18.subsampled.srt-3.bam",
              "G18.subsampled.srt.bam"))
 se<- smoothRatiosByChromosome(se, chr="chr18")
-peaks <- callPeaks(se[[1]][10000:15000, ], 
+peaks <- callPeaks(se[[1]][10000:15000, ],
                 cutoffAdjPvalue=0.001, countFilter=1000)
 
 }
