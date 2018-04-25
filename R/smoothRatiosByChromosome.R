@@ -52,7 +52,7 @@ smoothRatiosByChromosome <- function(se,
     stopifnot(ratioAssay %in% names(assays(se)))
     
     
-    ## What's the purpose of this snippt code
+    ## for computing z-score using global background 
     if (!chrom.level.background)
     {
         all.ratios <- assays(se)$ratio
@@ -60,7 +60,6 @@ smoothRatiosByChromosome <- function(se,
             quantile(all.ratios, probs = backgroundPercentage)
         bg.ratios <- all.ratios[all.ratios <= bg.percentile]
         
-        ## What's this?
         pop.sd <-
             sd(bg.ratios) * sqrt(length(bg.ratios) - 1) / sqrt(length(bg.ratios))
         pop.mean <- mean(bg.ratios)

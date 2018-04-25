@@ -19,10 +19,11 @@
 #' @param ... Parameters not used.
 #' @import GenomicRanges
 #' @import GenomeInfoDb
-#' @importFrom stats as.formula
+#' @importFrom stats as.formula cor.test
 #' @importFrom utils combn
 #' @importFrom corrplot corrplot
 #' @importFrom IRanges Views viewSums
+#' @importFrom grDevices colorRampPalette dev.off pdf
 #' @export
 #' @return A list of matrixes of correlation coefficients and p-values.
 #' @author Jianhong Ou, Haibo Liu

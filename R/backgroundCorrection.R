@@ -31,8 +31,7 @@ backgroundCorrection <- function(ratios, degree = 3, ...)
     {
         ratios[is.na(ratios)] <- 0
     }
-    
-    ## Deos this make sense?
+   ### this will not happen 
     if (any(is.infinite(ratios)))
     {
         ratios[is.infinite(ratios)] <- 0

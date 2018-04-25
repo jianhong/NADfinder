@@ -12,6 +12,7 @@
 #' @param inter.feature not used. This parameter is required by
 #' \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}.
 #' @export
+#' @importFrom stats setNames
 #' @return return a summarized experiment object with chromosome-level depth
 #' information for each input sample as metadata.
 #'

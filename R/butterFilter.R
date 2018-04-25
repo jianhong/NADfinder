@@ -23,7 +23,6 @@
 butterFilter <- function(ratios, N = ceiling(length(ratios) / 200))
 {
     ## length(ratios) = chromosome length / step size
-    ## N = number of ratios in 200 regions for a given chromosome
     ### Divide the chromosome into 200 regions
     stopifnot(inherits(ratios, c("numeric", "integer")))
     stopifnot(length(N) == 1)

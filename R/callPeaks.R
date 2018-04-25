@@ -34,6 +34,7 @@
 #' @import S4Vectors
 #' @import EmpiricalBrownsMethod 
 #' @import metap
+#' @importFrom stats loess median predict
 #' @export
 #' @return An object of GRanges of peak list with metadata "AveSig", "P.Value",
 #' and "adj.P.Val", where "AveSig" means average signal such as average log2OddsRatio, log2CPMRatio or log2Ratio.
