@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.3.13
+
+* add tileCount2.
+
 # CHANGES IN VERSION 1.3.12
 
 * update callPeaks.
