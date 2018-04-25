@@ -6,5 +6,5 @@
 \alias{NADfinder-package}
 \title{Identify nucleolus-associated domains (NADs) from NAD-seq}
 \description{
-Sliding-window based peak calling algorithm using whole genome sequences as control.
+Sliding-window based peak calling algorithm using whole genome sequences as control
 }

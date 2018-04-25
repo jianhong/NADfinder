@@ -12,7 +12,7 @@ log2se(se, nucleolusCols, genomeCols, pseudocount = 1L,
 \item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
 The output of \link{tileCount}.}
 
-\item{nucleolusCols, genomeCols}{column names of counts for nucleolus 
+\item{nucleolusCols, genomeCols}{column Names of counts for nucleolus 
 and genome. They should be the column names in the assays of se. 
 Ratios will be calculated as log2(transformed nucleolusCols/transformed genomeCols).}
 

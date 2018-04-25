@@ -5,8 +5,9 @@
 \title{Call peaks using transformed, background corrected, and smoothed ratios with biological replicates}
 \usage{
 callPeaks(se, backgroundCorrectedAssay = "bcRatio",
-  normlizationMethod = "quantile", N = 100, cutoffAdjPvalue = 1e-04,
-  countFilter = 1000, method.combineP = "meansig", ...)
+  normalization.method = "quantile", N = 100, cutoffAdjPvalue = 1e-04,
+  countFilter = 1000, combineP.method = "meansig",
+  smooth.method = "loess", lfc = log2(1.5), ...)
 }
 \arguments{
 \item{se}{An object of
@@ -18,12 +19,13 @@ smoothed ratios and z-scores. It should be an element of output of
 \item{backgroundCorrectedAssay}{character(1). Assays names
 for background corrected log2-transformed ratios, CPMRatios or OddRatios.}
 
-\item{normlizationMethod}{character(1) specifying the normalization
+\item{normalization.method}{character(1) specifying the normalization
 method to be used. Choices  are "none", "scale", "quantile" or "cyclicloess".
 See \link[limma]{normalizeBetweenArrays} for details.}
 
 \item{N}{numeric(1) or integer(1).
-Critical frequencies of the low pass filter will be set as 1/N.
+The number of  neighboring windows used for loess smoothing or the inverse of
+the critical frequencies of the low pass filter for butterworth filter.
 1/N is a cutoff at 1/N-th of the Nyquist frequency.
 Default 100.}
 
@@ -32,7 +34,12 @@ Default 100.}
 \item{countFilter}{numeric(1). Cutoff value for mean of raw reads count
 in each window.}
 
-\item{method.combineP}{A method used to combine P-values. Default meansig}
+\item{combineP.method}{A method used to combine P-values. Default meansig}
+
+\item{smooth.method}{A method used to smooth the ratios. Choices are "loess",
+"none" and "butterworthfilter".}
+
+\item{lfc}{the minimum log2-fold-change that is considered scientifically meaningful}
 
 \item{...}{Parameter not used.}
 }
@@ -58,8 +65,11 @@ se <- log2se(se, transformation = "log2CPMRatio",
              "G18.subsampled.srt-3.bam",
              "G18.subsampled.srt.bam"))
 se<- smoothRatiosByChromosome(se, chr="chr18")
-peaks <- callPeaks(se[[1]][10000:15000, ],
-                cutoffAdjPvalue=0.001, countFilter=1000)
+#add some variability to the data since the triplicate.count data was created using one sample only
+assays(se[[1]])$bcRatio[,2] <- assays(se[[1]])$bcRatio[,2] + 0.3
+assays(se[[1]])$bcRatio[,3] <- assays(se[[1]])$bcRatio[,3] - 0.3
+peaks <- callPeaks(se[[1]],
+                cutoffAdjPvalue=0.001, countFilter=10)
 
 }
 \author{
