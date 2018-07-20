@@ -5,7 +5,7 @@
 \title{Perform overlap queries between reads and genome by sliding windows
 Count reads over sliding windows.}
 \usage{
-tileCount2(reads, windowSize = 50000, restrict = paste0("chr", c(1:19, "X",
+tileCount2(reads, fragment.length = 100, windowSize = 50000, restrict = paste0("chr", c(1:19, "X",
   "Y")), step = 1000, filter = 0, pe = "both")
 }
 \arguments{
@@ -13,6 +13,7 @@ tileCount2(reads, windowSize = 50000, restrict = paste0("chr", c(1:19, "X",
 If reads are more than 1 bam files,
 it should be a vector of character with full path. This funciton now if for paired end reads}
 
+\item{fragment.length}{integer(1). Average fragment size.}
 \item{windowSize}{numeric(1) or integer(1). Size of the windows.}
 
 \item{restrict}{restrict to a set of chromosomes, default to mouse chromosomes.}
