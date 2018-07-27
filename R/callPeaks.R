@@ -23,7 +23,7 @@
 #' @param cutoffAdjPvalue numeric(1). Cutoff adjust p-value.
 #' @param countFilter numeric(1). Cutoff value for mean of raw reads count
 #' in each window.
-#' @param combineP.method A method used to combine P-values. Default meansig
+#' @param combineP.method A method used to combine P-values. Default minimump
 #' @param smooth.method A method used to smooth the ratios. Choices are "loess",
 #' "none" and "butterworthfilter".
 #' @param lfc the minimum log2-fold-change that is considered scientifically meaningful
@@ -217,7 +217,7 @@ callPeaks <- function(se,
         adj.p1 <-  all.windows.in.ra$adj.P.Val 
         if (length(identical.windows) > 0)
         {
-              data_matrix1 <- data_matrix[-identical.windows,]
+              data_matrix1 <- data_matrix1[-identical.windows,]
               pvalues1 <- pvalues1[-identical.windows]
               adj.p1 <- adj.p1[-identical.windows]
         }
@@ -239,7 +239,7 @@ callPeaks <- function(se,
                 ra$adj.P.Val <-
                    empiricalBrownsMethod(
                     data_matrix =
-                    data_matrix1,
+                      data_matrix1,
                     p_values = adj.p1,
                     extra_info = FALSE)
         } else if (combineP.method == "Fishers")
