@@ -68,7 +68,7 @@ callPeaks <- function(se,
                       N = 100,
                       cutoffAdjPvalue = 0.0001,
                       countFilter = 1000,
-                      combineP.method = "meansig",
+                      combineP.method = "minimump",
                       smooth.method = "loess",
                       lfc = log2(1.5),
                       ...) {
@@ -157,19 +157,16 @@ callPeaks <- function(se,
   
   mcols(gr) <- DataFrame(res)
   gr.all <- gr
-  
   keep <- gr$adj.P.Val < cutoffAdjPvalue
   gr <- gr[keep]
   se <- se[keep,]
-  
+   
   gr <- gr[rowMeans(cbind(assays(se)[["nucleolus"]],
                           assays(se)[["genome"]])) >= countFilter]
   se <- se[rowMeans(cbind(assays(se)[["nucleolus"]],
                           assays(se)[["genome"]])) >= countFilter] 
   if (length(gr) > 0) {
-    
     gr <- split(gr, gr$group)
-    
     gr.rd <- endoapply(gr, function(.e) {
       ## find the peak summit for each groupped window
       if (length(.e) > 10)
@@ -209,45 +206,76 @@ callPeaks <- function(se,
       
         ra$AveSig <- mean(all.windows.in.ra$AveExpr)
         #ra$AveSig <- quantile(.e$AveExpr, probs=c(0, .75, 1), na.rm=TRUE)[2]
+        
+        data_matrix1 <- as.data.frame(mcols(all.windows.in.ra)[, 1:dim(bc.norm)[2]])
+        temp <- apply(data_matrix1, MARGIN =1, FUN=diff)
+        if (length(dim(temp)) == 2)
+            identical.windows <- as.numeric(which(colSums(temp) ==0))
+        else
+            identical.windows <- as.numeric(which(temp ==0))
+        pvalues1 <-  all.windows.in.ra$P.Value
+        adj.p1 <-  all.windows.in.ra$adj.P.Val 
+        if (length(identical.windows) > 0)
+        {
+              data_matrix1 <- data_matrix[-identical.windows,]
+              pvalues1 <- pvalues1[-identical.windows]
+              adj.p1 <- adj.p1[-identical.windows]
+        }
+	if (length(pvalues1) <2)
+        {
+                 ra$P.value <- min(all.windows.in.ra$P.Value) 
+                 ra$adj.P.Val <- min(all.windows.in.ra$adj.P.Val)
+        }
+        else {
+      tryCatch(
+      (
         if (combineP.method  == "Browns")
         {
-          ra$P.value <- empiricalBrownsMethod(
-            data_matrix =
-              mcols(all.windows.in.ra)[, 1:dim(bc.norm)[2]],
-            p_values = all.windows.in.ra$P.Value,
-            extra_info = FALSE)
-          ra$adj.P.Val <-
-            empiricalBrownsMethod(
-              data_matrix =
-                mcols(all.windows.in.ra)[, 1:dim(bc.norm)[2]],
-              p_values = all.windows.in.ra$adj.P.Val,
-              extra_info = FALSE)
+                ra$P.value <- empiricalBrownsMethod(
+                   data_matrix =
+                     data_matrix1,
+                     p_values = pvalues1,
+                     extra_info = FALSE)
+                ra$adj.P.Val <-
+                   empiricalBrownsMethod(
+                    data_matrix =
+                    data_matrix1,
+                    p_values = adj.p1,
+                    extra_info = FALSE)
         } else if (combineP.method == "Fishers")
         {
-          ra$P.value <- sumlog(all.windows.in.ra$P.Value)$p
-          ra$adj.P.Val <- sumlog(all.windows.in.ra$adj.P.Val)$p
+                ra$P.value <- sumlog(pvalues1)$p
+                ra$adj.P.Val <- sumlog(adj.p1)$p
         } else if (combineP.method == "logitp")
         {
-          ra$P.value <- logitp(all.windows.in.ra$P.Value)$p
-          ra$adj.P.Val <- logitp(all.windows.in.ra$adj.P.Val)$p
+              ra$P.value <- logitp(pvalues1)$p
+              ra$adj.P.Val <- logitp(adj.p1)$p
         } else if (combineP.method == "minimump")
         {
-          ra$P.value <- minimump(all.windows.in.ra$P.Value)$p
-          ra$adj.P.Val <- minimump(all.windows.in.ra$adj.P.Val)$p
+          #ra$P.value <- minimump(pvalues1)$p
+          #ra$adj.P.Val <- minimump(adj.p1)$p
+          ra$P.value <- min(all.windows.in.ra$P.Value)
+          ra$adj.P.Val <- min(all.windows.in.ra$adj.P.Val)
         } else if (combineP.method == "sumz")
         {
-          print("OK")
-          ra$P.value <- sumz(all.windows.in.ra$P.Value)$p
-          ra$adj.P.Val <- sumz(all.windows.in.ra$adj.P.Val)$p
+              ra$P.value <- sumz(pvalues1)$p
+              ra$adj.P.Val <- sumz(adj.p1)$p
         }
+       ), error = function(e) {print(e);
+                 cat(pvalues1)
+                 ra$P.value <- min(all.windows.in.ra$P.Value)
+                 ra$adj.P.Val <- min(all.windows.in.ra$adj.P.Val)
+              }
+      ) # tryCatch
+      } #if more than one pvalue
         mcols(ra) <- cbind(DataFrame(t(colMeans(as.matrix(
-          mcols(all.windows.in.ra)[, 1:dim(bc.norm)[2]])))), mcols(ra))
+             mcols(all.windows.in.ra)[, 1:dim(bc.norm)[2]])))), mcols(ra))
       }
       return(ra)
     }
     )
     gr <- unlist((gr.rd))
-    
+     
     if (combineP.method == "meansig")
     {
       fit <- lmFit(mcols(gr)[, 1:dim(bc.norm)[2]])
