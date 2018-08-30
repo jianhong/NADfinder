@@ -22,8 +22,8 @@ these higher-order chromosome interactions in fixed and live single cells.
 To install this package, start R and enter:
 
 ```r
-library(BiocInstaller)
-biocLite("NADfinder")
+library(BiocManager)
+BiocManager::install("NADfinder")
 ```
 
 ## Documentation
