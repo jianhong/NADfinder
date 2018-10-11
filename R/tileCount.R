@@ -112,8 +112,9 @@ GAlignmentsList ",
 #'     names(fls) <- basename(fls)
 #'     if (!require(BSgenome.Mmusculus.UCSC.mm10))
 #'     {
-#'         source("https://bioconductor.org/biocLite.R")
-#'         biocLite("BSgenome.Mmusculus.UCSC.mm10")
+#'         if (!requireNamespace("BiocManager", quietly=TRUE))
+    #'         install.packages("BiocManager")
+#'         BiocManager::install("BSgenome.Mmusculus.UCSC.mm10")
 #'         library(BSgenome.Mmusculus.UCSC.mm10)
 #'     }
 #'     se <- tileCount(reads = fls, 
