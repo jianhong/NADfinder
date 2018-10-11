@@ -4,9 +4,10 @@
 \alias{getCorrelations}
 \title{Get correlation coefficinets and p-values between biological replicates}
 \usage{
-getCorrelations(se, chr = paste0("chr", seq_len(19)), ratioAssay = "ratio",
-  window = 10000L, cutoff = 1, method = c("spearman", "pearson",
-  "kendall"), file_name = "Correlation plots.pdf", ...)
+getCorrelations(se, chr = paste0("chr", seq_len(19)),
+  ratioAssay = "ratio", window = 10000L, cutoff = 1,
+  method = c("spearman", "pearson", "kendall"),
+  file_name = "Correlation plots.pdf", ...)
 }
 \arguments{
 \item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.

@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.5.3
+
+* add BiocManager into suggest package.
+
 # CHANGES IN VERSION 1.3.13
 
 * add tileCount2.

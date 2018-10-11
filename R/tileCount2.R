@@ -1,3 +1,36 @@
+computeLibSizeChrom <- function(aln_list)
+{
+  stopifnot(is.list(aln_list))
+  lib_size_list <- lapply(aln_list,
+                          function(aln) {
+                            qname <- names(aln)
+                            if (is.null(qname))
+                              stop(wmsg("Some of the GAlignments or
+                                        GAlignmentsList ",
+                                        "objects in 'aln_list' don't have names. ",
+                                        "Did you use 'use.names=TRUE' when loading ",
+                                        "them with readGAlignments() or ",
+                                        "readGAlignmentsList()?"))
+                            if (is(aln, "GAlignmentsList")) {
+                              rname <- seqnames(unlist(aln, use.names=FALSE))
+                              qname <- rep.int(qname, lengths(aln, use.names=FALSE))
+                            } else {
+                              rname <- seqnames(aln)
+                            }
+                            lengths(unique(split(qname, rname)))
+                          })
+  rnames <- unique(names(unlist(unname(lib_size_list))))
+  lib_size_list <- lapply(lib_size_list,
+                          function(lib_size) {
+                            lib_size2 <- setNames(integer(length(rnames)), rnames)
+                            lib_size2[names(lib_size)] <- lib_size
+                            lib_size2
+                          })
+  ans <- do.call(cbind, unname(lib_size_list))
+  colnames(ans) <- names(lib_size_list)
+  ans
+}
+
 #' Perform overlap queries between reads and genome by sliding windows
 #' Count reads over sliding windows.
 #' @param reads An object that represents the names and path of the bam files  to be counted.
@@ -16,7 +49,7 @@
 #' The assays slot holds the counts, rowRanges holds the annotation from the
 #' sliding widows of genome.
 #' metadata contains lib.size.chrom for holding chromosome-level sequence depth
-#' @importFrom csaw windowCounts
+#' @importFrom csaw windowCounts readParam
 #' @import SummarizedExperiment
 #' @import rbamtools
 #' @import Rsamtools
@@ -35,42 +68,6 @@
 #' }
 #'
 #'
- 
- 
-
-computeLibSizeChrom <- function(aln_list)
-     {
-         stopifnot(is.list(aln_list))
-         lib_size_list <- lapply(aln_list,
-             function(aln) {
-                 qname <- names(aln)
-                 if (is.null(qname))
-                     stop(wmsg("Some of the GAlignments or
-GAlignmentsList ",
-                               "objects in 'aln_list' don't have names. ",
-                               "Did you use 'use.names=TRUE' when loading ",
-                               "them with readGAlignments() or ",
-                               "readGAlignmentsList()?"))
-                 if (is(aln, "GAlignmentsList")) {
-                     rname <- seqnames(unlist(aln, use.names=FALSE))
-                     qname <- rep.int(qname, lengths(aln, use.names=FALSE))
-                 } else {
-                     rname <- seqnames(aln)
-                 }
-                 lengths(unique(split(qname, rname)))
-             })
-         rnames <- unique(names(unlist(unname(lib_size_list))))
-         lib_size_list <- lapply(lib_size_list,
-             function(lib_size) {
-                 lib_size2 <- setNames(integer(length(rnames)), rnames)
-                 lib_size2[names(lib_size)] <- lib_size
-                 lib_size2
-             })
-         ans <- do.call(cbind, unname(lib_size_list))
-         colnames(ans) <- names(lib_size_list)
-         ans
-    }
-
  
 tileCount2 <- function(reads,
                      fragment.length = 100,
@@ -138,3 +135,5 @@ tileCount2 <- function(reads,
     rowRanges(rse)$oid <- chrs
     return(rse)
 }
+
+

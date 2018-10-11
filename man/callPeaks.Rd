@@ -5,9 +5,10 @@
 \title{Call peaks using transformed, background corrected, and smoothed ratios with biological replicates}
 \usage{
 callPeaks(se, backgroundCorrectedAssay = "bcRatio",
-  normalization.method = "quantile", N = 100, cutoffAdjPvalue = 1e-04,
-  countFilter = 1000, combineP.method = "meansig",
-  smooth.method = "loess", lfc = log2(1.5), ...)
+  normalization.method = "quantile", N = 100,
+  cutoffAdjPvalue = 1e-04, countFilter = 1000,
+  combineP.method = "minimump", smooth.method = "loess",
+  lfc = log2(1.5), ...)
 }
 \arguments{
 \item{se}{An object of
@@ -34,7 +35,7 @@ Default 100.}
 \item{countFilter}{numeric(1). Cutoff value for mean of raw reads count
 in each window.}
 
-\item{combineP.method}{A method used to combine P-values. Default meansig}
+\item{combineP.method}{A method used to combine P-values. Default minimump}
 
 \item{smooth.method}{A method used to smooth the ratios. Choices are "loess",
 "none" and "butterworthfilter".}

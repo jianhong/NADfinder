@@ -56,7 +56,7 @@ if (interactive())
     if (!require(BSgenome.Mmusculus.UCSC.mm10))
     {
         if (!requireNamespace("BiocManager", quietly=TRUE))
-            install.packages("BiocManager")
+        install.packages("BiocManager")
         BiocManager::install("BSgenome.Mmusculus.UCSC.mm10")
         library(BSgenome.Mmusculus.UCSC.mm10)
     }
