@@ -45,7 +45,7 @@ computeLibSizeChrom <- function(aln_list)
 #' @param restrict restrict to a set of chromosomes, default to mouse chromosomes.
 #' @param filter default to 0 without filtering. An integer scalar for the minimum count sum across libraries for each window
 #'
-#' @return A \link[SummarizedExperiment]{RangedSummarizedExperiment} object with chromosome-level depth
+#' @return A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object with chromosome-level depth
 #' The assays slot holds the counts, rowRanges holds the annotation from the
 #' sliding widows of genome.
 #' metadata contains lib.size.chrom for holding chromosome-level sequence depth

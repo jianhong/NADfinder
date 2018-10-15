@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.5.4
+
+* Fix the warning of documentation in windows with missing link.
+
 # CHANGES IN VERSION 1.5.3
 
 * add BiocManager into suggest package.

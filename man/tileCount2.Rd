@@ -28,7 +28,7 @@ containing the average length(s) of the sequenced fragments in each libary.}
 \item{pe}{a character string indicating whether paired-end data is present; set to "none", "both", "first" or "second"}
 }
 \value{
-A \link[SummarizedExperiment]{RangedSummarizedExperiment} object with chromosome-level depth
+A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object with chromosome-level depth
 The assays slot holds the counts, rowRanges holds the annotation from the
 sliding widows of genome.
 metadata contains lib.size.chrom for holding chromosome-level sequence depth
