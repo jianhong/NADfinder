@@ -99,7 +99,7 @@ GAlignmentsList ",
 #' @import GenomeInfoDb
 #' @import SummarizedExperiment
 #' @importFrom IRanges IRanges elementNROWS
-#' @importFrom BiocGenerics lengths table
+#' @importFrom BiocGenerics table
 #' @importFrom methods as
 #' @importFrom ATACseqQC readBamFile
 #' @export
