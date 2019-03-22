@@ -144,27 +144,27 @@ tileCount2 <- function(reads,
 
 #### bamCountAll does not count properly with paired-end data  
     
-    if (!testPairedEndBam(reads[1]))
-    {
-        count <- lapply(reads, function(thisBam) {
-    	    reader <- bamReader(thisBam, idx = TRUE) 
-            temp <- bamCountAll(reader, verbose = FALSE)
-            temp1 <- cbind(rownames(temp), temp$nAligns)
-            colnames(temp1) <- c("chr", basename(thisBam))
-            temp1
-       })
-   
-       merge.all <- function(x, y) {
-           merge(x, y, all=TRUE, by="chr")
-       }
-
-       lib.size.chrom <- Reduce(merge.all, count)
-       rownames(lib.size.chrom) <- lib.size.chrom[,1]
-       lib.size.chrom <- lib.size.chrom[, -1]
-       lib.size.chrom <- lib.size.chrom[rownames(lib.size.chrom) %in% restrict, drop = FALSE, ]
-    }
-    else
-    { 
+    #if (!testPairedEndBam(reads[1]))
+    #{
+    #    count <- lapply(reads, function(thisBam) {
+    #	    reader <- bamReader(thisBam, idx = TRUE) 
+    #        temp <- bamCountAll(reader, verbose = FALSE)
+    #        temp1 <- cbind(rownames(temp), temp$nAligns)
+    #        colnames(temp1) <- c("chr", basename(thisBam))
+    #        temp1
+    #   })
+  # 
+  #     merge.all <- function(x, y) {
+  #         merge(x, y, all=TRUE, by="chr")
+  #     }
+#
+#       lib.size.chrom <- Reduce(merge.all, count)
+#       rownames(lib.size.chrom) <- lib.size.chrom[,1]
+#       lib.size.chrom <- lib.size.chrom[, -1]
+#       lib.size.chrom <- lib.size.chrom[rownames(lib.size.chrom) %in% restrict, drop = FALSE, ]
+#    }
+#    else
+#    { 
         if (is.null(names(reads)))
           names(reads) <- basename(reads)
         aln_list <- lapply(reads,
@@ -182,7 +182,7 @@ tileCount2 <- function(reads,
     
        ## remove excludeChr from lib.size.chrom
        lib.size.chrom <- lib.size.chrom[rownames(lib.size.chrom) %in% restrict, drop = FALSE, ]
-    } 
+#    } 
     metadata(rse)$lib.size.chrom <- lib.size.chrom 
     colData(rse)$records <- colData(rse)$total
     colData(rse)$object <- colnames(rse)
@@ -224,27 +224,27 @@ tileCount2 <- function(reads,
 
 #### bamCountAll does not count properly with paired-end data  
     
-    if (!testPairedEndBam(reads[1]))
-    {
-        count <- lapply(reads, function(thisBam) {
-    	    reader <- bamReader(thisBam, idx = TRUE) 
-            temp <- bamCountAll(reader, verbose = FALSE)
-            temp1 <- cbind(rownames(temp), temp$nAligns)
-            colnames(temp1) <- c("chr", basename(thisBam))
-            temp1
-       })
+    #if (!testPairedEndBam(reads[1]))
+    #{
+    #    count <- lapply(reads, function(thisBam) {
+    #	    reader <- bamReader(thisBam, idx = TRUE) 
+    #        temp <- bamCountAll(reader, verbose = FALSE)
+    #        temp1 <- cbind(rownames(temp), temp$nAligns)
+    #        colnames(temp1) <- c("chr", basename(thisBam))
+    #        temp1
+    #   })
    
-       merge.all <- function(x, y) {
-           merge(x, y, all=TRUE, by="chr")
-       }
+    #   merge.all <- function(x, y) {
+    #       merge(x, y, all=TRUE, by="chr")
+    #   }
 
-       lib.size.chrom <- Reduce(merge.all, count)
-       rownames(lib.size.chrom) <- lib.size.chrom[,1]
-       lib.size.chrom <- lib.size.chrom[, -1]
-       lib.size.chrom <- lib.size.chrom[rownames(lib.size.chrom) %in% restrict, drop = FALSE, ]
-    }
-    else
-    { 
+    #   lib.size.chrom <- Reduce(merge.all, count)
+    #   rownames(lib.size.chrom) <- lib.size.chrom[,1]
+    #   lib.size.chrom <- lib.size.chrom[, -1]
+    #   lib.size.chrom <- lib.size.chrom[rownames(lib.size.chrom) %in% restrict, drop = FALSE, ]
+    #}
+    #else
+    #{ 
         if (is.null(names(reads)))
           names(reads) <- basename(reads)
         aln_list <- lapply(reads,
@@ -262,7 +262,7 @@ tileCount2 <- function(reads,
     
        ## remove excludeChr from lib.size.chrom
        lib.size.chrom <- lib.size.chrom[rownames(lib.size.chrom) %in% restrict, drop = FALSE, ]
-    } 
+    #} 
     metadata(rse)$lib.size.chrom <- lib.size.chrom 
     colData(rse)$records <- colData(rse)$total
     colData(rse)$object <- colnames(rse)
@@ -272,5 +272,3 @@ tileCount2 <- function(reads,
     rowRanges(rse)$oid <- chrs
     return(rse)
 }
-
-
