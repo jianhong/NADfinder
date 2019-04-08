@@ -1,7 +1,7 @@
 Package: NADfinder
 Type: Package
 Title: Call wide peaks for sequencing data
-Version: 1.7.1
+Version: 1.7.3
 Encoding: UTF-8
 Author: Jianhong Ou, Haibo Liu, Jun Yu, Hervé Pagès, Paul Kaufman, Lihua Julie Zhu
 Maintainer: Jianhong Ou <jianhong.ou@duke.edu>,
@@ -25,7 +25,7 @@ Description: Nucleolus is an important structure inside the nucleus
     smoothing, peak calling, peak trimming and annotation.
 License: GPL (>= 2)
 Depends: R (>= 3.4), BiocGenerics, IRanges, GenomicRanges, S4Vectors, SummarizedExperiment
-Imports: graphics, methods, baseline, signal, GenomicAlignments, rbamtools,
+Imports: graphics, methods, baseline, signal, GenomicAlignments,
         GenomeInfoDb, rtracklayer, limma, trackViewer, stats, utils, 
         Rsamtools, metap, EmpiricalBrownsMethod,ATACseqQC, corrplot, csaw
 Suggests: RUnit, BiocStyle, knitr, BSgenome.Mmusculus.UCSC.mm10,
