@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.7.1
+
+* Update author email.
+
 # CHANGES IN VERSION 1.5.4
 
 * Fix the warning of documentation in windows with missing link.
