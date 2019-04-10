@@ -8,22 +8,7 @@ Count reads over sliding windows.}
 computeLibSizeChrom(aln_list)
 }
 \arguments{
-\item{reads}{An object that represents the names and path of the bam files  to be counted.
-If reads are more than 1 bam files,
-it should be a vector of character with full path. This function now works for paired end reads}
-
-\item{fragment.length}{integer(1). An integer scalar or a list of two integer scalars/vectors,
-containing the average length(s) of the sequenced fragments in each libary.}
-
-\item{windowSize}{numeric(1) or integer(1). Size of the windows.}
-
-\item{step}{numeric(1) or integer(1). Step of generating silding windows.}
-
-\item{pe}{a character string indicating whether paired-end data is present; set to "none", "both", "first" or "second"}
-
-\item{restrict}{restrict to a set of chromosomes, default to mouse chromosomes.}
-
-\item{filter}{default to 0 without filtering. An integer scalar for the minimum count sum across libraries for each window}
+\item{aln_list}{a list.}
 }
 \value{
 A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object with chromosome-level depth

@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.7.4
+
+* Fix the warning of documentation of computeLibSizeChrom.
+
 # CHANGES IN VERSION 1.7.1
 
 * Update author email.

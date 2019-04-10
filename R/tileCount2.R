@@ -33,18 +33,7 @@ computeLibSizeChrom <- function(aln_list)
 
 #' Perform overlap queries between reads and genome by sliding windows
 #' Count reads over sliding windows.
-#' @param reads An object that represents the names and path of the bam files  to be counted.
-#' If reads are more than 1 bam files,
-#' it should be a vector of character with full path. This function now works for paired end reads
-#'
-#' @param fragment.length integer(1). An integer scalar or a list of two integer scalars/vectors,
-#'          containing the average length(s) of the sequenced fragments in each libary.
-#' @param windowSize numeric(1) or integer(1). Size of the windows.
-#' @param step numeric(1) or integer(1). Step of generating silding windows.
-#' @param pe a character string indicating whether paired-end data is present; set to "none", "both", "first" or "second"
-#' @param restrict restrict to a set of chromosomes, default to mouse chromosomes.
-#' @param filter default to 0 without filtering. An integer scalar for the minimum count sum across libraries for each window
-#'
+#' @param aln_list a list.
 #' @return A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object with chromosome-level depth
 #' The assays slot holds the counts, rowRanges holds the annotation from the
 #' sliding widows of genome.
@@ -53,9 +42,8 @@ computeLibSizeChrom <- function(aln_list)
 #' @import SummarizedExperiment
 #' @import Rsamtools
 #' @import GenomicAlignments
-#' @export
 #' @author Jun Yu,Hervé Pagès and Julie Zhu
-#' @examples
+
 computeLibSizeChrom <- function(aln_list)
 {
   stopifnot(is.list(aln_list))
