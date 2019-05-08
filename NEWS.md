@@ -1,3 +1,7 @@
+# CHANGES IN VERSION 1.9.1
+
+* Add citation.
+
 # CHANGES IN VERSION 1.7.4
 
 * Fix the warning of documentation of computeLibSizeChrom.

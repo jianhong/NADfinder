@@ -1,0 +1,11 @@
+citHeader("Please cite the paper below for the NADfinder package.")
+
+citEntry(entry="Article",
+	title="Two Contrasting Classes of Nucleolus-Associated Domains in Mouse Fibroblast Heterochromatin",
+	author=personList(as.person("Anastassiia Vertii"), as.person("Jianhong Ou"), as.person("Jun Yu"), as.person("Aimin Yan"), as.person("Haibo Liu"), as.person("Lihua Julie Zhu"), as.person("Paul D Kaufman")),
+	publisher="bioRxiv",
+	journal="bioRxiv",
+	year=2019,
+	url="https://doi.org/10.1101/484568",
+	textVersion="Anastassiia Vertii, Jianhong Ou, Jun Yu, Aimin Yan, Herv\'e Pag\'es, Haibo Liu, Lihua Julie Zhu, Paul D. Kaufman. Two Contrasting Classes of Nucleolus-Associated Domains in Mouse Fibroblast Heterochromatin. doi: https://doi.org/10.1101/484568. https://www.biorxiv.org/content/10.1101/484568v1.article-info. (2019)."
+)
