@@ -1,7 +1,7 @@
 Package: NADfinder
 Type: Package
 Title: Call wide peaks for sequencing data
-Version: 1.9.1
+Version: 1.9.2
 Encoding: UTF-8
 Author: Jianhong Ou, Haibo Liu, Jun Yu, Hervé Pagès, Paul Kaufman, Lihua Julie Zhu
 Maintainer: Jianhong Ou <jianhong.ou@duke.edu>,
@@ -21,8 +21,8 @@ Description: Nucleolus is an important structure inside the nucleus
     stem cell (ESC) differentiation. 
     Here, we developed a 
     Bioconductor package NADfinder for bioinformatic 
-    analysis of the NAD-seq data, including normalization, 
-    smoothing, peak calling, peak trimming and annotation.
+    analysis of the NAD-seq data, including baseline correction, 
+    smoothing, normalization, peak calling, and annotation.
 License: GPL (>= 2)
 Depends: R (>= 3.4), BiocGenerics, IRanges, GenomicRanges, S4Vectors, SummarizedExperiment
 Imports: graphics, methods, baseline, signal, GenomicAlignments,

@@ -1,3 +1,6 @@
+# CHANGES IN VERSION 1.9.2
+* Update citation.
+* Update trimPeaks.R to filter peaks using adjusted pvalues and trimmed peaks by removing windows with zscore < 1.696
 # CHANGES IN VERSION 1.9.1
 
 * Add citation.

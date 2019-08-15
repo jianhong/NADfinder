@@ -147,7 +147,7 @@ legend("topright",
 ## call peaks for each chromosome
 peaks <- lapply(datList, trimPeaks, 
                 backgroundPercentage=backgroundPercentage, 
-                cutoffPvalue=0.05, countFilter=1000)
+                cutoffAdjPvalue=0.05, countFilter=1000)
 ## plot the peaks in "chr18"
 peaks.subset <- countOverlaps(rowRanges(chr18subset), peaks$chr18)>=1
 peaks.run <- rle(peaks.subset)

@@ -4,7 +4,7 @@
 \alias{trimPeaks}
 \title{Trim peaks}
 \usage{
-trimPeaks(se, cutoffPvalue = 0.05, backgroundPercentage = 0.25,
+trimPeaks(se, cutoffAdjPvalue = 0.05, padjust.method = "BH", backgroundPercentage = 0.25,
   countFilter = 1000, ratioAssay = "ratio",
   backgroundCorrectedAssay = "bcRatio",
   smoothedRatioAssay = "smoothedRatio", zscoreAssay = "zscore")
@@ -16,8 +16,10 @@ with assays of raw counts, ratios, background corrected ratios,
 smoothed ratios and z-scores. It should be an element of the output of 
 \link{smoothRatiosByChromosome}}
 
-\item{cutoffPvalue}{numeric(1). Cutoff p-value.}
+\item{cutoffAdjPvalue}{numeric(1). Cutoff for adjusted p-value.}
 
+\item{padjust.method}{character(1). The method to use for adjusting p-values,which is passed
+ to p.adjust function}
 \item{backgroundPercentage}{numeric(1). Cutoff value for the peaks height.}
 
 \item{countFilter}{numeric(1) or integer(1). Cutoff value for mean of 
@@ -47,6 +49,6 @@ transformation="log2CPMRatio")
 dat <- smoothRatiosByChromosome(dat, N=100, chr=c("chr18","chr19"))
 peaks <- trimPeaks(dat[["chr18"]],
                 backgroundPercentage=.25,
-                cutoffPvalue=0.05, countFilter=1000)
+                cutoffAdjPvalue=0.05, countFilter=1000)
 
 }
