@@ -4,10 +4,17 @@
 \alias{trimPeaks}
 \title{Trim peaks}
 \usage{
-trimPeaks(se, cutoffAdjPvalue = 0.05, padjust.method = "BH", backgroundPercentage = 0.25,
-  countFilter = 1000, ratioAssay = "ratio",
+trimPeaks(
+  se,
+  cutoffAdjPvalue = 0.05,
+  padjust.method = "BH",
+  backgroundPercentage = 0.25,
+  countFilter = 1000,
+  ratioAssay = "ratio",
   backgroundCorrectedAssay = "bcRatio",
-  smoothedRatioAssay = "smoothedRatio", zscoreAssay = "zscore")
+  smoothedRatioAssay = "smoothedRatio",
+  zscoreAssay = "zscore"
+)
 }
 \arguments{
 \item{se}{An object of 
@@ -16,14 +23,15 @@ with assays of raw counts, ratios, background corrected ratios,
 smoothed ratios and z-scores. It should be an element of the output of 
 \link{smoothRatiosByChromosome}}
 
-\item{cutoffAdjPvalue}{numeric(1). Cutoff for adjusted p-value.}
+\item{cutoffAdjPvalue}{numeric(1). Cutoff of adjusted p-value.}
 
-\item{padjust.method}{character(1). The method to use for adjusting p-values,which is passed
- to p.adjust function}
+\item{padjust.method}{character(1). The method to use for adjusting p-values, which is passed
+to p.adjust function}
+
 \item{backgroundPercentage}{numeric(1). Cutoff value for the peaks height.}
 
 \item{countFilter}{numeric(1) or integer(1). Cutoff value for mean of 
-raw reads count in each window.}
+raw reads count of the Nucleolar/ChIP samples in each window.}
 
 \item{ratioAssay}{character(1). The name of assay in se, which store the 
 values to be smoothed.}
@@ -37,7 +45,7 @@ An object of \link[GenomicRanges:GRanges-class]{GRanges}.
 }
 \description{
 Filter the peaks by pvalue and trim the range of peaks 
-for an NAD experiment without biological replicates.
+for an NAD or ChIP-seq experiment without biological replicates.
 }
 \examples{
 

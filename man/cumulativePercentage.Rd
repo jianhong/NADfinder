@@ -4,8 +4,12 @@
 \alias{cumulativePercentage}
 \title{Plot the cumulative percentage of tag allocation}
 \usage{
-cumulativePercentage(se, binWidth = 1e+05,
-  backgroundCorrectedAssay = "bcRatio", ...)
+cumulativePercentage(
+  se,
+  binWidth = 1e+05,
+  backgroundCorrectedAssay = "bcRatio",
+  ...
+)
 }
 \arguments{
 \item{se}{An object of 

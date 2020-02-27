@@ -4,8 +4,12 @@
 \alias{IntersectionNotStrict}
 \title{Count reads overlapping genomic ranges}
 \usage{
-IntersectionNotStrict(features, reads, ignore.strand = TRUE,
-  inter.feature = FALSE)
+IntersectionNotStrict(
+  features,
+  reads,
+  ignore.strand = TRUE,
+  inter.feature = FALSE
+)
 }
 \arguments{
 \item{features}{A object of \link[GenomicRanges:GRanges-class]{GRanges} representing the

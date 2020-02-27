@@ -26,12 +26,10 @@
 #' metadata(se)$lib.size.chrom <- data.frame( c(1000, 1000), c(2000, 2000), c(200,200), c(300,300))
 #' colnames(metadata(se)$lib.size.chrom) <- c("A", "B", "C", "D")
 #' rownames(metadata(se)$lib.size.chrom) <- c("chr1", "chr2")
-#' as.data.frame(assays(log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"), 
-#'     transformation = "log2Ratio")))
-#' as.data.frame(assays(log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"),
-#'     transformation = "log2CPMRatio")))
-#' as.data.frame(assays(log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"),
-#'     transformation = "log2OddsRatio")))
+#' log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"), transformation = "log2Ratio")
+#' log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"), transformation = "log2CPMRatio")
+#' log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"),
+#'     transformation = "log2OddsRatio")
 #' @author Jianhong Ou and Julie Zhu
 
 log2se <- function(se, nucleolusCols, genomeCols, pseudocount = 1L, 

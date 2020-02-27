@@ -71,7 +71,7 @@ smoothRatiosByChromosome <- function(se,
     
     se <- lapply(se, function(.ele) 
     {
-        if (class(assays(.ele)[[ratioAssay]]) != "matrix") 
+        if (!is(assays(.ele)[[ratioAssay]], "matrix"))
         {
             assays(.ele)[[ratioAssay]] <- as.matrix(assays(.ele)[[ratioAssay]])
         }

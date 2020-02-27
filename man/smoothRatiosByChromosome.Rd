@@ -4,10 +4,17 @@
 \alias{smoothRatiosByChromosome}
 \title{Backgound correction and signal smoothing per chromosome}
 \usage{
-smoothRatiosByChromosome(se, chr = paste0("chr", c(seq_len(21), "X",
-  "Y")), ratioAssay = "ratio", backgroundCorrectedAssay = "bcRatio",
-  smoothedRatioAssay = "smoothedRatio", zscoreAssay = "zscore",
-  backgroundPercentage = 0.25, chrom.level.background = TRUE, ...)
+smoothRatiosByChromosome(
+  se,
+  chr = paste0("chr", c(seq_len(21), "X", "Y")),
+  ratioAssay = "ratio",
+  backgroundCorrectedAssay = "bcRatio",
+  smoothedRatioAssay = "smoothedRatio",
+  zscoreAssay = "zscore",
+  backgroundPercentage = 0.25,
+  chrom.level.background = TRUE,
+  ...
+)
 }
 \arguments{
 \item{se}{An object of 

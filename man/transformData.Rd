@@ -4,9 +4,17 @@
 \alias{transformData}
 \title{transform counts to log2 cpm ratios, log2 ratios or log2 odds ratios}
 \usage{
-transformData(A, B, seqnames.A, seqnames.B, pseudo.count = 1L,
+transformData(
+  A,
+  B,
+  seqnames.A,
+  seqnames.B,
+  pseudo.count = 1L,
   transformation = c("log2OddsRatio", "log2CPMRatio", "log2Ratio"),
-  chrom.level.lib = TRUE, lib.size.A, lib.size.B)
+  chrom.level.lib = TRUE,
+  lib.size.A,
+  lib.size.B
+)
 }
 \arguments{
 \item{A, B}{window-level counts for nucleolus and genome, extracted from the assays of 

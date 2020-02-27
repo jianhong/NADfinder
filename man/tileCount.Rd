@@ -4,9 +4,16 @@
 \alias{tileCount}
 \title{Perform overlap queries between reads and genome by windows}
 \usage{
-tileCount(reads, genome, excludeChrs = c("chrM", "M", "Mt", "MT"),
-  windowSize = 50000, step = 10000, mode = IntersectionNotStrict,
-  dataOverSamples = FALSE, ...)
+tileCount(
+  reads,
+  genome,
+  excludeChrs = c("chrM", "M", "Mt", "MT"),
+  windowSize = 50000,
+  step = 10000,
+  mode = IntersectionNotStrict,
+  dataOverSamples = FALSE,
+  ...
+)
 }
 \arguments{
 \item{reads}{A \link[GenomicRanges:GRanges-class]{GRanges},

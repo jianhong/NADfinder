@@ -4,11 +4,18 @@
 \alias{callPeaks}
 \title{Call peaks using transformed, background corrected, and smoothed ratios with biological replicates}
 \usage{
-callPeaks(se, backgroundCorrectedAssay = "bcRatio",
-  normalization.method = "quantile", N = 100,
-  cutoffAdjPvalue = 1e-04, countFilter = 1000,
-  combineP.method = "minimump", smooth.method = "loess",
-  lfc = log2(1.5), ...)
+callPeaks(
+  se,
+  backgroundCorrectedAssay = "bcRatio",
+  normalization.method = "quantile",
+  N = 100,
+  cutoffAdjPvalue = 1e-04,
+  countFilter = 1000,
+  combineP.method = "minimump",
+  smooth.method = "loess",
+  lfc = log2(1.5),
+  ...
+)
 }
 \arguments{
 \item{se}{An object of

@@ -138,7 +138,7 @@ tileCount<- function(reads,
                       ...) 
 {
     stopifnot(all(grepl(".bam$", reads)), all(file.exists(paste0(reads, ".bai"))))
-    stopifnot(class(genome) == "BSgenome")
+    stopifnot(is(genome, "BSgenome"))
     stopifnot(windowSize %% 1 == 0, step %% 1 ==0, windowSize > 0, step > 0, step < windowSize)
 
     targetRegions <- as(seqinfo(genome), "GRanges")

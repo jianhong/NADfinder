@@ -49,7 +49,7 @@ getCorrelations <- function(se,
                             file_name = "Correlation plots.pdf",
                             ...) 
 {
-    stopifnot(class(se) == "RangedSummarizedExperiment")
+    stopifnot(is(se, "RangedSummarizedExperiment"))
     stopifnot(length(ratioAssay) == 1)
     stopifnot(ratioAssay %in% names(assays(se)))
     method <- match.arg(method)

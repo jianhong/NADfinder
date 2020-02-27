@@ -23,7 +23,7 @@
 #' @return An object of \link[GenomicRanges:GRanges-class]{GRanges}.
 #'
 #' @export
-#' @importFrom stats quantile
+#' @importFrom stats quantile p.adjust
 #' @examples
 #'
 #' data(single.count)

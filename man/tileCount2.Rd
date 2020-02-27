@@ -5,13 +5,25 @@
 \title{Perform overlap queries between reads and genome by sliding windows
 Count reads over sliding windows.}
 \usage{
-tileCount2(reads, fragment.length = 100, windowSize = 50000,
-  restrict = paste0("chr", c(1:19, "X", "Y")), step = 1000,
-  filter = 0, pe = "both")
+tileCount2(
+  reads,
+  fragment.length = 100,
+  windowSize = 50000,
+  restrict = paste0("chr", c(1:19, "X", "Y")),
+  step = 1000,
+  filter = 0,
+  pe = "both"
+)
 
-tileCount2(reads, fragment.length = 100, windowSize = 50000,
-  restrict = paste0("chr", c(1:19, "X", "Y")), step = 1000,
-  filter = 0, pe = "both")
+tileCount2(
+  reads,
+  fragment.length = 100,
+  windowSize = 50000,
+  restrict = paste0("chr", c(1:19, "X", "Y")),
+  step = 1000,
+  filter = 0,
+  pe = "both"
+)
 }
 \arguments{
 \item{reads}{An object that represents the names and path of the bam files  to be counted.
