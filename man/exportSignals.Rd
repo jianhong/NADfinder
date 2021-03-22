@@ -26,9 +26,9 @@ vector, it is assumed to be a filename and a corresponding file connection
 is created and then closed after exporting the object.
 If missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be returned.}
 
-\item{format}{The format of the output. see \link[rtracklayer]{export}.}
+\item{format}{The format of the output. see \link[BiocIO:export]{export}.}
 
-\item{...}{Parameters to be passed to \link[rtracklayer]{export}}
+\item{...}{Parameters to be passed to \link[BiocIO:export]{export}}
 }
 \value{
 If con is missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be returned.

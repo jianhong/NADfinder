@@ -1,3 +1,6 @@
+# CHANGES IN VERSION 1.15.1
+* fix the missing link for rtracklayer::export.
+
 # CHANGES IN VERSION 1.11.1
 * replace all `class` by `is`.
 
