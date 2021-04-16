@@ -1,3 +1,6 @@
+# CHANGES IN VERSION 1.15.2
+* add rmarkdown as suggest package.
+
 # CHANGES IN VERSION 1.15.1
 * fix the missing link for rtracklayer::export.
 

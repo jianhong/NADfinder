@@ -1,7 +1,7 @@
 Package: NADfinder
 Type: Package
 Title: Call wide peaks for sequencing data
-Version: 1.15.1
+Version: 1.15.2
 Encoding: UTF-8
 Author: Jianhong Ou, Haibo Liu, Jun Yu, Hervé Pagès, Paul Kaufman, Lihua Julie Zhu
 Maintainer: Jianhong Ou <jianhong.ou@duke.edu>,
@@ -29,7 +29,7 @@ Imports: graphics, methods, baseline, signal, GenomicAlignments,
         GenomeInfoDb, rtracklayer, limma, trackViewer, stats, utils, 
         Rsamtools, metap, EmpiricalBrownsMethod,ATACseqQC, corrplot, csaw
 Suggests: RUnit, BiocStyle, knitr, BSgenome.Mmusculus.UCSC.mm10,
-        testthat, BiocManager
+        testthat, BiocManager, rmarkdown
 biocViews: Sequencing, DNASeq, GeneRegulation, PeakDetection
 LazyData: TRUE
 VignetteBuilder: knitr
