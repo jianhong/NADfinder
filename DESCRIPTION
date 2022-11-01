@@ -1,7 +1,7 @@
 Package: NADfinder
 Type: Package
 Title: Call wide peaks for sequencing data
-Version: 1.22.0
+Version: 1.23.0
 Encoding: UTF-8
 Author: Jianhong Ou, Haibo Liu, Jun Yu, Hervé Pagès, Paul Kaufman, Lihua Julie Zhu
 Maintainer: Jianhong Ou <jianhong.ou@duke.edu>,
