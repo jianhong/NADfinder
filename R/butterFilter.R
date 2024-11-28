@@ -5,13 +5,13 @@
 #'
 #' @param ratios A vector of numeric. It is log2-transformed ratios,
 #' CPMRatios or OddRatios in each window.
-#' @param N numeric(1) or integer(1). 
+#' @param N numeric(1) or integer(1).
 #' Critical frequencies of the low pass filter will be set as 1/N.
 #' 1/N is a cutoff at 1/N-th of the Nyquist frequency.
-#' By default, it is suppose there are about 200 peaks in the inputs.
+#' By default, it is supposed there are about 200 peaks in the inputs.
 #'
-#' @return A vector of numeric with same length of input ratios. 
-#' The vector indicates smoothed ratios.
+#' @return A numeric vector of the same length as input ratios, containing
+#' smoothed ratios.
 #'
 #' @export
 #' @importFrom signal butter filter
@@ -27,10 +27,10 @@ butterFilter <- function(ratios, N = ceiling(length(ratios) / 200))
     stopifnot(inherits(ratios, c("numeric", "integer")))
     stopifnot(length(N) == 1)
     bf <- butter(2, 1 / N, type = "low")
-    
+
     ## r2 filtered smoothed ratio
     r2 <- as.numeric(filter(bf, ratios))
-    
+
     W1 <- floor(N / 2) + 1
     W2 <- N - W1
     ### the following loop is to shift the smoothed ratios half window backward
@@ -41,8 +41,7 @@ butterFilter <- function(ratios, N = ceiling(length(ratios) / 200))
         c(r2[W1:length(r2)],
           loess.smooth(seq.int(W2 + 1), y,
                        evaluation = W2 + 1)$y)[seq_along(r2)]
-    } else
-    {
+    } else {
         r2
     }
 }

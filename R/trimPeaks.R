@@ -1,22 +1,21 @@
 #' Trim peaks
 #'
-#' Filter the peaks by pvalue and trim the range of peaks 
-#' for an NAD or ChIP-seq experiment without biological replicates.
+#' Filter the peaks by p-value and trim the range of peaks for an NAD or
+#' ChIP-seq experiment without biological replicates.
 #'
-#' @param se An object of 
-#' \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
+#' @param se A [SummarizedExperiment::RangedSummarizedExperiment-class] object
 #' with assays of raw counts, ratios, background corrected ratios,
-#' smoothed ratios and z-scores. It should be an element of the output of 
+#' smoothed ratios and z-scores. It should be an element of the output of
 #' \link{smoothRatiosByChromosome}
 #' @param cutoffAdjPvalue numeric(1). Cutoff of adjusted p-value.
-#' @param padjust.method character(1). The method to use for adjusting p-values, which is passed
-#' to p.adjust function
+#' @param padjust.method character(1). The method to use for adjusting p-values,
+#' which is passed to p.adjust function.
 #' @param backgroundPercentage numeric(1). Cutoff value for the peaks height.
-#' @param countFilter numeric(1) or integer(1). Cutoff value for mean of 
+#' @param countFilter numeric(1) or integer(1). Cutoff value for mean of
 #' raw reads count of the Nucleolar/ChIP samples in each window.
-#' @param ratioAssay character(1). The name of assay in se, which store the 
-#' values to be smoothed. 
-#' @param backgroundCorrectedAssay,smoothedRatioAssay,zscoreAssay Assays names 
+#' @param ratioAssay character(1). The name of assay in se, which store the
+#' values to be smoothed.
+#' @param backgroundCorrectedAssay,smoothedRatioAssay,zscoreAssay Assays names
 #' for background-corrected ratios, smoothed ratios and z-scores based on
 #' background corrected ratios.
 #'
@@ -28,7 +27,8 @@
 #'
 #' data(single.count)
 #' se <- single.count
-#' dat <- log2se(se, nucleolusCols="N18.subsampled.srt.bam", genomeCols="G18.subsampled.srt.bam", 
+#' dat <- log2se(se, nucleolusCols="N18.subsampled.srt.bam",
+#'               genomeCols="G18.subsampled.srt.bam",
 #' transformation="log2CPMRatio")
 #' ## Smooth the ratios for each chromosome.
 #' dat <- smoothRatiosByChromosome(dat, N=100, chr=c("chr18","chr19"))
@@ -45,7 +45,7 @@ trimPeaks <- function(se,
                       ratioAssay = "ratio",
                       backgroundCorrectedAssay = "bcRatio",
                       smoothedRatioAssay = "smoothedRatio",
-                      zscoreAssay = "zscore") 
+                      zscoreAssay = "zscore")
 {
     backgroundPercentage2 = .5
     stopifnot(backgroundPercentage > 0 && backgroundPercentage < 1)
@@ -57,7 +57,7 @@ trimPeaks <- function(se,
         backgroundCorrectedAssay,
         smoothedRatioAssay,
         zscoreAssay)
-    if (any(!asyNames %in% names(assays(se)))) 
+    if (any(!asyNames %in% names(assays(se))))
     {
         stop(
             "se must be a list contain assays of nucleolus, genome,",
@@ -71,27 +71,26 @@ trimPeaks <- function(se,
         )
     }
     chr <- rowRanges(se)
-    
+
     ## NO,this might not the case for the last window of each chromosome
     # if (!all(width(chr) == width(chr)[1]))
     # {
     #     stop("The width of rowRanges should be identical.")
     # }
-    
+
     windowSize <- width(chr)[1]
     sampleLen <- ncol(assays(se)[[zscoreAssay]])
-    
+
     ## this function is for single sample. For multiple samples, use callPeaks
     if (sampleLen != 1)
     {
-        stop(
-            "This function is for single sample.",
+        stop("This function is for single sample.",
             "For multiple samples, please try callPeaks.")
     }
     ## prepare data
     mcols(chr) <- do.call(cbind, assays(se)[asyNames])
     colnames(mcols(chr)) <- asyNames
-    
+
     ## call peaks by zscore.
     mcols(chr) <-
         cbind(mcols(chr),
@@ -100,16 +99,20 @@ trimPeaks <- function(se,
                   probs = c(0, backgroundPercentage, 1))
     ## filter
     #chr <-
-    #    chr[rowMeans(as.data.frame(mcols(chr)[, seq_len(which(colnames(mcols(chr)) ==
+    #    chr[rowMeans(as.data.frame(mcols(chr)[,
+    #        seq_len(which(colnames(mcols(chr)) ==
     #                            ratioAssay) - 1)])) > countFilter]
-    chr <- chr[mcols(chr)[, which(colnames(mcols(chr)) == ratioAssay) - 2] > countFilter]
-    #### filter windows with lower zscore (1.696 corresponds to 1 percentile - two tailed)
+    chr <- chr[mcols(chr)[, which(colnames(mcols(chr)) ==
+                                      ratioAssay) - 2] > countFilter]
+    ## filter windows with lower zscore (1.696 corresponds to 1 percentile -
+    ## two tailed)
     chr <- chr[mcols(chr)[, which(colnames(mcols(chr)) == "zscore")] > 1.696]
-   
-    group.p <- unique(mcols(chr)[, which(colnames(mcols(chr)) %in% c("group", "pvalue"))]) 
+
+    group.p <- unique(mcols(chr)[, which(colnames(mcols(chr)) %in%
+                                             c("group", "pvalue"))])
     adjustedPvalue <- p.adjust(group.p[,2], method = padjust.method)
     group.p <-cbind(group.p, adjustedPvalue)
-    adjustedPvalue <- group.p[match(mcols(chr)$group, group.p[,1]),3]     
+    adjustedPvalue <- group.p[match(mcols(chr)$group, group.p[,1]),3]
     mcols(chr) <- cbind(mcols(chr), adjustedPvalue)
     chr <-
         chr[chr$adjustedPvalue < cutoffAdjPvalue &
@@ -117,11 +120,13 @@ trimPeaks <- function(se,
     ## return if not peak
     if (length(chr) == 0)
     {
-        mcols(chr) <- DataFrame(zscore = numeric(0), pvalue = numeric(0), adjustedPvalue = numeric(0))
+        mcols(chr) <- DataFrame(zscore = numeric(0),
+                                pvalue = numeric(0),
+                                adjustedPvalue = numeric(0))
         colnames(mcols(chr)) <- c(zscoreAssay, "pvalue", "adjustedPvalue")
         return(chr)
     }
-    
+
     chr <- split(chr, chr$group)
     ## trim peaks by cut from shoulder
     chr.rd <- lapply(chr, function(.e) {
@@ -145,14 +150,15 @@ trimPeaks <- function(se,
         }
         .e <- .e[-length(.e)]
         ra <- range(.e)
-        if (length(.e) > 0) 
+        if (length(.e) > 0)
         {
             mcols(ra)[, zscoreAssay] <- .e$grp.zscore[1]
             ra$pvalue <- .e$pvalue[1]
 	    ra$adjustedPvalue <- .e$adjustedPvalue[1]
-        } else
-        {
-            mcols(ra) <- DataFrame(zscore = numeric(0), pvalue = numeric(0), adjustedPvalue = numeric(0))
+        } else {
+            mcols(ra) <- DataFrame(zscore = numeric(0),
+                                   pvalue = numeric(0),
+                                   adjustedPvalue = numeric(0))
             colnames(mcols(ra)) <- c(zscoreAssay, "pvalue", "adjustedPvalue")
         }
         ra
@@ -167,7 +173,7 @@ trimPeaks <- function(se,
     s <- start(chr.rd)
     e <- end(chr.rd)
     idx <- which(e[-length(e)] > s[-1])
-    if (length(idx) > 0) 
+    if (length(idx) > 0)
     {
         end(chr.rd)[idx] <- start(chr.rd)[idx + 1] - wh
         start(chr.rd)[idx + 1] <- start(chr.rd)[idx + 1] + wh

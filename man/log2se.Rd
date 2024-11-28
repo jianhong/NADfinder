@@ -14,22 +14,23 @@ log2se(
 )
 }
 \arguments{
-\item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
+\item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::RangedSummarizedExperiment} object.
 The output of \link{tileCount}.}
 
-\item{nucleolusCols, genomeCols}{column Names of counts for nucleolus 
-and genome. They should be the column names in the assays of se. 
-Ratios will be calculated as log2(transformed nucleolusCols/transformed genomeCols).}
+\item{nucleolusCols, genomeCols}{column Names of counts for nucleolus
+and genome. They should be the column names in the assays of se.
+Ratios will be calculated as
+log2(transformed nucleolusCols/transformed genomeCols).}
 
 \item{pseudocount}{default to 1, pseudo-count used to aviod x/0 or log(0).}
 
 \item{transformation}{transformation type}
 
-\item{chrom.level.lib}{indicating whether calculating CPM or odds using 
+\item{chrom.level.lib}{indicating whether calculating CPM or odds using
 sequence depth of the whole genome or the corresponding chromosome}
 }
 \value{
-A RangedSummarizedExperiment object with log2 transformed ratios. 
+A RangedSummarizedExperiment object with log2 transformed ratios.
 Assays will be named as nucleolus, genome and ratio.
 }
 \description{
@@ -39,15 +40,18 @@ pseudo-count will be used to avoid x/0 or log(0).
 \examples{
 library(SummarizedExperiment)
 se <- SummarizedExperiment(assays=list(counts=DataFrame(A=seq_len(3),
-       B=rep(1, 3), C=rep(4, 3), D=rep(2, 3))),              
+       B=rep(1, 3), C=rep(4, 3), D=rep(2, 3))),
                   rowRanges=GRanges(c("chr1","chr1", "chr2"),
                       IRanges(c(1, 10, 20),
                             width=9)))
-metadata(se)$lib.size.chrom <- data.frame( c(1000, 1000), c(2000, 2000), c(200,200), c(300,300))
+metadata(se)$lib.size.chrom <- data.frame(c(1000, 1000), c(2000, 2000),
+                                          c(200,200), c(300,300))
 colnames(metadata(se)$lib.size.chrom) <- c("A", "B", "C", "D")
 rownames(metadata(se)$lib.size.chrom) <- c("chr1", "chr2")
-log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"), transformation = "log2Ratio")
-log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"), transformation = "log2CPMRatio")
+log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"),
+       transformation = "log2Ratio")
+log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"),
+       transformation = "log2CPMRatio")
 log2se(se, nucleolusCols = c("A", "C"), genomeCols = c("B", "D"),
     transformation = "log2OddsRatio")
 }

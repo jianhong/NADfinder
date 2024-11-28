@@ -1,9 +1,10 @@
 #' Plot signals with ideograms
 #'
-#' Plot signals with ideograms for \link[GenomicRanges:GRangesList-class]{GRangesList}.
+#' Plot signals with ideograms for [GenomicRanges::GRangesList-class].
 #'
 #' @param ideo Output of \link[trackViewer]{loadIdeogram}.
-#' @param grList A \link[GenomicRanges:GRangesList-class]{GRangesList} of data to plot.
+#' @param grList A \link[GenomicRanges:GRangesList-class]{GRangesList} of data
+#' to plot.
 #' @param mcolName Column name of metadata of GRangesList for plotting.
 #' @param ... Parameters to pass to \link[trackViewer]{ideogramPlot}
 #' @importFrom trackViewer ideogramPlot
@@ -29,14 +30,13 @@ plotSig <- function(ideo, grList, mcolName, ...){
     ylabs <- lapply(seqlevels(ideo), function(.ele) {
         c(.ele, names(grList))})
     names(ylabs) <- seqlevels(ideo)
-    if (length(args$parameterList)) 
+    if (length(args$parameterList))
     {
         if (!length(args$parameterList$dataColumn))
             args$parameterList$dataColumn <- mcolName
         if (!length(args$parameterList$ylabs))
             args$parameterList$ylabs <- ylabs
-    } else
-    {
+    } else {
         args$parameterList <- list(dataColumn = mcolName,
                                    ylabs = ylabs)
     }

@@ -22,13 +22,16 @@ tileCount(
 \link[GenomicAlignments:GAlignmentsList-class]{GAlignmentsList},
 \link[GenomicAlignments:GAlignmentPairs-class]{GAlignmentPairs} or
 \link[Rsamtools:BamFile-class]{BamFileList} object that represents the data to be
-counted by \code{\link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}}. If reads are more than 1 bam files,
-it should be a vector of character with full path, otherwise current working directory 
+counted by \code{\link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}}.
+If reads are more than 1 bam files,
+it should be a vector of character with full path, otherwise current working directory
 is the default directory.}
 
-\item{genome}{A BSgenome object from/on which to get/set the sequence and metadata information.}
+\item{genome}{A BSgenome object from/on which to get/set the sequence and
+metadata information.}
 
-\item{excludeChrs}{A vector of string: chromosomes/scaffolds of no interest for NAD analysis.
+\item{excludeChrs}{A vector of string: chromosomes/scaffolds of no interest
+for NAD analysis.
 see \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}.
 default is countByOverlaps, alia of countOverlaps(features, reads, ignore.strand=ignore.strand)}
 
@@ -51,8 +54,8 @@ sliding widows of genome.
 metadata contains lib.size.chrom for holding chromosome-level sequence depth
 }
 \description{
-tileCount extends \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps} by finding coverage for
-each fixed window in the whole genome
+tileCount extends \link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}
+by finding coverage for each fixed window in the whole genome
 }
 \examples{
 if (interactive())
@@ -60,17 +63,12 @@ if (interactive())
     fls <- list.files(system.file("extdata", package="NADfinder"),
     recursive=FALSE, pattern="*bam$", full=TRUE)
     names(fls) <- basename(fls)
-    if (!require(BSgenome.Mmusculus.UCSC.mm10))
-    {
-        if (!requireNamespace("BiocManager", quietly=TRUE))
-        install.packages("BiocManager")
-        BiocManager::install("BSgenome.Mmusculus.UCSC.mm10")
-        library(BSgenome.Mmusculus.UCSC.mm10)
-    }
-    se <- tileCount(reads = fls, 
+    library(BSgenome.Mmusculus.UCSC.mm10)
+
+    se <- tileCount(reads = fls,
                     genome = Mmusculus,
-                    excludeChrs = c("chrM", paste0("chr", c(1:17,19)), 
-                                    "chrX", "chrY"), 
+                    excludeChrs = c("chrM", paste0("chr", c(1:17,19)),
+                                    "chrX", "chrY"),
                     windowSize=50000, step=10000)
 }
 

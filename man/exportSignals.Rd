@@ -7,46 +7,53 @@
 exportSignals(dat, assayName, colName, con, format = "bedGraph", ...)
 }
 \arguments{
-\item{dat}{An object of \link[GenomicRanges:GRanges-class]{GRanges}, 
-or \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
+\item{dat}{An object of \link[GenomicRanges:GRanges-class]{GRanges},
+or \link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::RangedSummarizedExperiment}.
 with assays of raw counts, ratios, background correct ratios,
-smoothed ratios and z-scores. It should be an element of output of 
+smoothed ratios and z-scores. It should be an element of output of
 \link{smoothRatiosByChromosome}}
 
-\item{assayName}{character(1). Assay name for 
-\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}}
+\item{assayName}{character(1). Assay name for
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::RangedSummarizedExperiment}.}
 
-\item{colName}{character(1). Column name of metadata of dat or assay of dat 
+\item{colName}{character(1). Column name of metadata of dat or assay of dat
 for coverage weight, see
-\link[GenomicRanges:coverage-methods]{coverage}, 
-\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}.}
+\link[GenomicRanges:coverage-methods]{coverage},
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::RangedSummarizedExperiment}.}
 
 \item{con}{The connection to which data is saved. If this is a character
 vector, it is assumed to be a filename and a corresponding file connection
 is created and then closed after exporting the object.
-If missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be returned.}
+If missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be
+returned.}
 
 \item{format}{The format of the output. see \link[BiocIO:export]{export}.}
 
 \item{...}{Parameters to be passed to \link[BiocIO:export]{export}}
 }
 \value{
-If con is missing, a \link[IRanges:AtomicList-class]{SimpleRleList} will be returned.
+If con is missing, a \link[IRanges:AtomicList-class]{SimpleRleList}
+will be returned.
 Otherwise, nothing is returned.
 }
 \description{
 Output signals to bedgraph, bed, wig, etc, for track viewer
 }
 \examples{
-gr <- GRanges("chr1", IRanges(seq_len(100), 201:300), reads=rep(1, 100))
+gr <- GRanges("chr1", IRanges(seq_len(100), 201:300),
+              reads=rep(1, 100))
 myTrackLine <- new("TrackLine", name="my track",
                     description="description of my track",
                     color=col2rgb("red")[, 1],
                     visibility="full")
-exportSignals(gr, colName="reads", 
-              con="test.bedGraph", trackLine=myTrackLine)
+out <- tempdir()
+exportSignals(gr, colName="reads",
+              con = file.path(out, "test.bedGraph"),
+              trackLine=myTrackLine)
 data(triplicate.count)
-exportSignals(triplicate.count, "counts", 
-              "G18.subsampled.srt.bam", "test.bw", format="bigWig")
+exportSignals(triplicate.count, "counts",
+              "G18.subsampled.srt.bam",
+              con = file.path(out, "test.bw"),
+              format="bigWig")
 
 }

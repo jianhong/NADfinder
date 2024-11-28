@@ -11,28 +11,28 @@ getCorrelations(
   window = 10000L,
   cutoff = 1,
   method = c("spearman", "pearson", "kendall"),
-  file_name = "Correlation plots.pdf",
+  file_name = "Correlation.plots.pdf",
   ...
 )
 }
 \arguments{
-\item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object.
-The output from \link{log2se}.}
+\item{se}{A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::RangedSummarizedExperiment} object.
+The output from \code{\link[=log2se]{log2se()}}.}
 
 \item{chr}{A vector of character. Filter for seqnames. It should be the
 chromosome names to be kept.}
 
-\item{ratioAssay}{character(1). 
+\item{ratioAssay}{character(1).
 Column name of ratio for correlation calculation.}
 
-\item{window}{numeric(1) or integer(1). 
+\item{window}{numeric(1) or integer(1).
 The window size for summary of the ratios.}
 
-\item{cutoff}{numeric(1). All the coverage signals lower than cutoff value 
+\item{cutoff}{numeric(1). All the coverage signals lower than cutoff value
 in a given window will be filtered out.}
 
 \item{method}{character(1) indicating which correlation coefficient
-is to be computed. See \link[stats]{cor}.}
+is to be computed. See \code{\link[stats:cor]{stats::cor()}}.}
 
 \item{file_name}{A file name for output correlation plots}
 
@@ -42,10 +42,10 @@ is to be computed. See \link[stats]{cor}.}
 A list of matrixes of correlation coefficients and p-values.
 }
 \description{
-Get correlations and p-values between biological replicates based on coverage signal for 
-             peak regions. The signals will be filtered by the background cutoff value before
-             calculated correlations. This function also output a correlation plots using the 
-             \link[corrplot]{corrplot}.
+Get correlations and p-values between biological replicates
+based on coverage signal for peak regions. The signals will be filtered by
+the background cutoff value before calculated correlations. This function
+also output a correlation plots using the \link[corrplot]{corrplot}.
 }
 \examples{
 data(triplicate.count)
@@ -57,7 +57,9 @@ se <- log2se(se, transformation = "log2CPMRatio",
              genomeCols = c("G18.subsampled.srt-2.bam",
              "G18.subsampled.srt-3.bam",
              "G18.subsampled.srt.bam"))
-getCorrelations(se, chr="chr18")
+out <-  tempdir()
+getCorrelations(se, chr="chr18",
+                file_name = file.path(out, "Correlation.plots.pdf"))
 
 }
 \author{

@@ -7,7 +7,7 @@
 backgroundCorrection(ratios, degree = 3, ...)
 }
 \arguments{
-\item{ratios}{A vector of numeric. It is log2-transformed ratios, CPMRatios 
+\item{ratios}{A vector of numeric. It is log2-transformed ratios, CPMRatios
 or OddRatios of counts for each window.}
 
 \item{degree}{Degree of polynomial. default 3.}
@@ -17,7 +17,8 @@ or OddRatios of counts for each window.}
 }
 \value{
 A vector of numeric.
-It is the background corrected log2-transformed ratios, CPMRatios or OddRatios.
+It is the background corrected log2-transformed ratios, CPMRatios
+or OddRatios.
 }
 \description{
 Correct ratios of read counts per sliding window for background.
@@ -25,7 +26,7 @@ Correct ratios of read counts per sliding window for background.
 \details{
 This function implements the backgound correction methods of
 algorithm for polynomial fitting. See details via
-\code{\link[baseline]{baseline.modpolyfit}}. This function expects 
+\code{\link[baseline]{baseline.modpolyfit}}. This function expects
 the trendency of decreasing of the ratios from 5' end to 3' end.
 }
 \examples{

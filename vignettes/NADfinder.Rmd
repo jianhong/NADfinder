@@ -16,8 +16,9 @@ output:
 ```{r, echo=FALSE, results="hide", warning=FALSE}
 suppressPackageStartupMessages({
   library(NADfinder)
-  library(BSgenome.Mmusculus.UCSC.mm10)
+  library(SummarizedExperiment)
   library(rtracklayer)
+  library(future.apply)
 })
 knitr::opts_chunk$set(warning=FALSE, message=FALSE, eval=TRUE)
 ```
@@ -55,14 +56,11 @@ given step along the genome using a pair of bam files from genomic sample as
 background and purified nucleoleus-associated DNA as target signal. 
 
 ```{r quickStart, fig.width=6, fig.height=4}
-## load the library
-library(NADfinder)
-library(SummarizedExperiment)
 ## test bam files in the package
 path <- system.file("extdata", package = "NADfinder", lib.loc = NULL,
             mustWork = TRUE)
-bamFiles <- dir(path, ".bam$")
-
+bamFiles <- dir(path, ".bam$", full.names = TRUE)
+names(bamFiles) <- c("G18", "N18")
 ## window size for tile of genome. Here we set it to a big window size,
 ## ie., 50k because of the following two reasons:
 ## 1. peaks of NADs are wide;
@@ -75,16 +73,37 @@ step <- 5000
 backgroundPercentage <- 0.25
 ## Count the reads for each window with a given step in the genome.
 ## The output will be a GRanges object.
-library(BSgenome.Mmusculus.UCSC.mm10)
+
+## using future for multithreading
+ if (.Platform$OS.type == "windows")
+ {
+     plan(sequential)
+ } else {
+     plan(multicore)
+ }
+ncores <- length(availableWorkers())
 ```
 
-```{r eval=FALSE}
-se <- tileCount(reads=file.path(path, bamFiles), 
-                genome=Mmusculus, 
-                windowSize=ws, 
-                step=step,
-                mode = IntersectionNotStrict,
-                dataOverSamples = FALSE)
+```{r eval=TRUE}
+genomeSW_SAF <-
+     generateGenomeSAF(bamfile = bamFiles[1],
+                       windowSize = 50000L,
+                       step = 5000L,
+                       chrExcluded = c("chrM", "MT"))
+invisible({
+    capture.output({
+      se <- swFeatureCounts (bamfiles = bamFiles,
+                        saf =  genomeSW_SAF,
+                        isPairedEnd = TRUE,
+                        threads = 1L,
+                        checkFragLength = FALSE,
+                        requireBothEndsMapped = FALSE,
+                        minFragLength = 50L,
+                        maxFragLength = 1000L,
+                        minMQS = 0,
+                        verbose = FALSE)
+    })
+})
 ```
 
 Here we load the pre-computed coverage data single.count to save build time.
@@ -145,9 +164,14 @@ legend("topright",
        legend = c("raw_ratio", "background_corrected", "smoothed"), 
        fill = c("black", "green", "red"))
 ## call peaks for each chromosome
-peaks <- lapply(datList, trimPeaks, 
+schedule_jobs <- length(datList) / ncores
+future.scheduling <- ifelse(schedule_jobs >= 1, 
+                            floor(schedule_jobs), 1)
+
+peaks <- future_lapply(datList, trimPeaks, 
                 backgroundPercentage=backgroundPercentage, 
-                cutoffAdjPvalue=0.05, countFilter=1000)
+                cutoffAdjPvalue=0.05, countFilter=1,
+                future.scheduling = future.scheduling)
 ## plot the peaks in "chr18"
 peaks.subset <- countOverlaps(rowRanges(chr18subset), peaks$chr18)>=1
 peaks.run <- rle(peaks.subset)
@@ -166,9 +190,9 @@ downstream analysis.
 
 ```{r}
 ## output the peaks
-write.csv(as.data.frame(unname(peaks.gr)), "peaklist.csv", row.names=FALSE)
-## export peaks to a bed file.
-library(rtracklayer)
+out <- tempdir()
+write.csv(as.data.frame(unname(peaks.gr)), 
+          file.path(out, "peaklist.csv"), row.names=FALSE)
 #export(peaks.gr, "peaklist.bed", "BED")
 ```
 
@@ -180,23 +204,36 @@ and smoothing, and peak calling. The only difference is that limma is used
 to determine the statistical significance in peak calling.
 
 ```{r}
-library(NADfinder)
 ## bam file path
 path <- system.file("extdata", package = "NADfinder", lib.loc = NULL,
             mustWork = TRUE)
-bamFiles <- dir(path, ".bam$")
-
+bamFiles <- dir(path, ".bam$", full.names = TRUE)
+names(bamFiles) <- c("G18", "N18")
 f <- bamFiles
 ws <- 50000
 step <- 5000
-library(BSgenome.Mmusculus.UCSC.mm10)
 ```
 
-```{r eval=FALSE}
-se <- tileCount(reads=file.path(path, f), 
-                genome=Mmusculus, 
-                windowSize=ws, 
-                step=step)
+```{r eval=TRUE}
+genomeSW_SAF <-
+     generateGenomeSAF(bamfile = bamFiles[1],
+                       windowSize = 50000L,
+                       step = 5000L,
+                       chrExcluded = c("chrM", "MT"))
+invisible({
+    capture.output({
+      se <- swFeatureCounts (bamfiles = bamFiles,
+                        saf =  genomeSW_SAF,
+                        isPairedEnd = TRUE,
+                        threads = 1L,
+                        checkFragLength = FALSE,
+                        requireBothEndsMapped = FALSE,
+                        minFragLength = 50L,
+                        maxFragLength = 1000L,
+                        minMQS = 0,
+                        verbose = FALSE)
+    })
+})
 ```
 
 Load saved coverage.
@@ -216,8 +253,9 @@ se <- log2se(se,
              transformation = "log2CPMRatio")
 seList<- smoothRatiosByChromosome(se, chr="chr18")
 cumulativePercentage(seList[["chr18"]])
-peaks <- lapply(seList, callPeaks, 
-                cutoffAdjPvalue=0.05, countFilter=1)
+peaks <- future_lapply(seList, callPeaks, 
+                cutoffAdjPvalue=0.05, countFilter=1,
+                future.scheduling = future.scheduling)
 peaks <- unlist(GRangesList(peaks))
 peaks
 ```
@@ -227,7 +265,8 @@ The peaks can be visualized along the ideogram using `plotSig`.
 ```{r fig.height=1.5}
 ideo <- readRDS(system.file("extdata", "ideo.mm10.rds", 
                             package = "NADfinder"))
-plotSig(ideo=ideo, grList=GRangesList(peaks), mcolName="AveSig", 
+plotSig(ideo=ideo, grList=GRangesList(peaks), 
+        mcolName="AveSig", 
         layout=list("chr18"), 
         parameterList=list(types="heatmap"))
 ```

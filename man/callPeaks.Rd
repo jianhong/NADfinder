@@ -2,7 +2,8 @@
 % Please edit documentation in R/callPeaks.R
 \name{callPeaks}
 \alias{callPeaks}
-\title{Call peaks using transformed, background corrected, and smoothed ratios with biological replicates}
+\title{Call peaks using transformed, background corrected, and smoothed ratios with
+biological replicates}
 \usage{
 callPeaks(
   se,
@@ -18,18 +19,18 @@ callPeaks(
 )
 }
 \arguments{
-\item{se}{An object of
-\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
+\item{se}{A
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::RangedSummarizedExperiment} object
 with assays of raw counts, tranformed ratios, background corrected ratios,
 smoothed ratios and z-scores. It should be an element of output of
-\link{smoothRatiosByChromosome}}
+\code{\link[=smoothRatiosByChromosome]{smoothRatiosByChromosome()}}}
 
 \item{backgroundCorrectedAssay}{character(1). Assays names
 for background corrected log2-transformed ratios, CPMRatios or OddRatios.}
 
 \item{normalization.method}{character(1) specifying the normalization
 method to be used. Choices  are "none", "scale", "quantile" or "cyclicloess".
-See \link[limma]{normalizeBetweenArrays} for details.}
+See \code{\link[limma:normalizebetweenarrays]{limma::normalizeBetweenArrays()}} for details.}
 
 \item{N}{numeric(1) or integer(1).
 The number of  neighboring windows used for loess smoothing or the inverse of
@@ -42,24 +43,26 @@ Default 100.}
 \item{countFilter}{numeric(1). Cutoff value for mean of raw reads count
 in each window.}
 
-\item{combineP.method}{A method used to combine P-values. Default minimump}
+\item{combineP.method}{A method used to combine P-values which can be
+"Browns", "minimump", "logitp", "Fishers", "sumz","meansig". Default is
+"minimump".}
 
 \item{smooth.method}{A method used to smooth the ratios. Choices are "loess",
-"none" and "butterworthfilter".}
+"none" and "butterworthfilter". Default is "loess".}
 
-\item{lfc}{the minimum log2-fold-change that is considered scientifically meaningful}
+\item{lfc}{the minimum log2-fold-change that is considered scientifically
+meaningful}
 
 \item{...}{Parameter not used.}
 }
 \value{
 An object of GRanges of peak list with metadata "AveSig", "P.Value",
-and "adj.P.Val", where "AveSig" means average signal such as average log2OddsRatio, log2CPMRatio or log2Ratio.
+and "adj.P.Val", where "AveSig" means average signal such as average
+log2OddsRatio, log2CPMRatio or log2Ratio.
 }
 \description{
-Use limma to calculate p-values for NADs
-}
-\details{
-By default, use the mean smoothed ratio for each peak region to calculate p-values
+Use limma to calculate p-values for NADs. By default, use the mean smoothed
+ratio for each peak region to calculate p-values
 }
 \examples{
 
@@ -73,7 +76,8 @@ se <- log2se(se, transformation = "log2CPMRatio",
              "G18.subsampled.srt-3.bam",
              "G18.subsampled.srt.bam"))
 se<- smoothRatiosByChromosome(se, chr="chr18")
-#add some variability to the data since the triplicate.count data was created using one sample only
+# add some variability to the data since the triplicate.count data was
+# created using one sample only
 assays(se[[1]])$bcRatio[,2] <- assays(se[[1]])$bcRatio[,2] + 0.3
 assays(se[[1]])$bcRatio[,3] <- assays(se[[1]])$bcRatio[,3] - 0.3
 peaks <- callPeaks(se[[1]],

@@ -4,17 +4,18 @@
 #'
 #' @details This function implements the backgound correction methods of
 #' algorithm for polynomial fitting. See details via
-#' \code{\link[baseline]{baseline.modpolyfit}}. This function expects 
+#' \code{\link[baseline]{baseline.modpolyfit}}. This function expects
 #' the trendency of decreasing of the ratios from 5' end to 3' end.
 #'
-#' @param ratios A vector of numeric. It is log2-transformed ratios, CPMRatios 
+#' @param ratios A vector of numeric. It is log2-transformed ratios, CPMRatios
 #' or OddRatios of counts for each window.
 #' @param degree Degree of polynomial. default 3.
 #' @param ... parameters could be passed to
 #'  \link[baseline]{baseline.modpolyfit}.
 #'
 #' @return A vector of numeric.
-#' It is the background corrected log2-transformed ratios, CPMRatios or OddRatios.
+#' It is the background corrected log2-transformed ratios, CPMRatios
+#' or OddRatios.
 #'
 #' @importFrom baseline baseline getCorrected
 #' @export
@@ -31,17 +32,17 @@ backgroundCorrection <- function(ratios, degree = 3, ...)
     {
         ratios[is.na(ratios)] <- 0
     }
-   ### this will not happen 
+   ### this will not happen
     if (any(is.infinite(ratios)))
     {
         ratios[is.infinite(ratios)] <- 0
     }
     if (length(unique(ratios)) > 1)
     {
-        bc <- baseline(t(ratios), method = "modpolyfit", degree = degree, ...)
+        bc <- baseline(t(ratios), method = "modpolyfit",
+                       degree = degree, ...)
         as.numeric(getCorrected(bc))
-    } else 
-    {
+    } else {
         ratios
     }
 }

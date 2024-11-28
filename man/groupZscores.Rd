@@ -11,7 +11,7 @@ groupZscores(zscore)
 It is the z-scores of ratios for each window.}
 }
 \value{
-A data.frame with column names as "zscore", "group", "grp.zscore", 
+A data.frame with column names as "zscore", "group", "grp.zscore",
 and "pvalue".
 }
 \description{

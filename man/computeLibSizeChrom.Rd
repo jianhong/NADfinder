@@ -11,10 +11,10 @@ computeLibSizeChrom(aln_list)
 \item{aln_list}{a list.}
 }
 \value{
-A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} object with chromosome-level depth
-The assays slot holds the counts, rowRanges holds the annotation from the
-sliding widows of genome.
-metadata contains lib.size.chrom for holding chromosome-level sequence depth
+A \link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::RangedSummarizedExperiment} object
+with chromosome-level depth. The assays slot holds the counts, rowRanges
+holds the annotation from the sliding widows of genome. metadata contains
+lib.size.chrom for holding chromosome-level sequence depth
 }
 \description{
 Perform overlap queries between reads and genome by sliding windows

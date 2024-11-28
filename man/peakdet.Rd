@@ -9,11 +9,11 @@ peakdet(y, delta = 0, silence = TRUE)
 \arguments{
 \item{y}{A numeric vector for searching peaks}
 
-\item{delta}{A numeric vector of length 1, defining the minimum absolute changes required
-for local maximum or minimum detection when slope sign changes. If it is set to 0, 
-the delta will be set to 1/10 of the range of y.}
+\item{delta}{A numeric vector of length 1, defining the minimum absolute
+changes required for local maximum or minimum detection when slope sign
+changes. If it is set to 0, the delta will be set to 1/10 of the range of y.}
 
-\item{silence}{logical(1). 
+\item{silence}{logical(1).
 If false, echo the delta value when delta is set as 0.}
 }
 \value{

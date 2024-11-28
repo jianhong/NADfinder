@@ -13,49 +13,65 @@ smoothRatiosByChromosome(
   zscoreAssay = "zscore",
   backgroundPercentage = 0.25,
   chrom.level.background = TRUE,
+  future.scheduling = 1L,
   ...
 )
 }
 \arguments{
-\item{se}{An object of 
-\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment} 
-with log2-transformed ratios, CPMRatios or OddRatios. Output of \link{log2se}}
+\item{se}{An \link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::RangedSummarizedExperiment} object.
+with log2-transformed ratios, CPMRatios or OddRatios. Output of \link{log2se}.}
 
 \item{chr}{A character vector, used to filter out seqnames. It should be the
 chromosome names to be kept.}
 
-\item{ratioAssay}{The name of assay in se, which store the values (log2-transformed ratios,
+\item{ratioAssay}{The name of assay in se, which store the values
+(log2-transformed ratios,
 CPMRatios or OddRatios) to be smoothed.}
 
 \item{backgroundCorrectedAssay, smoothedRatioAssay, zscoreAssay}{character(1).
-Assays names for background corrected ratios, smoothed ratios and 
+Assays names for background corrected ratios, smoothed ratios and
 z-scores based on background corrected ratios.}
 
-\item{backgroundPercentage}{numeric(1). Percentage of values for background, 
-see \link{zscoreOverBck}. The percentage of values lower than this threshold 
+\item{backgroundPercentage}{numeric(1). Percentage of values for background,
+see \link{zscoreOverBck}. The percentage of values lower than this threshold
 will be treated as background, with 25 percentile as default.}
 
-\item{chrom.level.background}{logical(1): TRUE or FALSE, default to TRUE, use chromosome-level 
-background to calculate z-score}
+\item{chrom.level.background}{logical(1): TRUE or FALSE, default to TRUE,
+use chromosome-level background to calculate z-score.}
+
+\item{future.scheduling}{An integer(1), average number of futures ("chunks")
+per worker for multithreading using the \code{\link[future.apply:future_lapply]{future.apply::future_lapply()}}
+function. If 0.0, then a single future is used to process all elements of
+X. If 1.0 or TRUE, then one future per worker is used. If 2.0, then each
+worker will process two futures (if there are enough elements in X). If
+Inf or FALSE, then one future per element of X is used.}
 
 \item{...}{Parameters could be passed to \link{butterFilter}.}
 }
 \value{
-A \link[S4Vectors:SimpleList-class]{SimpleList} of 
-\link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
-with smoothed ratios.
+A \link[S4Vectors:SimpleList-class]{SimpleList} of
+\link[SummarizedExperiment:RangedSummarizedExperiment-class]{SummarizedExperiment::RangedSummarizedExperiment} with smoothed
+ratios.
 }
 \description{
-Split the ratios by chromosome and do background correction and signal smoothing.
+Split the ratios by chromosome and do background correction and signal
+smoothing. The future_lapply() function is used for multithreading.
 }
 \examples{
-
+library(future.apply)
+if (.Platform$OS.type == "windows")
+{
+    plan(sequential)
+} else {
+    plan(multisession)
+}
 data(single.count)
 se <- single.count
-dat <- log2se(se, nucleolusCols="N18.subsampled.srt.bam", genomeCols="G18.subsampled.srt.bam", 
-transformation="log2CPMRatio")
+dat <- log2se(se, nucleolusCols="N18.subsampled.srt.bam",
+              genomeCols="G18.subsampled.srt.bam",
+              transformation="log2CPMRatio")
 dat1 <- smoothRatiosByChromosome(dat, N=100, chr = c("chr18", "chr19"))
-dat2 <- smoothRatiosByChromosome(dat, N=100, chr = c("chr18", "chr19"), 
+dat2 <- smoothRatiosByChromosome(dat, N=100, chr = c("chr18", "chr19"),
                                  chrom.level.background = FALSE)
 
 }

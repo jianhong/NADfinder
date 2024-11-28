@@ -12,12 +12,15 @@ IntersectionNotStrict(
 )
 }
 \arguments{
-\item{features}{A object of \link[GenomicRanges:GRanges-class]{GRanges} representing the
+\item{features}{A object of \link[GenomicRanges:GRanges-class]{GRanges}
+representing the
 feature regions to be counted.}
 
 \item{reads}{An object that represents the data to be counted. See
-\link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}. If reads are more than 1 bam files,
-it should be a vector of character with full path, otherwise current working directory 
+\link[GenomicAlignments:summarizeOverlaps-methods]{summarizeOverlaps}.
+If reads are more than 1 bam files,
+it should be a vector of character with full path, otherwise current
+working directory
 is the default directory. For paired end reads,}
 
 \item{ignore.strand}{logical(1). ignore strand?}

@@ -3,11 +3,12 @@ Type: Package
 Title: Call wide peaks for sequencing data
 Version: 1.31.0
 Encoding: UTF-8
-Author: Jianhong Ou, Haibo Liu, Jun Yu, Hervé Pagès, Paul Kaufman, Lihua Julie Zhu
+Author: Jianhong Ou, Haibo Liu, Jun Yu, Hervé Pagès, Paul Kaufman, 
+        Lihua Julie Zhu
 Maintainer: Jianhong Ou <jianhong.ou@duke.edu>,
             Lihua Julie Zhu <julie.zhu@umassmed.edu>
-Description: Nucleolus is an important structure inside the nucleus 
-    in eukaryotic cells. It is the site for transcribing rDNA 
+Description: Nucleolus is an important structure inside the nucleus in 
+    eukaryotic cells. It is the site for transcribing rDNA 
     into rRNA and for assembling ribosomes, aka ribosome 
     biogenesis. In addition, nucleoli are dynamic hubs 
     through which numerous proteins shuttle and contact 
@@ -18,19 +19,21 @@ Description: Nucleolus is an important structure inside the nucleus
     dimensional associations with nucleoli. NAD-seq has 
     been used to study the biological functions of NAD and 
     the dynamics of NAD distribution during embryonic 
-    stem cell (ESC) differentiation. 
-    Here, we developed a 
+    stem cell (ESC) differentiation. Here, we developed a 
     Bioconductor package NADfinder for bioinformatic 
     analysis of the NAD-seq data, including baseline correction, 
     smoothing, normalization, peak calling, and annotation.
 License: GPL (>= 2)
-Depends: R (>= 3.4), BiocGenerics, IRanges, GenomicRanges, S4Vectors, SummarizedExperiment
-Imports: graphics, methods, baseline, signal, GenomicAlignments,
+Depends: R (>= 3.5), BiocGenerics, IRanges, GenomicRanges, S4Vectors, 
+         SummarizedExperiment
+Imports: graphics, methods, baseline, signal, GenomicAlignments,Rsubread,
         GenomeInfoDb, rtracklayer, limma, trackViewer, stats, utils, 
-        Rsamtools, metap, EmpiricalBrownsMethod,ATACseqQC, corrplot, csaw
-Suggests: RUnit, BiocStyle, knitr, BSgenome.Mmusculus.UCSC.mm10,
-        testthat, BiocManager, rmarkdown
+        Rsamtools, metap, EmpiricalBrownsMethod,ATACseqQC, corrplot, csaw,
+        future.apply
+Suggests: RUnit, BiocStyle, knitr, testthat, BiocManager, rmarkdown,
+        BSgenome.Mmusculus.UCSC.mm10
 biocViews: Sequencing, DNASeq, GeneRegulation, PeakDetection
 LazyData: TRUE
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.1
+Roxygen: list(markdown = TRUE)

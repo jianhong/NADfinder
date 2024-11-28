@@ -10,14 +10,14 @@ butterFilter(ratios, N = ceiling(length(ratios)/200))
 \item{ratios}{A vector of numeric. It is log2-transformed ratios,
 CPMRatios or OddRatios in each window.}
 
-\item{N}{numeric(1) or integer(1). 
+\item{N}{numeric(1) or integer(1).
 Critical frequencies of the low pass filter will be set as 1/N.
 1/N is a cutoff at 1/N-th of the Nyquist frequency.
-By default, it is suppose there are about 200 peaks in the inputs.}
+By default, it is supposed there are about 200 peaks in the inputs.}
 }
 \value{
-A vector of numeric with same length of input ratios. 
-The vector indicates smoothed ratios.
+A numeric vector of the same length as input ratios, containing
+smoothed ratios.
 }
 \description{
 The Butterworth filter is a type of signal processing filter designed to

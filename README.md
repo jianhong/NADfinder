@@ -7,11 +7,11 @@ Call wide peaks for sequencing data
 
 Nucleoli serve as major organizing hubs for the three-dimensional structure 
 of mammalian heterochromatin. Specific loci, termed
-nucleolar-associated domains (NADs), form frequent three-dimensional 
+nucleolus-associated domains (NADs), form frequent three-dimensional 
 associations with nucleoli. Early mammalian 
 development is a critical period to study NAD biological function, because 
 interactions between pericentromeric chromatin and perinucleolar regions are 
-particularly dynamic during embryonic development . 
+particularly dynamic during embryonic development. 
 We therefore propose for the first time to map the 
 NADs in the mouse genome, determine how these associations are altered during 
 embryonic stem cell (ESC) differentiation, and develop tools for study of 
@@ -41,13 +41,13 @@ The peaks are wide peaks (over 10K bps) and the chromosomes were acrocentric.
 
 1. Reads count: We move the window (w) along the genome with step (s) and count
 the reads in each window. This step can smooth the coverage, 
-which is a good for wide peaks.
+which is good for wide peaks.
 2. Ratio calculation: ratio = log2(nucleosome counts / genome counts), 
-pseudocount will be used to avoid x/0 by x/pseudocount.
-3. Background correction: Because the the ratios are higher in 5’end than 
+pseudocount will be used to avoid zero division by x/pseudocount.
+3. Background correction: Because the ratios are higher in 5’ end than 
 3’ end, we applied modified polynomial fitting to remove the background. 
 With this step, the baseline of the ratios will keep at 0 along each 
-chromosome. More details could refer: CHAD A. LIEBER and ANITA 
+chromosome. More details could refer to: CHAD A. LIEBER and ANITA 
 MAHADEVAN-JANSEN: Automated Method for Subtraction of 
 Fluorescence from Biological Raman Spectra 
 (http://journals.sagepub.com/doi/pdf/10.1366/000370203322554518).  

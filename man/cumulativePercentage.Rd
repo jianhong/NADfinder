@@ -12,15 +12,15 @@ cumulativePercentage(
 )
 }
 \arguments{
-\item{se}{An object of 
+\item{se}{An object of
 \link[SummarizedExperiment:RangedSummarizedExperiment-class]{RangedSummarizedExperiment}
 with assays of raw counts, transfomred ratios, background correct ratios,
-smoothed ratios and z-scores. It should be an element of the output of 
+smoothed ratios and z-scores. It should be an element of the output of
 \link{smoothRatiosByChromosome}.}
 
 \item{binWidth}{numeric(1) or integer(1). The width of each bin.}
 
-\item{backgroundCorrectedAssay}{character(1). Assays names 
+\item{backgroundCorrectedAssay}{character(1). Assays names
 for background correction ratios.}
 
 \item{...}{Parameter not used.}
@@ -29,7 +29,7 @@ for background correction ratios.}
 A list of data.frame with the cumulative percentages.
 }
 \description{
-Plot the difference between the cumulative percentage of tag allocation in 
+Plot the difference between the cumulative percentage of tag allocation in
 paired samples.
 }
 \examples{
@@ -49,10 +49,10 @@ cumulativePercentage(se[["chr18"]])
 \references{
 Normalization, bias correction, and peak calling for ChIP-seq
 Aaron Diaz, Kiyoub Park, Daniel A. Lim, Jun S. Song
-Stat Appl Genet Mol Biol. Author manuscript; 
-available in PMC 2012 May 3.Published in final edited form as: 
+Stat Appl Genet Mol Biol. Author manuscript;
+available in PMC 2012 May 3.Published in final edited form as:
 Stat Appl Genet Mol Biol. 2012 Mar 31; 11(3): 10.1515/1544-6115.1750
- /j/sagmb.2012.11.issue-3/1544-6115.1750/1544-6115.1750.xml. 
- Published online 2012 Mar 31.  doi: 10.1515/1544-6115.1750
- PMCID: PMC3342857
+/j/sagmb.2012.11.issue-3/1544-6115.1750/1544-6115.1750.xml.
+Published online 2012 Mar 31.  doi: 10.1515/1544-6115.1750
+PMCID: PMC3342857
 }

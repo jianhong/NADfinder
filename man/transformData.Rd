@@ -17,47 +17,57 @@ transformData(
 )
 }
 \arguments{
-\item{A, B}{window-level counts for nucleolus and genome, extracted from the assays of 
-the output of the tileCounts function}
+\item{A, B}{window-level counts for nucleolus and genome, extracted from
+the assays of the output of the tileCounts function}
 
-\item{seqnames.A, seqnames.B}{seqnames, extracted from the rowRanges of the ouput of 
-the tileCounts function}
+\item{seqnames.A, seqnames.B}{seqnames, extracted from the rowRanges of
+the ouput of the tileCounts function}
 
-\item{pseudo.count}{pseudo-count will be used to aviod x/0 or log0, defult to 1.}
+\item{pseudo.count}{pseudo-count will be used to aviod x/0 or log0, defult
+to 1.}
 
 \item{transformation}{transformation type}
 
-\item{chrom.level.lib}{indicating whether calculating CPM or odds using 
+\item{chrom.level.lib}{indicating whether calculating CPM or odds using
 sequence depth of the whole genome or the corresponding chromosome}
 
 \item{lib.size.A, lib.size.B}{library size for A and B.
-these two dataframes contain chromosome-level sequence depth for the chromosomes,
-which can be extracted from the metadata of the output of the tileCounts function}
+these two dataframes contain chromosome-level sequence depth for the
+chromosomes, which can be extracted from the metadata of the output of
+the tileCounts function}
 }
 \value{
 a numeric vector of log2 ratios, log2 CPM ratios or log2 odds ratios.
 }
 \description{
-calculate the log2 ratios, log2 cpm (count per million) ratios, or 
-log2 odds ratios for nucleolus vs genome.
-pseudo-count will be used to avoid x/0 or log(0).
+calculate the log2 ratios, log2 cpm (count per million) ratios,
+or log2 odds ratios for nucleolus vs genome. pseudo-count will be used to
+avoid x/0 or log(0).
 }
 \examples{
-transformData(seq_len(10), 10:1, seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
+transformData(seq_len(10), 10:1,
+             seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
 Rle(c("chr1", "chr2" ) , c(5,5)), transformation = "log2OddsRatio",
-chrom.level.lib = FALSE, lib.size.A = cbind(c("chr1", "chr2"), c(10000, 12000)), 
+chrom.level.lib = FALSE,
+lib.size.A = cbind(c("chr1", "chr2"), c(10000, 12000)),
 lib.size.B = cbind(c("chr1", "chr2"), c(10000, 12000)))
-transformData(seq_len(10), 10:1, seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)), 
+transformData(seq_len(10), 10:1,
+seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
 Rle(c("chr1", "chr2" ) , c(5,5)), transformation = "log2CPMRatio",
-chrom.level.lib = FALSE, lib.size.A = cbind(c("chr1", "chr2"), c(10000, 12000)), 
+chrom.level.lib = FALSE,
+lib.size.A = cbind(c("chr1", "chr2"), c(10000, 12000)),
 lib.size.B = cbind(c("chr1", "chr2"), c(10000, 12000)))
-transformData(seq_len(10), 10:1, seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)), 
+transformData(seq_len(10), 10:1,
+seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
 Rle(c("chr1", "chr2" ) , c(5,5)), transformation = "log2CPMRatio",
-chrom.level.lib = TRUE, lib.size.A = cbind(c("chr1", "chr2"), c(100, 12000)), 
+chrom.level.lib = TRUE,
+lib.size.A = cbind(c("chr1", "chr2"), c(100, 12000)),
 lib.size.B = cbind(c("chr1", "chr2"), c(10000, 200)))
-transformData(seq_len(10), 10:1, seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
+transformData(seq_len(10), 10:1,
+seqnames.A = Rle(c("chr1", "chr2" ) , c(5,5)),
 Rle(c("chr1", "chr2" ) , c(5,5)), transformation = "log2OddsRatio",
-chrom.level.lib = TRUE, lib.size.A = cbind(c("chr1", "chr2"), c(100, 12000)),
+chrom.level.lib = TRUE,
+lib.size.A = cbind(c("chr1", "chr2"), c(100, 12000)),
 lib.size.B = cbind(c("chr1", "chr2"), c(10000, 200)))
 transformData(seq_len(10), 10:1, transformation = "log2Ratio")
 }

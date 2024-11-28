@@ -7,9 +7,11 @@
 zscoreOverBck(ratios, backgroundPercentage = 0.25)
 }
 \arguments{
-\item{ratios}{A numeric vector containing the transformed, background corrected and smoothed ratios in each window.}
+\item{ratios}{A numeric vector containing the transformed, background
+corrected and smoothed ratios in each window.}
 
-\item{backgroundPercentage}{numeric(1). Low percentile for background distribution.}
+\item{backgroundPercentage}{numeric(1). Low percentile for background
+distribution.}
 }
 \value{
 A vector of numeric. Z-scores.
