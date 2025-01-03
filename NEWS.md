@@ -1,3 +1,6 @@
+# CHANGES IN VERSION 1.31.1
+* Update email address.
+
 # CHANGES IN VERSION 1.15.2
 * add rmarkdown as suggest package.
 
