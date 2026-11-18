@@ -4,6 +4,9 @@
 \name{single.count}
 \alias{single.count}
 \title{Counts data for chromosome 18 for an experiment of a single pair of samples}
+\format{
+An object of RangedSummarizedExperiment with 2 samples.
+}
 \description{
 Counts data for chromosome 18 for an experiment of a single pair of samples
 }

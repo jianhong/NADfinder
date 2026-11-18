@@ -49,7 +49,7 @@ trimPeaks <- function(se,
 {
     backgroundPercentage2 = .5
     stopifnot(backgroundPercentage > 0 && backgroundPercentage < 1)
-    stopifnot(class(se) == "RangedSummarizedExperiment")
+    stopifnot(is(se, "RangedSummarizedExperiment"))
     asyNames <- c(
         "nucleolus",
         "genome",

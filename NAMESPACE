@@ -28,42 +28,60 @@ import(limma)
 import(metap)
 import(rtracklayer)
 importFrom(ATACseqQC,readBamFile)
-importFrom(BiocGenerics,table)
-importFrom(BiocGenerics,which.min)
-importFrom(IRanges,IRanges)
-importFrom(IRanges,Views)
-importFrom(IRanges,elementNROWS)
-importFrom(IRanges,tile)
-importFrom(IRanges,viewApply)
-importFrom(IRanges,viewMeans)
-importFrom(IRanges,viewSums)
-importFrom(baseline,baseline)
-importFrom(baseline,getCorrected)
+importFrom(BiocGenerics,
+  table,
+  which.min
+)
+importFrom(IRanges,
+  IRanges,
+  Views,
+  elementNROWS,
+  tile,
+  viewApply,
+  viewMeans,
+  viewSums
+)
+importFrom(baseline,
+  baseline,
+  getCorrected
+)
 importFrom(corrplot,corrplot)
-importFrom(csaw,readParam)
-importFrom(csaw,windowCounts)
-importFrom(grDevices,colorRampPalette)
-importFrom(grDevices,dev.off)
-importFrom(grDevices,pdf)
-importFrom(graphics,abline)
-importFrom(graphics,axis)
-importFrom(graphics,legend)
-importFrom(graphics,matlines)
-importFrom(graphics,par)
-importFrom(graphics,plot)
-importFrom(methods,as)
-importFrom(methods,is)
-importFrom(signal,butter)
-importFrom(signal,filter)
-importFrom(stats,as.formula)
-importFrom(stats,cor.test)
-importFrom(stats,loess)
-importFrom(stats,loess.smooth)
-importFrom(stats,median)
-importFrom(stats,p.adjust)
-importFrom(stats,pnorm)
-importFrom(stats,predict)
-importFrom(stats,quantile)
-importFrom(stats,setNames)
+importFrom(csaw,
+  readParam,
+  windowCounts
+)
+importFrom(grDevices,
+  colorRampPalette,
+  dev.off,
+  pdf
+)
+importFrom(graphics,
+  abline,
+  axis,
+  legend,
+  matlines,
+  par,
+  plot
+)
+importFrom(methods,
+  as,
+  is
+)
+importFrom(signal,
+  butter,
+  filter
+)
+importFrom(stats,
+  as.formula,
+  cor.test,
+  loess,
+  loess.smooth,
+  median,
+  p.adjust,
+  pnorm,
+  predict,
+  quantile,
+  setNames
+)
 importFrom(trackViewer,ideogramPlot)
 importFrom(utils,combn)

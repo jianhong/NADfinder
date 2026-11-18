@@ -8,3 +8,17 @@
 \description{
 Sliding-window based peak calling algorithm using whole genome sequences as control
 }
+\author{
+\strong{Maintainer}: Jianhong Ou \email{jou@morgridge.org} (\href{https://orcid.org/0000-0002-8652-2488}{ORCID})
+
+Authors:
+\itemize{
+  \item Jianhong Ou \email{jou@morgridge.org} (\href{https://orcid.org/0000-0002-8652-2488}{ORCID})
+  \item Haibo Liu
+  \item Jun Yu
+  \item Hervé Pagès
+  \item Paul Kaufman
+  \item Julie Lihua Zhu \email{Julie.Zhu@umassmed.edu}
+}
+
+}

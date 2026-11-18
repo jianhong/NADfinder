@@ -1,3 +1,6 @@
+# CHANGES IN VERSION 1.37.1
+* Fix the issues in BiocCheck.
+
 # CHANGES IN VERSION 1.31.1
 * Update email address.
 

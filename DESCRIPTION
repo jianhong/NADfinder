@@ -1,11 +1,16 @@
 Package: NADfinder
 Type: Package
 Title: Call wide peaks for sequencing data
-Version: 1.37.0
+Version: 1.37.1
 Encoding: UTF-8
-Author: Jianhong Ou, Haibo Liu, Jun Yu, Hervé Pagès, Paul Kaufman, Lihua Julie Zhu
-Maintainer: Jianhong Ou <jou@morgridge.org>,
-            Lihua Julie Zhu <julie.zhu@umassmed.edu>
+Authors@R: c(person(given="Jianhong", family="Ou", email="jou@morgridge.org", 
+        role=c("aut", "cre"), comment=c(ORCID="0000-0002-8652-2488")), 
+        person(given="Haibo", family="Liu", role="aut"), 
+        person(given="Jun", family="Yu", role="aut"), 
+        person(given="Hervé", family="Pagès", role="aut"), 
+        person(given="Paul", family="Kaufman", role="aut"),
+        person(given="Julie Lihua", family="Zhu", 
+        role="aut", email="Julie.Zhu@umassmed.edu"))
 Description: Nucleolus is an important structure inside the nucleus 
     in eukaryotic cells. It is the site for transcribing rDNA 
     into rRNA and for assembling ribosomes, aka ribosome 
@@ -24,7 +29,7 @@ Description: Nucleolus is an important structure inside the nucleus
     analysis of the NAD-seq data, including baseline correction, 
     smoothing, normalization, peak calling, and annotation.
 License: GPL (>= 2)
-Depends: R (>= 3.4), BiocGenerics, IRanges, GenomicRanges, S4Vectors, SummarizedExperiment
+Depends: R (>= 3.5.0), BiocGenerics, IRanges, GenomicRanges, S4Vectors, SummarizedExperiment
 Imports: graphics, methods, baseline, signal, GenomicAlignments,
         GenomeInfoDb, rtracklayer, limma, trackViewer, stats, utils, 
         Rsamtools, metap, EmpiricalBrownsMethod,ATACseqQC, corrplot, csaw
@@ -33,4 +38,4 @@ Suggests: RUnit, BiocStyle, knitr, BSgenome.Mmusculus.UCSC.mm10,
 biocViews: Sequencing, DNASeq, GeneRegulation, PeakDetection
 LazyData: TRUE
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+Config/roxygen2/version: 8.1.1

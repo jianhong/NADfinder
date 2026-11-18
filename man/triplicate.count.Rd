@@ -3,8 +3,11 @@
 \docType{data}
 \name{triplicate.count}
 \alias{triplicate.count}
-\title{Counts data for chromosome 18 for an expriment with triplicates}
+\title{Counts data for chromosome 18 for an experiment with triplicates}
+\format{
+An object of RangedSummarizedExperiment with 6 samples.
+}
 \description{
-Counts data for chromosome 18 for an expriment with triplicates
+Counts data for chromosome 18 for an experiment with triplicates
 }
 \keyword{data}

@@ -64,8 +64,7 @@ if (interactive())
 }
 }
 \examples{
-if (interactive())
-{
+if (interactive()){
     fls <- list.files(system.file("extdata", package="NADfinder"),
     recursive=FALSE, pattern="*bam$", full=TRUE)
     names(fls) <- basename(fls)
